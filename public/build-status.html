@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="refresh" content="30">
+  <title>EyeEarn Build Status</title>
+  <style>
+    :root{--ink:#111315;--chalk:#f4f0e8;--line:#343839;--orange:#ff4d2e;--blue:#3267e8;--mint:#73c99c;--muted:#a8aaa5}*{box-sizing:border-box}body{margin:0;background:var(--ink);color:var(--chalk);font-family:Arial,sans-serif}main{width:min(1060px,94vw);margin:auto;padding:4vw 0}header{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid var(--line);padding-bottom:18px}h1{font-size:clamp(2.5rem,7vw,5.6rem);line-height:.85;margin:0;text-transform:uppercase}header p{font:12px ui-monospace,monospace;color:var(--mint)}.meter{height:8px;background:#272a2b;margin:25px 0}.meter i{display:block;width:12.5%;height:100%;background:var(--orange)}.grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line)}section{padding:20px;border-right:1px solid var(--line)}section:last-child{border:0}h2{font-size:13px;text-transform:uppercase;color:var(--muted);margin:0 0 16px}strong{font-size:23px}p,li{line-height:1.5;color:#c7c8c4}a{color:#9db6ff}.history{margin-top:24px;border-top:1px solid var(--line);padding-top:24px}.history b{color:var(--mint)}code{font-family:ui-monospace,monospace;color:var(--muted)}@media(max-width:720px){.grid{grid-template-columns:1fr}section{border-right:0;border-bottom:1px solid var(--line)}header{align-items:start;flex-direction:column;gap:12px}}
+  </style>
+</head>
+<body><main>
+  <header><div><h1>Build status</h1><p>EYEEARN · LIVE BUILD LEDGER</p></div><strong>PHASE 0 · IN PROGRESS</strong></header>
+  <div class="meter"><i></i></div>
+  <div class="grid">
+    <section><h2>Links</h2><p><a href="/">Product shell</a><br><a href="/api/health">Health endpoint</a><br><a href="https://github.com/anshulyadav1976/EyeEarn">GitHub repository</a></p><code>Local: http://localhost:3000<br>Tunnel: https://baghdad-prisoner-deposits-utility.trycloudflare.com<br>Commit: f11bbbc</code></section>
+    <section><h2>Test now</h2><strong>Role-aware shell</strong><p>Open all three role surfaces. Seeded Buyer and Authority states are explicitly labelled.</p></section>
+    <section><h2>Verification</h2><p>Lint and production build passed. Local and Cloudflare health checks passed. Vercel authorization is pending.</p></section>
+  </div>
+  <div class="history"><h2>Chronological history</h2><p><b>Phase 0 · In progress</b> — repository, shell, seeded states, health route and this persistent dashboard.</p><p><b>Next: Phase 1</b> — select a priced safe zone, persist an itinerary, preflight sensors, and start an earning run.</p></div>
+  <script>setInterval(()=>fetch('/api/health').then(r=>r.ok&&document.documentElement.dataset.health='ok').catch(()=>document.documentElement.dataset.health='down'),15000)</script>
+</main></body></html>
