@@ -1,6 +1,10 @@
 .page {
   min-height: 100vh;
-  background: #f7f5f0;
+  background-color: #fafaf8;
+  background-image:
+    linear-gradient(#e8e8e3 1px, transparent 1px),
+    linear-gradient(90deg, #e8e8e3 1px, transparent 1px);
+  background-size: 52px 52px;
   color: #17191b;
 }
 .header {
@@ -14,20 +18,26 @@
 }
 .header nav {
   display: flex;
+  align-items: center;
   gap: 2rem;
   margin: auto;
+  height: 70px;
   font:
     700 0.72rem ui-monospace,
     monospace;
   text-transform: uppercase;
   color: #89969b;
 }
+.header nav a,
+.header nav b {
+  display: flex;
+  align-items: center;
+  height: 70px;
+  line-height: 1;
+}
 .header nav b {
   color: #17191b;
   border-bottom: 2px solid #ff1f6b;
-  height: 70px;
-  display: flex;
-  align-items: center;
 }
 .status {
   font:
@@ -142,6 +152,52 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 0.55rem;
+}
+.activeRequest {
+  box-shadow: 0 0 0 3px #ff1f6b2e;
+}
+.requestBuilder {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid #dedbd5;
+  background: #fff7fa;
+}
+.requestBuilder > div:first-child {
+  display: grid;
+  min-width: 220px;
+}
+.requestBuilder small,
+.requestBuilder > b,
+.formStep small,
+.scopeFieldset legend {
+  color: #777b7e;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.requestBuilder > b {
+  margin-left: auto;
+  color: #ff1f6b;
+}
+.scopePicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.scopePicker button {
+  border: 1px solid #cbc7bf;
+  background: #fff;
+  color: #44494c;
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+}
+.scopePicker button.activeScope {
+  border-color: #ff1f6b;
+  color: #fff;
+  background: #ff1f6b;
 }
 .requestTop,
 .actions button,
@@ -356,7 +412,7 @@
   padding: 1rem;
 }
 .modal {
-  width: min(480px, 100%);
+  width: min(560px, 100%);
   max-height: calc(100dvh - 2rem);
   overflow: auto;
   background: #192024;
@@ -382,12 +438,46 @@
   text-transform: uppercase;
 }
 .modal textarea,
-.modal input[type="number"] {
+.modal input[type="number"],
+.modal input[type="text"],
+.modal select {
   background: #101417;
   border: 1px solid #344047;
   color: #f4f0e8;
   padding: 10px;
   resize: vertical;
+}
+.formStep {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #dedbd5;
+  background: #fafaf8;
+}
+.formStep strong {
+  font-size: 0.78rem;
+}
+.scopeFieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.scopeFieldset legend {
+  margin-bottom: 0.45rem;
+}
+.scopeFieldset label {
+  display: flex;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  border: 1px solid #cbc7bf;
+  padding: 0.65rem 0.75rem;
+  cursor: pointer;
+}
+.scopeFieldset label:has(input:checked) {
+  border-color: #ff1f6b;
+  color: #ff1f6b;
+  background: #fff1f6;
 }
 .check {
   display: flex !important;
@@ -444,6 +534,12 @@
     width: 100%;
     justify-content: flex-start;
   }
+  .requestBuilder {
+    display: grid;
+  }
+  .requestBuilder > b {
+    margin-left: 0;
+  }
   .legend {
     flex-wrap: wrap;
   }
@@ -493,7 +589,9 @@
 }
 .search input,
 .modal textarea,
-.modal input[type="number"] {
+.modal input[type="number"],
+.modal input[type="text"],
+.modal select {
   background: #fff;
   color: #17191b;
   border-color: #cbc7bf;

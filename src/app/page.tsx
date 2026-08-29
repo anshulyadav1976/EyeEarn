@@ -1,5 +1,6 @@
 import Link from "next/link";
 import BurningWick from "./burning-wick";
+import MotionHeadline from "./motion-headline";
 import styles from "./page.module.css";
 
 const roles = [
@@ -47,10 +48,7 @@ export default function Home() {
 
       <section className={styles.hero}>
         <p className={styles.eyebrow}>Movement-powered place intelligence</p>
-        <h1>
-          <span>Run</span>
-          <span>and earn.</span>
-        </h1>
+        <MotionHeadline />
         <p className={styles.statement}>
           Run where the map needs <em>eyes.</em>
         </p>

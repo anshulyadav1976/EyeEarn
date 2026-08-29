@@ -21,7 +21,17 @@ body {
   margin: 0;
   min-height: 100vh;
   background: #f7f5f0;
-  font-family: "Arial Narrow", "Aptos Narrow", Arial, sans-serif;
+  font-family: var(--font-roboto), Arial, sans-serif;
+}
+body
+  :where(p, small, label, input, textarea, button, select, nav, dt, dd, time) {
+  font-family: var(--font-roboto), Arial, sans-serif !important;
+}
+h1,
+h2,
+h3,
+.wordmark {
+  font-family: var(--font-saira), "Arial Narrow", sans-serif;
 }
 a {
   color: inherit;

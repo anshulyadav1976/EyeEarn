@@ -39,6 +39,9 @@ See [docs/PHASE5_8_DEMO.md](docs/PHASE5_8_DEMO.md), [docs/DATA_COLLECTION.md](do
 ## Demo UI notes
 
 - All product chrome uses the landing page’s light survey-grid language and `#ff1f6b` accent.
+- The landing thesis rotates RUN / DRIVE / WALK / FLY / RIDE / SAIL with a clipped neon glitch-and-flap transition; reduced-motion users see the static RUN state.
+- Saira Condensed carries display headlines while Roboto is the application reading and control face.
 - Explore removes numbered route pins and shows a closed circuit, target pace, estimated finish and capture brief before the camera starts.
+- Buyer coverage requests support a building point, circular area or rectangular area selected on the map, followed by name, requirement, bounty and demo payment method.
 - Example field-footage links are clearly labelled as references rather than submitted EyeEarn evidence. The linked Pexels and Mixkit collections describe their clips as free-use stock video; review the source licence before repackaging assets.
 - The home-page burning-wick canvas respects reduced-motion preferences.

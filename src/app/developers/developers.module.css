@@ -1,6 +1,10 @@
 .page {
   min-height: 100vh;
-  background: #f7f5f0;
+  background-color: #fafaf8;
+  background-image:
+    linear-gradient(#e8e8e3 1px, transparent 1px),
+    linear-gradient(90deg, #e8e8e3 1px, transparent 1px);
+  background-size: 52px 52px;
   color: #17191b;
 }
 .header {

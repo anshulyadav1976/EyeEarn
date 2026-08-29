@@ -120,6 +120,7 @@ export default function ExploreClient({
   const [runPaused, setRunPaused] = useState(false);
   const [micMuted, setMicMuted] = useState(false);
   const [mapReady, setMapReady] = useState(false);
+  const [projectedRoute, setProjectedRoute] = useState("");
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -165,14 +166,17 @@ export default function ExploreClient({
   const plannedRoute = useMemo<[number, number][]>(() => {
     if (!selected) return route;
     const [lng, lat] = selected.coordinates;
-    const spread = Math.max(0.004, Math.min(0.012, distance / 220));
+    const spread = Math.max(0.0025, Math.min(0.006, distance / 680));
     return [
-      [lng - spread, lat - spread * 0.45],
-      [lng - spread * 0.4, lat - spread * 0.7],
-      [lng, lat],
-      [lng + spread * 0.45, lat + spread * 0.55],
-      [lng + spread, lat + spread * 0.2],
-      [lng - spread, lat - spread * 0.45],
+      [lng - spread, lat],
+      [lng - spread * 0.55, lat + spread * 0.72],
+      [lng, lat + spread],
+      [lng + spread * 0.65, lat + spread * 0.55],
+      [lng + spread, lat],
+      [lng + spread * 0.48, lat - spread * 0.72],
+      [lng, lat - spread],
+      [lng - spread * 0.62, lat - spread * 0.52],
+      [lng - spread, lat],
     ];
   }, [selected, distance, route]);
   const itinerary = useMemo(
@@ -320,6 +324,19 @@ export default function ExploreClient({
       properties: {},
       geometry: { type: "LineString", coordinates: plannedRoute },
     });
+    const projectRoute = () => {
+      setProjectedRoute(
+        plannedRoute
+          .map((point) => {
+            const projected = instance.project(point);
+            return `${projected.x},${projected.y}`;
+          })
+          .join(" "),
+      );
+    };
+    instance.on("move", projectRoute);
+    instance.on("resize", projectRoute);
+    projectRoute();
     instance.fitBounds(
       plannedRoute.reduce(
         (bounds, point) => bounds.extend(point),
@@ -327,6 +344,10 @@ export default function ExploreClient({
       ),
       { padding: 84, maxZoom: 14.2, duration: 650 },
     );
+    return () => {
+      instance.off("move", projectRoute);
+      instance.off("resize", projectRoute);
+    };
   }, [mapReady, plannedRoute]);
 
   useEffect(() => {
@@ -914,6 +935,18 @@ export default function ExploreClient({
             className={styles.map}
             aria-label="Prepared safe route and bounty zones"
           />
+          {selected && projectedRoute && (
+            <svg
+              className={styles.routeOverlay}
+              aria-label={`Exact ${selected.name} circuit`}
+            >
+              <polyline
+                className={styles.routeCasing}
+                points={projectedRoute}
+              />
+              <polyline className={styles.routeLine} points={projectedRoute} />
+            </svg>
+          )}
           {selected && (
             <div className={styles.itineraryBadge}>
               <span>★ {plannedRoute.length} stops</span>

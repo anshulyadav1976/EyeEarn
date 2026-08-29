@@ -108,3 +108,13 @@ Verification passed: desktop and 390 px browser review, six-card navigation, Exp
 - Implemented the full-viewport eight-second burning-wick canvas with a reduced-motion fallback.
 
 Verification passed: browser interaction and visual inspection of Home, Explore, Buyer, Intelligence, Authority Atlas and Replay; fresh console checks after MapLibre lifecycle fixes; ESLint, TypeScript, six unit tests and production build.
+
+## Motion, typography and coverage-builder refinement
+
+- Added the supplied six-word neon glitch/slot-flap hero treatment with animation cancellation between cycles and a reduced-motion static state.
+- Adopted Saira Condensed for display type and Roboto for small copy, controls and navigation.
+- Completed the Buyer request path: select building/circle/rectangle, click the map, name the location, size the area, describe the evidence, choose bounty and demo payment source, then publish.
+- Aligned the Buyer primary navigation on one baseline and applied the landing survey-grid background to Buyer and Public Evidence.
+- Fixed the invisible Explorer itinerary at the presentation layer by projecting the actual route coordinates into a map-synchronized SVG; it remains aligned as the map moves and now forms a clean closed circuit.
+
+Verification passed: desktop and 390 px Playwright runs, rotating headline RUN→DRIVE, aligned Buyer header, complete unsent payment form, nine-point visible Stratford circuit, no horizontal overflow or console errors, ESLint, TypeScript, six unit tests and production build.

@@ -18,6 +18,7 @@ type Coverage = {
   rewardMinor: number;
   note: string;
 };
+type RequestScope = "building" | "circle" | "rectangle";
 const locations: Coverage[] = [
   {
     id: "zone-south-access",
@@ -210,11 +211,18 @@ function CoverageMap({
   satellite,
   onSelect,
   onMapClick,
+  requestSelection,
 }: {
   locations: Coverage[];
   satellite: boolean;
   onSelect: (item: Coverage) => void;
   onMapClick: (lng: number, lat: number) => void;
+  requestSelection: {
+    lng: number;
+    lat: number;
+    scope: RequestScope;
+    size: number;
+  } | null;
 }) {
   const host = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
@@ -303,6 +311,103 @@ function CoverageMap({
         .addTo(map.current!);
     });
   }, [locations, onSelect]);
+  useEffect(() => {
+    const instance = map.current;
+    if (!instance) return;
+    const syncSelection = () => {
+      if (!instance.isStyleLoaded()) return;
+      const feature = requestSelection
+        ? requestSelection.scope === "building"
+          ? {
+              type: "Feature" as const,
+              properties: {},
+              geometry: {
+                type: "Point" as const,
+                coordinates: [requestSelection.lng, requestSelection.lat],
+              },
+            }
+          : (() => {
+              const radius = Math.max(40, requestSelection.size) / 111320;
+              const points =
+                requestSelection.scope === "circle"
+                  ? Array.from({ length: 41 }, (_, index) => {
+                      const angle = (index / 40) * Math.PI * 2;
+                      return [
+                        requestSelection.lng +
+                          (Math.cos(angle) * radius) /
+                            Math.cos((requestSelection.lat * Math.PI) / 180),
+                        requestSelection.lat + Math.sin(angle) * radius,
+                      ];
+                    })
+                  : [
+                      [
+                        requestSelection.lng - radius,
+                        requestSelection.lat - radius,
+                      ],
+                      [
+                        requestSelection.lng + radius,
+                        requestSelection.lat - radius,
+                      ],
+                      [
+                        requestSelection.lng + radius,
+                        requestSelection.lat + radius,
+                      ],
+                      [
+                        requestSelection.lng - radius,
+                        requestSelection.lat + radius,
+                      ],
+                      [
+                        requestSelection.lng - radius,
+                        requestSelection.lat - radius,
+                      ],
+                    ];
+              return {
+                type: "Feature" as const,
+                properties: {},
+                geometry: { type: "Polygon" as const, coordinates: [points] },
+              };
+            })()
+        : null;
+      const data = {
+        type: "FeatureCollection" as const,
+        features: feature ? [feature] : [],
+      };
+      const source = instance.getSource("request-selection") as
+        maplibregl.GeoJSONSource | undefined;
+      if (source) source.setData(data);
+      else {
+        instance.addSource("request-selection", { type: "geojson", data });
+        instance.addLayer({
+          id: "request-area",
+          type: "fill",
+          source: "request-selection",
+          paint: { "fill-color": "#ff1f6b", "fill-opacity": 0.2 },
+        });
+        instance.addLayer({
+          id: "request-outline",
+          type: "line",
+          source: "request-selection",
+          paint: { "line-color": "#ff1f6b", "line-width": 4 },
+        });
+        instance.addLayer({
+          id: "request-point",
+          type: "circle",
+          source: "request-selection",
+          paint: {
+            "circle-color": "#ff1f6b",
+            "circle-radius": 10,
+            "circle-stroke-color": "#fff",
+            "circle-stroke-width": 3,
+          },
+        });
+      }
+    };
+    syncSelection();
+    instance.on("load", syncSelection);
+    return () => {
+      instance.off("load", syncSelection);
+    };
+  }, [requestSelection]);
   return (
     <div ref={host} className={styles.map} aria-label="London coverage map" />
   );
@@ -315,6 +420,12 @@ export default function BuyerPage() {
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState("");
   const [requestOpen, setRequestOpen] = useState(false);
+  const [requestMode, setRequestMode] = useState(false);
+  const [requestDraft, setRequestDraft] = useState<Coverage | null>(null);
+  const [requestScope, setRequestScope] = useState<RequestScope>("building");
+  const [areaSize, setAreaSize] = useState("180");
+  const [locationName, setLocationName] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("Demo card · •••• 4242");
   const [requirement, setRequirement] = useState(
     "Access and obstruction check",
   );
@@ -363,38 +474,38 @@ export default function BuyerPage() {
   const matches = coverageLocations
     .filter((i) => i.name.toLowerCase().includes(query.toLowerCase()))
     .slice(0, 5);
-  async function postFund(amount: number, verb: string) {
-    if (!selected) return;
+  async function postFund(amount: number, verb: string, target = selected) {
+    if (!target) return;
     setMessage("Sending coverage request…");
     try {
       const r = await fetch("/api/fund", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          locationId: selected.id,
+          locationId: target.id,
           amountMinor: amount,
           currency: "GBP",
           requirement,
           safeForDemo: true,
-          name: selected.name,
-          coordinates: [selected.lng, selected.lat],
+          name: target.name,
+          coordinates: [target.lng, target.lat],
         }),
       });
       if (!r.ok) throw Error();
       setCoverageLocations((current) => {
-        const exists = current.some((item) => item.id === selected.id);
+        const exists = current.some((item) => item.id === target.id);
         const updated = {
-          ...selected,
+          ...target,
           rewardMinor: amount,
           freshness: "Request just created",
           note: requirement,
         };
         return exists
-          ? current.map((item) => (item.id === selected.id ? updated : item))
+          ? current.map((item) => (item.id === target.id ? updated : item))
           : [updated, ...current];
       });
       setSelected((current) =>
-        current?.id === selected.id
+        current?.id === target.id
           ? {
               ...current,
               rewardMinor: amount,
@@ -403,10 +514,10 @@ export default function BuyerPage() {
             }
           : current,
       );
-      setMessage(`${selected.name} is funded · runners can now collect it`);
+      setMessage(`${target.name} is funded · runners can now collect it`);
     } catch {
       setMessage(
-        `${verb} recorded for the demo · ${selected.name} · ${money(amount)} bounty`,
+        `${verb} recorded for the demo · ${target.name} · ${money(amount)} bounty`,
       );
     }
   }
@@ -481,34 +592,68 @@ export default function BuyerPage() {
               {satellite ? "Street map" : "Satellite"}
             </button>
             <button
-              className={styles.requestTop}
+              className={`${styles.requestTop} ${requestMode ? styles.activeRequest : ""}`}
               onClick={() => {
-                if (!selected)
-                  setSelected({
-                    id: `point-${Date.now()}`,
-                    name: "Central London request",
-                    lng: -0.11,
-                    lat: 51.51,
-                    coverage: 0,
-                    freshness: "No evidence",
-                    rewardMinor: 800,
-                    note: "Start a request for this public location.",
-                  });
-                setRequestOpen(true);
+                setRequestMode(true);
+                setRequestDraft(null);
+                setMessage(
+                  "Choose a footprint, then click its location on the map",
+                );
               }}
             >
               ＋ Request coverage
             </button>
           </div>
         </div>
+        {requestMode && (
+          <div className={styles.requestBuilder}>
+            <div>
+              <small>Step 1</small>
+              <strong>Choose what you want covered</strong>
+            </div>
+            <div className={styles.scopePicker}>
+              {(
+                [
+                  ["building", "Specific building"],
+                  ["circle", "Circle area"],
+                  ["rectangle", "Rectangle area"],
+                ] as const
+              ).map(([value, label]) => (
+                <button
+                  type="button"
+                  key={value}
+                  className={requestScope === value ? styles.activeScope : ""}
+                  onClick={() => setRequestScope(value)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <b>Step 2 · click the exact location on the map</b>
+          </div>
+        )}
         <CoverageMap
           locations={coverageLocations}
           satellite={satellite}
           onSelect={setSelected}
+          requestSelection={
+            requestDraft
+              ? {
+                  lng: requestDraft.lng,
+                  lat: requestDraft.lat,
+                  scope: requestScope,
+                  size: Number(areaSize),
+                }
+              : null
+          }
           onMapClick={(lng, lat) => {
+            if (!requestMode) return;
             const point = {
               id: `point-${Date.now()}`,
-              name: "New London location",
+              name:
+                requestScope === "building"
+                  ? "Selected building"
+                  : "Selected coverage area",
               lng,
               lat,
               coverage: 0,
@@ -517,6 +662,8 @@ export default function BuyerPage() {
               note: "Start a request for this public location.",
             };
             setSelected(point);
+            setRequestDraft(point);
+            setLocationName(point.name);
             setRequestOpen(true);
           }}
         />
@@ -577,7 +724,12 @@ export default function BuyerPage() {
             </button>
             <button
               className={styles.secondary}
-              onClick={() => setRequestOpen(true)}
+              onClick={() => {
+                setRequestDraft(selected);
+                setLocationName(selected.name);
+                setRequestMode(true);
+                setRequestOpen(true);
+              }}
             >
               Request fresh coverage
             </button>
@@ -599,20 +751,88 @@ export default function BuyerPage() {
             className={styles.modal}
             onSubmit={(e) => {
               e.preventDefault();
+              if (!requestDraft) return;
+              const target = {
+                ...requestDraft,
+                name: locationName.trim() || requestDraft.name,
+                note: `${requirement} · ${requestScope} coverage`,
+              };
+              setSelected(target);
               setRequestOpen(false);
-              postFund(Math.round(Number(budget) * 100), "Coverage request");
+              setRequestMode(false);
+              postFund(
+                Math.round(Number(budget) * 100),
+                `${paymentMethod} payment`,
+                target,
+              );
             }}
           >
             <button
               type="button"
               className={styles.close}
-              onClick={() => setRequestOpen(false)}
+              onClick={() => {
+                setRequestOpen(false);
+                setRequestMode(false);
+                setRequestDraft(null);
+              }}
               aria-label="Close request form"
             >
               ×
             </button>
             <p className={styles.eyebrow}>New buyer request</p>
-            <h2>{selected?.name || "London location"}</h2>
+            <h2>Fund fresh coverage.</h2>
+            <div className={styles.formStep}>
+              <small>Selected on map</small>
+              <strong>
+                {requestDraft?.lat.toFixed(5)}, {requestDraft?.lng.toFixed(5)}
+              </strong>
+            </div>
+            <label>
+              Location name
+              <input
+                type="text"
+                required
+                value={locationName}
+                onChange={(e) => setLocationName(e.target.value)}
+                placeholder="e.g. Stratford station west entrance"
+              />
+            </label>
+            <fieldset className={styles.scopeFieldset}>
+              <legend>Coverage footprint</legend>
+              <div className={styles.scopePicker}>
+                {(
+                  [
+                    ["building", "Building"],
+                    ["circle", "Circle"],
+                    ["rectangle", "Rectangle"],
+                  ] as const
+                ).map(([value, label]) => (
+                  <label key={value}>
+                    <input
+                      type="radio"
+                      name="coverage-scope"
+                      value={value}
+                      checked={requestScope === value}
+                      onChange={() => setRequestScope(value)}
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            {requestScope !== "building" && (
+              <label>
+                {requestScope === "circle" ? "Radius" : "Half-width"} (metres)
+                <input
+                  type="number"
+                  min="40"
+                  max="1000"
+                  step="20"
+                  value={areaSize}
+                  onChange={(e) => setAreaSize(e.target.value)}
+                />
+              </label>
+            )}
             <label>
               What should a runner check?
               <textarea
@@ -631,11 +851,23 @@ export default function BuyerPage() {
                 onChange={(e) => setBudget(e.target.value)}
               />
             </label>
+            <label>
+              Pay with
+              <select
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              >
+                <option>Demo card · •••• 4242</option>
+                <option>Buyer credits · £54.00</option>
+              </select>
+            </label>
             <label className={styles.check}>
               <input type="checkbox" required /> This is a public, safe demo
               location.
             </label>
-            <button type="submit">Create coverage request →</button>
+            <button type="submit">
+              Pay £{Number(budget || 0).toFixed(2)} &amp; publish bounty →
+            </button>
             <small>
               Only sampled, privacy-processed evidence is collected.
             </small>
