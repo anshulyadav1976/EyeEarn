@@ -118,3 +118,11 @@ Verification passed: browser interaction and visual inspection of Home, Explore,
 - Removed the temporary map-synchronized SVG circuit overlay; native route data and itinerary guidance remain available without the extra presentation layer.
 
 Verification passed: desktop and 390 px Playwright runs, rotating headline RUN→DRIVE, aligned Buyer header, complete unsent payment form, no horizontal overflow or console errors, ESLint, TypeScript, six unit tests and production build.
+
+## Judge-facing GitHub entry point
+
+- Rebuilt the README around the product story, a five-minute judge path, privacy boundary, technical architecture and runnable setup.
+- Captured six authentic production screenshots across the runner, buyer, intelligence, authority and replay surfaces; no generated product mockups are presented as evidence.
+- Added a compact evidence-flywheel diagram, live-demo links, API map, stack summary and direct routes into every demo moment.
+
+Verification passed: all six production captures completed without browser console errors, local README asset paths resolve, Markdown diff checks pass and the six unit checks remain green.
