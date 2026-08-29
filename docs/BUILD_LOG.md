@@ -152,3 +152,12 @@ Verification passed on desktop and 390 px mobile: expected page order, no playba
 ## Public evidence headline
 
 - Replaced the processing-lab title with “What Cars Can't Capture: One Recording For Ultra Enriched Data” and recalibrated its desktop/mobile scale for the longer message.
+
+## Shared primary navigation and surface alignment
+
+- Centralized the Explore, Buyer and Methodology primary navigation so every main product page exposes the same all-caps links in the same order on desktop and mobile.
+- Renamed the landing-page Public Evidence destination to “Ultra Enriched Data.”
+- Moved the landing paper, grid, hairline and translucent header colors into shared tokens, giving Buyer and Methodology the exact same background treatment.
+- Increased the Methodology statement to a heavier 900 weight and a larger responsive scale while preserving its black and reddish-pink treatment.
+
+Verification passed on desktop and 390 px mobile: exact link labels, order, destinations and active state; all links visible; zero horizontal overflow; matching computed backgrounds; 73.44 px/900 desktop headline; no browser console errors; ESLint and TypeScript.

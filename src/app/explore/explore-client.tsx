@@ -12,6 +12,7 @@ import {
   type VoiceObservation,
 } from "@/lib/evidence-fusion";
 import type { BountyZone } from "@/lib/eyeearn-data";
+import PrimaryNav from "../primary-nav";
 import styles from "./explore.module.css";
 
 type SensorState = "idle" | "requesting" | "granted" | "unavailable" | "denied";
@@ -899,11 +900,7 @@ export default function ExploreClient({
         <Link className="wordmark" href="/">
           EYE<span>EARN</span>
         </Link>
-        <nav>
-          <b>Explore & Earn</b>
-          <Link href="/buyer">Buyer</Link>
-          <Link href="/operations">Authority</Link>
-        </nav>
+        <PrimaryNav active="explore" />
         <span className={runLive ? styles.live : styles.ready}>
           {runLive ? "● SURVEY LIVE" : "PHASE 4"}
         </span>

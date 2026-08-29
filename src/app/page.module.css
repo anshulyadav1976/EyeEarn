@@ -1,16 +1,16 @@
 .page {
-  --paper: #fafaf8;
+  --paper: var(--eye-paper);
   --ink: #141618;
   --muted: #60656a;
-  --hair: #deded9;
+  --hair: var(--eye-hair);
   --pink: #ff1f6b;
   min-height: 100vh;
   overflow-x: hidden;
   color: var(--ink);
   background-color: var(--paper);
   background-image:
-    linear-gradient(#e8e8e3 1px, transparent 1px),
-    linear-gradient(90deg, #e8e8e3 1px, transparent 1px);
+    linear-gradient(var(--eye-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--eye-grid) 1px, transparent 1px);
   background-size: 52px 52px;
   font-family: var(--font-roboto), Arial, sans-serif;
 }
@@ -24,7 +24,7 @@
   gap: 1.5rem;
   padding: 0 2rem;
   border-bottom: 1px solid var(--hair);
-  background: #fafaf8e8;
+  background: var(--eye-header);
   backdrop-filter: blur(12px);
 }
 

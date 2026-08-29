@@ -8,6 +8,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { streetMapStyle } from "@/lib/map-styles";
 import styles from "./buyer.module.css";
 import BuyerToolsNav from "../buyer-tools-nav";
+import PrimaryNav from "../primary-nav";
 type Coverage = {
   id: string;
   name: string;
@@ -527,11 +528,7 @@ export default function BuyerPage() {
         <Link className="wordmark" href="/">
           EYE<span>EARN</span>
         </Link>
-        <nav>
-          <Link href="/explore">Explore & Earn</Link>
-          <b>Buyer</b>
-          <Link href="/operations">Submissions</Link>
-        </nav>
+        <PrimaryNav active="buyer" />
         <span className={styles.status}>● BUYER CONSOLE</span>
       </header>
       <BuyerToolsNav active="coverage" />

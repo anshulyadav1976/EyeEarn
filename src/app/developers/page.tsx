@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PrimaryNav from "../primary-nav";
 import ProcessingLab from "./processing-lab";
 import styles from "./developers.module.css";
 
@@ -27,11 +28,7 @@ export default function DevelopersPage() {
         <Link className="wordmark" href="/">
           EYE<span>EARN</span>
         </Link>
-        <nav>
-          <Link href="/intelligence">Intelligence</Link>
-          <Link href="/operations">Authority</Link>
-          <Link href="/replay">Replay</Link>
-        </nav>
+        <PrimaryNav active="methodology" />
         <span>PUBLIC DATA · PHASE 8</span>
       </header>
       <ProcessingLab />

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 :root {
+  --eye-paper: #fafaf8;
+  --eye-grid: #e8e8e3;
+  --eye-hair: #deded9;
+  --eye-header: #fafaf8e8;
   --ink: #0d0f10;
   --panel: #151819;
   --chalk: #f4f0e8;

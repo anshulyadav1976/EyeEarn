@@ -22,10 +22,10 @@ const roles = [
   },
   {
     code: "03",
-    title: "Public Evidence",
+    title: "Ultra Enriched Data",
     copy: "Inspect the privacy-safe GeoJSON product without raw people, video or audio.",
     href: "/developers",
-    action: "View public API",
+    action: "View methodology",
     state: "V1",
   },
 ];
@@ -42,7 +42,7 @@ export default function Home() {
         <nav aria-label="Primary navigation">
           <Link href="/explore">Explore</Link>
           <Link href="/buyer">Buyer</Link>
-          <Link href="/developers">Public evidence</Link>
+          <Link href="/developers">Ultra Enriched Data</Link>
         </nav>
       </header>
 

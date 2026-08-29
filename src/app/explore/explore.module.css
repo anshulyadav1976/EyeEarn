@@ -1,29 +1,44 @@
 .page {
   min-height: 100vh;
-  background: #f7f5f0;
+  background-color: var(--eye-paper);
+  background-image:
+    linear-gradient(var(--eye-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--eye-grid) 1px, transparent 1px);
+  background-size: 52px 52px;
   color: #17191b;
 }
 .header {
-  height: 62px;
+  height: 70px;
   display: flex;
   align-items: center;
   gap: 26px;
-  padding: 0 24px;
-  background: #fff;
-  border-bottom: 1px solid #dedbd5;
+  padding: 0 3vw;
+  background: var(--eye-header);
+  border-bottom: 1px solid var(--eye-hair);
+  backdrop-filter: blur(12px);
   position: relative;
   z-index: 8;
 }
 .header nav {
   display: flex;
-  gap: 22px;
+  align-items: center;
+  gap: 2rem;
   margin: auto;
-  font-size: 0.76rem;
-  font-weight: 800;
-  color: #73777b;
+  height: 70px;
+  color: #89969b;
+  font:
+    700 0.72rem ui-monospace,
+    monospace;
+  text-transform: uppercase;
 }
-.header nav b {
+.header nav a {
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+.header nav a[aria-current="page"] {
   color: #17191b;
+  border-bottom: 2px solid #ff1f6b;
 }
 .header > span {
   font:
@@ -38,7 +53,7 @@
   color: #ff1f6b;
 }
 .workspace {
-  height: calc(100vh - 62px);
+  height: calc(100vh - 70px);
   min-height: 640px;
   position: relative;
   background: #d8dad6;
@@ -367,18 +382,26 @@
 }
 @media (max-width: 600px) {
   .header {
-    height: 54px;
-    padding: 0 14px;
+    height: 60px;
+    padding: 0 1rem;
   }
   .header nav {
-    display: none;
+    display: flex;
+    height: 60px;
+    gap: clamp(0.45rem, 2.2vw, 0.9rem);
+    margin-left: auto;
+    font-size: 0.56rem;
+    letter-spacing: 0.035em;
+  }
+  .header nav a {
+    height: 60px;
   }
   .workspace {
-    height: calc(100vh - 54px);
+    height: calc(100vh - 60px);
     min-height: 590px;
   }
   .runningWorkspace {
-    height: calc(100vh - 54px);
+    height: calc(100vh - 60px);
     min-height: 590px;
   }
   .itineraryBadge {
@@ -438,6 +461,6 @@
     font-size: 0.72rem;
   }
   .header > span {
-    font-size: 0.57rem;
+    display: none;
   }
 }

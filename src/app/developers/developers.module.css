@@ -1,9 +1,9 @@
 .page {
   min-height: 100vh;
-  background-color: #fafaf8;
+  background-color: var(--eye-paper);
   background-image:
-    linear-gradient(#e8e8e3 1px, transparent 1px),
-    linear-gradient(90deg, #e8e8e3 1px, transparent 1px);
+    linear-gradient(var(--eye-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--eye-grid) 1px, transparent 1px);
   background-size: 52px 52px;
   color: #17191b;
 }
@@ -12,9 +12,10 @@
   display: flex;
   align-items: center;
   gap: 2.5rem;
-  padding: 0 4vw;
-  background: #fff;
-  border-bottom: 1px solid #dedbd5;
+  padding: 0 3vw;
+  background: var(--eye-header);
+  border-bottom: 1px solid var(--eye-hair);
+  backdrop-filter: blur(12px);
 }
 .header nav {
   display: flex;
@@ -25,6 +26,15 @@
     700 0.68rem ui-monospace,
     monospace;
   text-transform: uppercase;
+}
+.header nav a {
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+.header nav a[aria-current="page"] {
+  color: #17191b;
+  border-bottom: 2px solid #ff1f6b;
 }
 .header > span {
   color: #ff1f6b;
@@ -103,10 +113,10 @@
 .labIntro h2 {
   max-width: 16ch;
   margin: 0;
-  font-size: clamp(2.7rem, 4.5vw, 4.8rem);
-  font-weight: 400;
-  letter-spacing: -0.07em;
-  line-height: 0.82;
+  font-size: clamp(3.1rem, 5.1vw, 5.8rem);
+  font-weight: 900;
+  letter-spacing: -0.055em;
+  line-height: 0.79;
   text-transform: uppercase;
 }
 .labIntro h2 em {
@@ -686,10 +696,14 @@
     padding: 0 1rem;
   }
   .header nav {
-    display: none;
+    display: flex;
+    gap: clamp(0.45rem, 2.2vw, 0.9rem);
+    margin-left: auto;
+    font-size: 0.56rem;
+    letter-spacing: 0.035em;
   }
   .header > span {
-    margin-left: auto;
+    display: none;
   }
   .hero,
   .sample {
@@ -711,7 +725,7 @@
     padding-top: 4rem;
   }
   .labIntro h2 {
-    font-size: clamp(2.6rem, 12vw, 4rem);
+    font-size: clamp(3rem, 13.5vw, 4.3rem);
   }
   .pipeline {
     grid-template-columns: 1fr;

@@ -1,9 +1,9 @@
 .page {
   min-height: 100vh;
-  background-color: #fafaf8;
+  background-color: var(--eye-paper);
   background-image:
-    linear-gradient(#e8e8e3 1px, transparent 1px),
-    linear-gradient(90deg, #e8e8e3 1px, transparent 1px);
+    linear-gradient(var(--eye-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--eye-grid) 1px, transparent 1px);
   background-size: 52px 52px;
   color: #17191b;
 }
@@ -13,8 +13,9 @@
   align-items: center;
   gap: 3vw;
   padding: 0 3vw;
-  background: #fff;
-  border-bottom: 1px solid #dedbd5;
+  background: var(--eye-header);
+  border-bottom: 1px solid var(--eye-hair);
+  backdrop-filter: blur(12px);
 }
 .header nav {
   display: flex;
@@ -28,14 +29,13 @@
   text-transform: uppercase;
   color: #89969b;
 }
-.header nav a,
-.header nav b {
+.header nav a {
   display: flex;
   align-items: center;
   height: 70px;
   line-height: 1;
 }
-.header nav b {
+.header nav a[aria-current="page"] {
   color: #17191b;
   border-bottom: 2px solid #ff1f6b;
 }
@@ -505,10 +505,14 @@
     padding: 0 1rem;
   }
   .header nav {
-    display: none;
+    display: flex;
+    gap: clamp(0.45rem, 2.2vw, 0.9rem);
+    margin-left: auto;
+    font-size: 0.56rem;
+    letter-spacing: 0.035em;
   }
   .status {
-    margin-left: auto;
+    display: none;
   }
   .hero {
     display: grid;
