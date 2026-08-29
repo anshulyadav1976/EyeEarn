@@ -146,7 +146,7 @@ function CoverageMap({
       container: host.current,
       style: streetMapStyle,
       center: [-0.11, 51.51],
-      zoom: 10.2,
+      zoom: 9.7,
       maxBounds: bounds,
       attributionControl: false,
     });
@@ -195,17 +195,16 @@ function CoverageMap({
       el.onclick = (e) => {
         e.stopPropagation();
         onSelect(item);
+        map.current?.flyTo({
+          center: [item.lng, item.lat],
+          zoom: 12,
+          duration: 500,
+        });
       };
       return new maplibregl.Marker({ element: el })
         .setLngLat([item.lng, item.lat])
         .addTo(map.current!);
     });
-    if (selected)
-      map.current.flyTo({
-        center: [selected.lng, selected.lat],
-        zoom: Math.max(map.current.getZoom(), 12),
-        duration: 500,
-      });
   }, [locations, selected, onSelect]);
   return (
     <div ref={host} className={styles.map} aria-label="London coverage map" />

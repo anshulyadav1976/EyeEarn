@@ -1,6 +1,43 @@
 {
   "runs": [
     {
+      "id": "RUN-254EE9AC",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:59:58.347Z",
+      "routePoints": [
+        {
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "accuracy": 6,
+          "altitude": 11,
+          "altitudeAccuracy": 4,
+          "heading": 65,
+          "speed": 1.7,
+          "recordedAt": "2026-08-29T13:59:58.504Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-5B6DF612",
+          "category": "voice note",
+          "description": "Manual observation at South access route",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:59:58.951Z",
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:59:59.198Z",
+      "handedOffAt": "2026-08-29T13:59:59.198Z"
+    },
+    {
       "id": "RUN-87146513",
       "runnerName": "Runner 01",
       "zoneIds": [
@@ -2963,7 +3000,7 @@
     },
     {
       "id": "zone-south-access",
-      "rewardMinor": 3020
+      "rewardMinor": 700
     }
   ]
 }

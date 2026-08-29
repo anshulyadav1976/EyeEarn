@@ -34,7 +34,6 @@ export async function fundDemoLocation(
   const zoneId = keyToZone[locationId] ?? locationId;
   let zone =
     zones.find((item) => item.id === zoneId) ?? customZones.get(zoneId);
-  let created = false;
   if (!zone && request.coordinates && request.safeForDemo) {
     const [lng, lat] = request.coordinates;
     if (
@@ -68,7 +67,6 @@ export async function fundDemoLocation(
       routeIndex: 100 + customZones.size,
     };
     customZones.set(zoneId, zone);
-    created = true;
   }
   if (
     !zone ||
@@ -77,12 +75,7 @@ export async function fundDemoLocation(
     amountMinor < 1
   )
     return null;
-  funded.set(
-    zoneId,
-    created
-      ? amountMinor
-      : (funded.get(zoneId) ?? zone.rewardMinor) + amountMinor,
-  );
+  funded.set(zoneId, amountMinor);
   const updated = {
     ...zone,
     rewardMinor: funded.get(zoneId)!,
