@@ -161,3 +161,12 @@ Verification passed on desktop and 390 px mobile: expected page order, no playba
 - Increased the Methodology statement to a heavier 900 weight and a larger responsive scale while preserving its black and reddish-pink treatment.
 
 Verification passed on desktop and 390 px mobile: exact link labels, order, destinations and active state; all links visible; zero horizontal overflow; matching computed backgrounds; 73.44 px/900 desktop headline; no browser console errors; ESLint and TypeScript.
+
+## Buyer coverage geometry workflow
+
+- Replaced the immediate map-to-payment jump with a deliberate select, refine, confirm, name and pay sequence.
+- Added a draggable building pin plus click-and-drag circle and rectangle footprints with live dimensions, clear/redraw and edit-on-map controls.
+- Added a custom coverage form that opens a prefilled email to `sales@eyeearn.com` for corridors, recurring surveys and multi-site work.
+- Updated the landing statement and metadata to “Go where the map needs eyes.”
+
+Verification passed for building, circle and rectangle selection, footprint correction and confirmation, custom-sales contact, desktop visual quality, 390 px overflow and browser console health.

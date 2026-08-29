@@ -157,30 +157,31 @@
   box-shadow: 0 0 0 3px #ff1f6b2e;
 }
 .requestBuilder {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.9rem 1.25rem;
+  display: grid;
+  grid-template-columns: minmax(230px, 0.8fr) minmax(420px, 1.8fr);
+  gap: 0.8rem 1.25rem;
+  padding: 1rem 1.25rem;
   border-bottom: 1px solid #dedbd5;
   background: #fff7fa;
 }
-.requestBuilder > div:first-child {
+.requestBuilderHead {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.requestBuilderHead > div {
   display: grid;
-  min-width: 220px;
+  gap: 0.2rem;
 }
 .requestBuilder small,
-.requestBuilder > b,
-.formStep small,
-.scopeFieldset legend {
+.formStep small {
   color: #777b7e;
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-.requestBuilder > b {
-  margin-left: auto;
-  color: #ff1f6b;
 }
 .scopePicker {
   display: flex;
@@ -198,6 +199,60 @@
   border-color: #ff1f6b;
   color: #fff;
   background: #ff1f6b;
+}
+.scopePicker .customScope {
+  border-style: dashed;
+  color: #17191b;
+}
+.cancelRequest,
+.clearSelection {
+  border: 0;
+  background: transparent;
+  color: #646a6e;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.drawInstruction {
+  margin: 0;
+  align-self: center;
+  color: #5a6064;
+  font-size: 0.88rem;
+}
+.selectionReview {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #ff1f6b;
+  background: #fff;
+  box-shadow: 4px 4px 0 #ff1f6b26;
+}
+.selectionReview > div {
+  display: grid;
+  gap: 0.15rem;
+}
+.selectionReview span,
+.formStep span {
+  color: #747b7e;
+  font:
+    600 0.7rem ui-monospace,
+    monospace;
+}
+.confirmSelection {
+  border: 0;
+  background: #ff1f6b;
+  color: #fff;
+  padding: 0.7rem 0.9rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+.selectionReview button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
 }
 .requestTop,
 .actions button,
@@ -244,6 +299,40 @@
     800 10px ui-monospace,
     monospace;
   color: #101417;
+}
+.selectionPin {
+  width: 24px;
+  height: 24px;
+  border: 4px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  background: #ff1f6b;
+  box-shadow: 0 2px 12px #0008;
+  cursor: grab;
+  transform: rotate(-45deg);
+}
+.selectionPin:active {
+  cursor: grabbing;
+}
+.shapeOverlay {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  min-height: 20px;
+  border: 4px solid #ff1f6b;
+  background: #ff1f6b38;
+  color: #fff;
+  box-shadow:
+    inset 0 0 0 1px #fff8,
+    0 2px 12px #0005;
+  pointer-events: none;
+}
+.shapeOverlay span {
+  padding: 0.32rem 0.42rem;
+  background: #ff1f6b;
+  font:
+    900 0.56rem ui-monospace,
+    monospace;
+  letter-spacing: 0.08em;
 }
 .marker.high {
   background: #ff1f6b;
@@ -449,35 +538,27 @@
 }
 .formStep {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem;
   border: 1px solid #dedbd5;
   background: #fafaf8;
 }
+.formStep > div {
+  display: grid;
+  gap: 0.2rem;
+}
 .formStep strong {
   font-size: 0.78rem;
 }
-.scopeFieldset {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-.scopeFieldset legend {
-  margin-bottom: 0.45rem;
-}
-.scopeFieldset label {
-  display: flex;
-  align-items: center;
-  grid-template-columns: auto 1fr;
+.formStep button {
   border: 1px solid #cbc7bf;
-  padding: 0.65rem 0.75rem;
+  background: #fff;
+  color: #17191b;
+  padding: 0.55rem 0.7rem;
+  font-weight: 800;
   cursor: pointer;
-}
-.scopeFieldset label:has(input:checked) {
-  border-color: #ff1f6b;
-  color: #ff1f6b;
-  background: #fff1f6;
 }
 .check {
   display: flex !important;
@@ -486,6 +567,11 @@
 }
 .modal small {
   color: #89969b;
+}
+.modalCopy {
+  margin: 0;
+  color: #50575a;
+  line-height: 1.55;
 }
 .footer {
   display: flex;
@@ -540,9 +626,16 @@
   }
   .requestBuilder {
     display: grid;
+    grid-template-columns: 1fr;
   }
-  .requestBuilder > b {
-    margin-left: 0;
+  .selectionReview {
+    grid-template-columns: 1fr 1fr;
+  }
+  .selectionReview > div {
+    grid-column: 1 / -1;
+  }
+  .selectionReview button {
+    width: 100%;
   }
   .legend {
     flex-wrap: wrap;

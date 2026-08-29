@@ -50,7 +50,7 @@ export default function Home() {
         <p className={styles.eyebrow}>Movement-powered place intelligence</p>
         <MotionHeadline />
         <p className={styles.statement}>
-          Run where the map needs <em>eyes.</em>
+          Go where the map needs <em>eyes.</em>
         </p>
         <div className={styles.heroFoot}>
           <p>

@@ -10,7 +10,7 @@ const saira = Saira_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "EyeEarn · Run where the map needs eyes",
+  title: "EyeEarn · Go where the map needs eyes",
   description:
     "A movement-powered marketplace for privacy-processed place intelligence.",
 };

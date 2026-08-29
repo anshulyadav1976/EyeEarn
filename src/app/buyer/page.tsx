@@ -20,6 +20,16 @@ type Coverage = {
   note: string;
 };
 type RequestScope = "building" | "circle" | "rectangle";
+type RequestGeometry =
+  | { scope: "building"; lng: number; lat: number }
+  | { scope: "circle"; lng: number; lat: number; radius: number }
+  | {
+      scope: "rectangle";
+      west: number;
+      south: number;
+      east: number;
+      north: number;
+    };
 const locations: Coverage[] = [
   {
     id: "zone-south-access",
@@ -207,32 +217,58 @@ const bounds: [[number, number], [number, number]] = [
   [-0.52, 51.3],
   [0.32, 51.7],
 ];
+function geometryCenter(selection: RequestGeometry) {
+  if (selection.scope !== "rectangle") {
+    return { lng: selection.lng, lat: selection.lat };
+  }
+  return {
+    lng: (selection.west + selection.east) / 2,
+    lat: (selection.south + selection.north) / 2,
+  };
+}
+function geometryLabel(selection: RequestGeometry) {
+  if (selection.scope === "building") return "Specific building · draggable pin";
+  if (selection.scope === "circle") {
+    return `Circle · ${Math.round(selection.radius)} m radius`;
+  }
+  const centre = geometryCenter(selection);
+  const width =
+    (selection.east - selection.west) *
+    111320 *
+    Math.cos((centre.lat * Math.PI) / 180);
+  const height = (selection.north - selection.south) * 111320;
+  return `Rectangle · ${Math.round(width)} × ${Math.round(height)} m`;
+}
 function CoverageMap({
   locations,
   satellite,
   onSelect,
   onMapClick,
+  onSelectionChange,
+  activeScope,
   requestSelection,
 }: {
   locations: Coverage[];
   satellite: boolean;
   onSelect: (item: Coverage) => void;
   onMapClick: (lng: number, lat: number) => void;
-  requestSelection: {
-    lng: number;
-    lat: number;
-    scope: RequestScope;
-    size: number;
-  } | null;
+  onSelectionChange: (selection: RequestGeometry) => void;
+  activeScope: RequestScope | null;
+  requestSelection: RequestGeometry | null;
 }) {
   const host = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const markers = useRef<maplibregl.Marker[]>([]);
+  const selectionMarker = useRef<maplibregl.Marker | null>(null);
   const onMapClickRef = useRef(onMapClick);
+  const onSelectionChangeRef = useRef(onSelectionChange);
   const satelliteRef = useRef(satellite);
   useEffect(() => {
     onMapClickRef.current = onMapClick;
   }, [onMapClick]);
+  useEffect(() => {
+    onSelectionChangeRef.current = onSelectionChange;
+  }, [onSelectionChange]);
   useEffect(() => {
     satelliteRef.current = satellite;
   }, [satellite]);
@@ -251,14 +287,79 @@ function CoverageMap({
       new maplibregl.NavigationControl({ showCompass: false }),
       "bottom-right",
     );
-    instance.on("click", (e) =>
-      onMapClickRef.current(e.lngLat.lng, e.lngLat.lat),
-    );
     return () => {
       instance.remove();
       map.current = null;
     };
   }, []);
+  useEffect(() => {
+    const instance = map.current;
+    if (!instance) return;
+    const canvas = instance.getCanvas();
+    requestAnimationFrame(() => instance.resize());
+    canvas.style.cursor = activeScope ? "crosshair" : "";
+    let start: { lng: number; lat: number } | null = null;
+
+    const metresBetween = (
+      first: { lng: number; lat: number },
+      second: { lng: number; lat: number },
+    ) =>
+      Math.hypot(
+        (second.lng - first.lng) *
+          111320 *
+          Math.cos((first.lat * Math.PI) / 180),
+        (second.lat - first.lat) * 111320,
+      );
+    const click = (event: maplibregl.MapMouseEvent) => {
+      if (activeScope === "building") {
+        onMapClickRef.current(event.lngLat.lng, event.lngLat.lat);
+      }
+    };
+    const move = (event: maplibregl.MapMouseEvent) => {
+      if (!start || !activeScope || activeScope === "building") return;
+      if (activeScope === "circle") {
+        onSelectionChangeRef.current({
+          scope: "circle",
+          lng: start.lng,
+          lat: start.lat,
+          radius: Math.max(20, metresBetween(start, event.lngLat)),
+        });
+      } else {
+        onSelectionChangeRef.current({
+          scope: "rectangle",
+          west: Math.min(start.lng, event.lngLat.lng),
+          south: Math.min(start.lat, event.lngLat.lat),
+          east: Math.max(start.lng, event.lngLat.lng),
+          north: Math.max(start.lat, event.lngLat.lat),
+        });
+      }
+    };
+    const down = (event: maplibregl.MapMouseEvent) => {
+      if (!activeScope || activeScope === "building") return;
+      event.preventDefault();
+      start = { lng: event.lngLat.lng, lat: event.lngLat.lat };
+      instance.dragPan.disable();
+      move(event);
+    };
+    const up = (event: maplibregl.MapMouseEvent) => {
+      if (!start) return;
+      move(event);
+      start = null;
+      instance.dragPan.enable();
+    };
+    instance.on("click", click);
+    instance.on("mousedown", down);
+    instance.on("mousemove", move);
+    instance.on("mouseup", up);
+    return () => {
+      canvas.style.cursor = "";
+      instance.off("click", click);
+      instance.off("mousedown", down);
+      instance.off("mousemove", move);
+      instance.off("mouseup", up);
+      instance.dragPan.enable();
+    };
+  }, [activeScope]);
   useEffect(() => {
     const instance = map.current;
     if (!instance) return;
@@ -328,7 +429,10 @@ function CoverageMap({
               },
             }
           : (() => {
-              const radius = Math.max(40, requestSelection.size) / 111320;
+              const radius =
+                requestSelection.scope === "circle"
+                  ? Math.max(20, requestSelection.radius) / 111320
+                  : 0;
               const points =
                 requestSelection.scope === "circle"
                   ? Array.from({ length: 41 }, (_, index) => {
@@ -342,24 +446,24 @@ function CoverageMap({
                     })
                   : [
                       [
-                        requestSelection.lng - radius,
-                        requestSelection.lat - radius,
+                        requestSelection.west,
+                        requestSelection.south,
                       ],
                       [
-                        requestSelection.lng + radius,
-                        requestSelection.lat - radius,
+                        requestSelection.east,
+                        requestSelection.south,
                       ],
                       [
-                        requestSelection.lng + radius,
-                        requestSelection.lat + radius,
+                        requestSelection.east,
+                        requestSelection.north,
                       ],
                       [
-                        requestSelection.lng - radius,
-                        requestSelection.lat + radius,
+                        requestSelection.west,
+                        requestSelection.north,
                       ],
                       [
-                        requestSelection.lng - radius,
-                        requestSelection.lat - radius,
+                        requestSelection.west,
+                        requestSelection.south,
                       ],
                     ];
               return {
@@ -382,13 +486,13 @@ function CoverageMap({
           id: "request-area",
           type: "fill",
           source: "request-selection",
-          paint: { "fill-color": "#ff1f6b", "fill-opacity": 0.2 },
+          paint: { "fill-color": "#ff1f6b", "fill-opacity": 0.32 },
         });
         instance.addLayer({
           id: "request-outline",
           type: "line",
           source: "request-selection",
-          paint: { "line-color": "#ff1f6b", "line-width": 4 },
+          paint: { "line-color": "#ff1f6b", "line-width": 5 },
         });
         instance.addLayer({
           id: "request-point",
@@ -409,6 +513,71 @@ function CoverageMap({
       instance.off("load", syncSelection);
     };
   }, [requestSelection]);
+  useEffect(() => {
+    selectionMarker.current?.remove();
+    selectionMarker.current = null;
+    const instance = map.current;
+    if (!instance || !requestSelection) return;
+    const centre = geometryCenter(requestSelection);
+    const element = document.createElement("div");
+    const building = requestSelection.scope === "building";
+    element.className = building ? styles.selectionPin : styles.shapeOverlay;
+    element.title = building
+      ? "Drag to refine the building location"
+      : "Selected coverage footprint";
+    if (!building) element.innerHTML = "<span>AREA</span>";
+    const marker = new maplibregl.Marker({ element, draggable: building })
+      .setLngLat([centre.lng, centre.lat])
+      .addTo(instance);
+    let updateOverlay: (() => void) | null = null;
+    if (building) {
+      marker.on("dragend", () => {
+        const point = marker.getLngLat();
+        onSelectionChangeRef.current({
+          scope: "building",
+          lng: point.lng,
+          lat: point.lat,
+        });
+      });
+    } else {
+      updateOverlay = () => {
+        const centerPoint = instance.project([centre.lng, centre.lat]);
+        if (requestSelection.scope === "circle") {
+          const edgeLng =
+            requestSelection.lng +
+            requestSelection.radius /
+              (111320 * Math.cos((requestSelection.lat * Math.PI) / 180));
+          const edgePoint = instance.project([edgeLng, requestSelection.lat]);
+          const diameter = Math.max(20, Math.abs(edgePoint.x - centerPoint.x) * 2);
+          element.style.width = `${diameter}px`;
+          element.style.height = `${diameter}px`;
+          element.style.borderRadius = "50%";
+        } else {
+          const northWest = instance.project([
+            requestSelection.west,
+            requestSelection.north,
+          ]);
+          const southEast = instance.project([
+            requestSelection.east,
+            requestSelection.south,
+          ]);
+          element.style.width = `${Math.max(20, Math.abs(southEast.x - northWest.x))}px`;
+          element.style.height = `${Math.max(20, Math.abs(southEast.y - northWest.y))}px`;
+        }
+      };
+      updateOverlay();
+      instance.on("zoom", updateOverlay);
+      instance.on("resize", updateOverlay);
+    }
+    selectionMarker.current = marker;
+    return () => {
+      if (updateOverlay) {
+        instance.off("zoom", updateOverlay);
+        instance.off("resize", updateOverlay);
+      }
+      marker.remove();
+    };
+  }, [requestSelection]);
   return (
     <div ref={host} className={styles.map} aria-label="London coverage map" />
   );
@@ -424,7 +593,11 @@ export default function BuyerPage() {
   const [requestMode, setRequestMode] = useState(false);
   const [requestDraft, setRequestDraft] = useState<Coverage | null>(null);
   const [requestScope, setRequestScope] = useState<RequestScope>("building");
-  const [areaSize, setAreaSize] = useState("180");
+  const [requestGeometry, setRequestGeometry] =
+    useState<RequestGeometry | null>(null);
+  const [customOpen, setCustomOpen] = useState(false);
+  const [customOrganisation, setCustomOrganisation] = useState("");
+  const [customBrief, setCustomBrief] = useState("");
   const [locationName, setLocationName] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Demo card · •••• 4242");
   const [requirement, setRequirement] = useState(
@@ -475,6 +648,24 @@ export default function BuyerPage() {
   const matches = coverageLocations
     .filter((i) => i.name.toLowerCase().includes(query.toLowerCase()))
     .slice(0, 5);
+  function updateRequestSelection(selection: RequestGeometry) {
+    const point = geometryCenter(selection);
+    const draft = {
+      id: "draft-coverage-request",
+      name:
+        selection.scope === "building"
+          ? "Selected building"
+          : "Selected coverage area",
+      lng: point.lng,
+      lat: point.lat,
+      coverage: 0,
+      freshness: "No evidence",
+      rewardMinor: 800,
+      note: "Start a request for this public location.",
+    };
+    setRequestGeometry(selection);
+    setRequestDraft(draft);
+  }
   async function postFund(amount: number, verb: string, target = selected) {
     if (!target) return;
     setMessage("Sending coverage request…");
@@ -593,8 +784,9 @@ export default function BuyerPage() {
               onClick={() => {
                 setRequestMode(true);
                 setRequestDraft(null);
+                setRequestGeometry(null);
                 setMessage(
-                  "Choose a footprint, then click its location on the map",
+                  "Choose a footprint, place it precisely, then confirm",
                 );
               }}
             >
@@ -604,9 +796,22 @@ export default function BuyerPage() {
         </div>
         {requestMode && (
           <div className={styles.requestBuilder}>
-            <div>
-              <small>Step 1</small>
-              <strong>Choose what you want covered</strong>
+            <div className={styles.requestBuilderHead}>
+              <div>
+                <small>New coverage request</small>
+                <strong>Choose, draw and confirm the exact footprint</strong>
+              </div>
+              <button
+                type="button"
+                className={styles.cancelRequest}
+                onClick={() => {
+                  setRequestMode(false);
+                  setRequestDraft(null);
+                  setRequestGeometry(null);
+                }}
+              >
+                Cancel
+              </button>
             </div>
             <div className={styles.scopePicker}>
               {(
@@ -620,48 +825,80 @@ export default function BuyerPage() {
                   type="button"
                   key={value}
                   className={requestScope === value ? styles.activeScope : ""}
-                  onClick={() => setRequestScope(value)}
+                  onClick={() => {
+                    setRequestScope(value);
+                    setRequestDraft(null);
+                    setRequestGeometry(null);
+                  }}
                 >
                   {label}
                 </button>
               ))}
+              <button
+                type="button"
+                className={styles.customScope}
+                onClick={() => setCustomOpen(true)}
+              >
+                Request custom coverage ↗
+              </button>
             </div>
-            <b>Step 2 · click the exact location on the map</b>
+            <p className={styles.drawInstruction}>
+              {requestScope === "building"
+                ? "Click to place the pin, then drag it for precision."
+                : `Click and drag to draw a ${requestScope}. Draw again to correct it.`}
+            </p>
+            <div className={styles.selectionReview}>
+              <div>
+                <small>
+                  {requestGeometry ? "Footprint ready" : "Map selection"}
+                </small>
+                <strong>
+                  {requestGeometry
+                    ? geometryLabel(requestGeometry)
+                    : "Place or draw a footprint on the map below"}
+                </strong>
+                {requestDraft && (
+                  <span>
+                    {requestDraft.lat.toFixed(5)}, {requestDraft.lng.toFixed(5)}
+                  </span>
+                )}
+              </div>
+              <button
+                type="button"
+                className={styles.clearSelection}
+                disabled={!requestGeometry}
+                onClick={() => {
+                  setRequestDraft(null);
+                  setRequestGeometry(null);
+                }}
+              >
+                Clear &amp; redraw
+              </button>
+              <button
+                type="button"
+                className={styles.confirmSelection}
+                disabled={!requestDraft}
+                onClick={() => {
+                  if (!requestDraft) return;
+                  setLocationName(requestDraft.name);
+                  setRequestOpen(true);
+                }}
+              >
+                Use this footprint →
+              </button>
+            </div>
           </div>
         )}
         <CoverageMap
           locations={coverageLocations}
           satellite={satellite}
           onSelect={setSelected}
-          requestSelection={
-            requestDraft
-              ? {
-                  lng: requestDraft.lng,
-                  lat: requestDraft.lat,
-                  scope: requestScope,
-                  size: Number(areaSize),
-                }
-              : null
-          }
+          activeScope={requestMode ? requestScope : null}
+          requestSelection={requestGeometry}
+          onSelectionChange={updateRequestSelection}
           onMapClick={(lng, lat) => {
-            if (!requestMode) return;
-            const point = {
-              id: `point-${Date.now()}`,
-              name:
-                requestScope === "building"
-                  ? "Selected building"
-                  : "Selected coverage area",
-              lng,
-              lat,
-              coverage: 0,
-              freshness: "No evidence",
-              rewardMinor: 800,
-              note: "Start a request for this public location.",
-            };
-            setSelected(point);
-            setRequestDraft(point);
-            setLocationName(point.name);
-            setRequestOpen(true);
+            if (!requestMode || requestScope !== "building") return;
+            updateRequestSelection({ scope: "building", lng, lat });
           }}
         />
         <div className={styles.legend}>
@@ -677,7 +914,11 @@ export default function BuyerPage() {
             <i className={styles.low} />
             needs coverage
           </span>
-          <span className={styles.hint}>Click the map to request a point</span>
+          <span className={styles.hint}>
+            {requestMode
+              ? "Selection mode · confirm above before payment"
+              : "Select Request coverage to place a footprint"}
+          </span>
         </div>
       </section>
       {selected && (
@@ -723,9 +964,15 @@ export default function BuyerPage() {
               className={styles.secondary}
               onClick={() => {
                 setRequestDraft(selected);
+                setRequestGeometry({
+                  scope: "building",
+                  lng: selected.lng,
+                  lat: selected.lat,
+                });
                 setLocationName(selected.name);
+                setRequestScope("building");
                 setRequestMode(true);
-                setRequestOpen(true);
+                setMessage("Review or drag the pin, then confirm the footprint");
               }}
             >
               Request fresh coverage
@@ -757,6 +1004,8 @@ export default function BuyerPage() {
               setSelected(target);
               setRequestOpen(false);
               setRequestMode(false);
+              setRequestDraft(null);
+              setRequestGeometry(null);
               postFund(
                 Math.round(Number(budget) * 100),
                 `${paymentMethod} payment`,
@@ -767,11 +1016,7 @@ export default function BuyerPage() {
             <button
               type="button"
               className={styles.close}
-              onClick={() => {
-                setRequestOpen(false);
-                setRequestMode(false);
-                setRequestDraft(null);
-              }}
+              onClick={() => setRequestOpen(false)}
               aria-label="Close request form"
             >
               ×
@@ -779,10 +1024,23 @@ export default function BuyerPage() {
             <p className={styles.eyebrow}>New buyer request</p>
             <h2>Fund fresh coverage.</h2>
             <div className={styles.formStep}>
-              <small>Selected on map</small>
-              <strong>
-                {requestDraft?.lat.toFixed(5)}, {requestDraft?.lng.toFixed(5)}
-              </strong>
+              <div>
+                <small>Confirmed footprint</small>
+                <strong>
+                  {requestGeometry
+                    ? geometryLabel(requestGeometry)
+                    : "Map selection"}
+                </strong>
+                <span>
+                  {requestDraft?.lat.toFixed(5)}, {requestDraft?.lng.toFixed(5)}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setRequestOpen(false)}
+              >
+                Edit on map
+              </button>
             </div>
             <label>
               Location name
@@ -794,42 +1052,6 @@ export default function BuyerPage() {
                 placeholder="e.g. Stratford station west entrance"
               />
             </label>
-            <fieldset className={styles.scopeFieldset}>
-              <legend>Coverage footprint</legend>
-              <div className={styles.scopePicker}>
-                {(
-                  [
-                    ["building", "Building"],
-                    ["circle", "Circle"],
-                    ["rectangle", "Rectangle"],
-                  ] as const
-                ).map(([value, label]) => (
-                  <label key={value}>
-                    <input
-                      type="radio"
-                      name="coverage-scope"
-                      value={value}
-                      checked={requestScope === value}
-                      onChange={() => setRequestScope(value)}
-                    />
-                    {label}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-            {requestScope !== "building" && (
-              <label>
-                {requestScope === "circle" ? "Radius" : "Half-width"} (metres)
-                <input
-                  type="number"
-                  min="40"
-                  max="1000"
-                  step="20"
-                  value={areaSize}
-                  onChange={(e) => setAreaSize(e.target.value)}
-                />
-              </label>
-            )}
             <label>
               What should a runner check?
               <textarea
@@ -868,6 +1090,63 @@ export default function BuyerPage() {
             <small>
               Only sampled, privacy-processed evidence is collected.
             </small>
+          </form>
+        </div>
+      )}
+      {customOpen && (
+        <div className={styles.modalBackdrop} role="dialog" aria-modal="true">
+          <form
+            className={styles.modal}
+            onSubmit={(event) => {
+              event.preventDefault();
+              const subject = encodeURIComponent(
+                `EyeEarn custom coverage · ${customOrganisation}`,
+              );
+              const body = encodeURIComponent(
+                `Organisation: ${customOrganisation}\n\nCoverage request:\n${customBrief}\n\nPlease contact me to scope this request.`,
+              );
+              window.location.href = `mailto:sales@eyeearn.com?subject=${subject}&body=${body}`;
+            }}
+          >
+            <button
+              type="button"
+              className={styles.close}
+              onClick={() => setCustomOpen(false)}
+              aria-label="Close custom coverage form"
+            >
+              ×
+            </button>
+            <p className={styles.eyebrow}>Custom coverage</p>
+            <h2>Contact sales.</h2>
+            <p className={styles.modalCopy}>
+              For corridors, recurring surveys, multi-site programmes or a
+              footprint that cannot be drawn here, send the EyeEarn coverage
+              team a scoped brief.
+            </p>
+            <label>
+              Organisation
+              <input
+                type="text"
+                required
+                value={customOrganisation}
+                onChange={(event) =>
+                  setCustomOrganisation(event.target.value)
+                }
+                placeholder="e.g. London Borough of Newham"
+              />
+            </label>
+            <label>
+              Coverage brief
+              <textarea
+                required
+                rows={5}
+                value={customBrief}
+                onChange={(event) => setCustomBrief(event.target.value)}
+                placeholder="Locations, evidence needed, frequency and target dates"
+              />
+            </label>
+            <button type="submit">Contact sales@eyeearn.com →</button>
+            <small>Your email app will open with this brief prefilled.</small>
           </form>
         </div>
       )}
