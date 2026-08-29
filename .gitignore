@@ -37,7 +37,8 @@ yarn-error.log*
 .vercel
 
 # local demo ledger
-/.data/
+/.data/*
+!/.data/phase2.json
 
 # typescript
 *.tsbuildinfo

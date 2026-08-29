@@ -40,4 +40,14 @@ Verification passed: Node itinerary test, ESLint, production build, real Luna-me
 - Scrubbed contact-shaped text, persisted only short structured notes, never continuous audio, and exposed derived/anonymized buyer status first.
 - Faces are blurred with the native detector where available; Luna flags faces/plates and risky evidence is held when redaction cannot be confirmed.
 
-The combined Phase 1–4 actual-phone permission/walking flow remains the final human test gate, as requested.
+## Phase 2–4 demo refinement — London map-first workflow
+
+- Replaced diagram-like maps with London-wide Carto street tiles and an Esri satellite toggle.
+- Simplified Explore to the bounty map, compact brief, camera preview and sticky live-run dock with elapsed time, distance, pace, earnings, observation, details and finish controls.
+- Expanded safe bounties across London and made buyer-created public points persist as real shared runner bounties.
+- Rebuilt Buyer around a clickable London coverage map, lightweight dossier and one short request form.
+- Added the Operations submissions page with route/evidence review and flat/perspective map modes.
+- Added local SQLite plus a portable JSON snapshot, export endpoint and explicit Vercel persistence boundaries.
+- Upgraded multimodal inference to three privacy-processed frames over about one second, one Luna-medium temporal report every six seconds, and a safe local fallback.
+
+Verification passed: live three-frame Luna-medium request, local SQLite and JSON writes, buyer-to-runner bounty sharing, GPS/manual-evidence run and handoff, Operations 2D/3D review, desktop/mobile visual review, responsive overflow, lint, TypeScript, tests and production build. The combined actual-phone permission/walking flow remains the final human test gate.

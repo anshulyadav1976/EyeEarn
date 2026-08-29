@@ -1,115 +1,294 @@
 "use client";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { seededObservations } from "@/lib/eyeearn-data";
+import { useEffect, useRef, useState } from "react";
+import * as maplibregl from "maplibre-gl";
+import type { Map as MapLibreMap } from "maplibre-gl";
+import type { ChangeEvent } from "react";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { streetMapStyle } from "@/lib/map-styles";
 import styles from "./buyer.module.css";
-type Evidence = {
+type Coverage = {
   id: string;
-  place: string;
+  name: string;
+  lng: number;
+  lat: number;
+  coverage: number;
   freshness: string;
-  age: string;
-  available: string;
-  coverage: string;
-  source: string;
-  privacy: string;
-  confidence: string;
+  rewardMinor: number;
   note: string;
-  priceMinor: number;
-  range: string;
-  color: string;
 };
-const evidence: Evidence[] = [
+const locations: Coverage[] = [
   {
-    id: "south",
-    place: "South access route",
-    freshness: "Fresh",
-    age: "12 min ago",
-    available: "92%",
-    coverage: "Visual + sound level",
-    source: "Runner 01 · demo run",
-    privacy: "Anonymized",
-    confidence: "High",
-    note: "Step-free route is clear. One temporary delivery barrier at the east kerb.",
-    priceMinor: 920,
-    range: "08:42–08:49",
-    color: "hot",
+    id: "zone-south-access",
+    name: "South Bank access route",
+    lng: -0.106,
+    lat: 51.505,
+    coverage: 92,
+    freshness: "Fresh · 12m",
+    rewardMinor: 920,
+    note: "Step-free route check and temporary obstruction scan.",
   },
   {
-    id: "river",
-    place: "River gate approach",
-    freshness: "Fresh",
-    age: "31 min ago",
-    available: "64%",
-    coverage: "Visual only",
-    source: "Runner 02 · external",
-    privacy: "Anonymized",
-    confidence: "Medium",
-    note: "Gate visible and open. Sound sample is missing; traffic conditions may have changed.",
-    priceMinor: 610,
-    range: "08:12–08:16",
-    color: "warm",
+    id: "zone-river-gate",
+    name: "River gate approach",
+    lng: -0.01485,
+    lat: 51.5404,
+    coverage: 64,
+    freshness: "Fresh · 31m",
+    rewardMinor: 610,
+    note: "Visual coverage is good; a sound sample is still needed.",
   },
   {
-    id: "north",
-    place: "North loop signage",
-    freshness: "Aging",
-    age: "3 days ago",
-    available: "38%",
-    coverage: "Visual + GPS",
-    source: "Runner 04 · external",
-    privacy: "Derived only",
-    confidence: "Medium",
-    note: "Sign points toward the stadium. Coverage is stale and no current obstruction check exists.",
-    priceMinor: 380,
-    range: "14 Aug · 16:10–16:14",
-    color: "cool",
+    id: "zone-north-loop",
+    name: "North loop signage",
+    lng: -0.142,
+    lat: 51.565,
+    coverage: 38,
+    freshness: "Aging · 3d",
+    rewardMinor: 380,
+    note: "Refresh signage and obstruction evidence around the loop.",
+  },
+  {
+    id: "london-camden",
+    name: "Camden market approach",
+    lng: -0.142,
+    lat: 51.541,
+    coverage: 54,
+    freshness: "Fresh · 2h",
+    rewardMinor: 740,
+    note: "Crowd flow and step-free access around the market.",
+  },
+  {
+    id: "london-greenwich",
+    name: "Greenwich footway",
+    lng: 0.002,
+    lat: 51.478,
+    coverage: 27,
+    freshness: "Aging · 6d",
+    rewardMinor: 520,
+    note: "Current route condition and wayfinding refresh.",
+  },
+  {
+    id: "london-paddington",
+    name: "Paddington interchange",
+    lng: -0.176,
+    lat: 51.516,
+    coverage: 71,
+    freshness: "Fresh · 45m",
+    rewardMinor: 680,
+    note: "Entrance accessibility and temporary works scan.",
+  },
+  {
+    id: "london-clapham",
+    name: "Clapham junction",
+    lng: -0.17,
+    lat: 51.465,
+    coverage: 43,
+    freshness: "Fresh · 4h",
+    rewardMinor: 460,
+    note: "Crossing safety and pavement obstruction evidence.",
+  },
+  {
+    id: "london-hampstead",
+    name: "Hampstead Heath edge",
+    lng: -0.178,
+    lat: 51.56,
+    coverage: 19,
+    freshness: "Aging · 9d",
+    rewardMinor: 810,
+    note: "Trail entrance condition and accessible route check.",
+  },
+  {
+    id: "london-stratford",
+    name: "Stratford east route",
+    lng: -0.004,
+    lat: 51.542,
+    coverage: 61,
+    freshness: "Fresh · 1h",
+    rewardMinor: 590,
+    note: "Route continuity and signage near the station.",
+  },
+  {
+    id: "london-richmond",
+    name: "Richmond riverside",
+    lng: -0.301,
+    lat: 51.461,
+    coverage: 34,
+    freshness: "Aging · 4d",
+    rewardMinor: 430,
+    note: "Riverside access, steps and temporary barriers.",
   },
 ];
 const money = (minor: number) => `£${(minor / 100).toFixed(2)}`;
-export default function BuyerPage() {
-  const [query, setQuery] = useState("");
-  const [selectedId, setSelectedId] = useState("south");
-  const [message, setMessage] = useState("");
-  const [asOf, setAsOf] = useState("2026-08-29T08:49");
-  const [timeWindow, setTimeWindow] = useState("24 hours");
-  const [funded, setFunded] = useState(false);
-  const selected = evidence.find((i) => i.id === selectedId) || evidence[0];
-  const matches = useMemo(
-    () => {
-      const search = query.trim().toLowerCase();
-      return search
-        ? evidence.filter((i) => i.place.toLowerCase().includes(search))
-        : [];
-    },
-    [query],
+const bounds: [[number, number], [number, number]] = [
+  [-0.52, 51.3],
+  [0.32, 51.7],
+];
+function CoverageMap({
+  locations,
+  selected,
+  satellite,
+  onSelect,
+  onMapClick,
+}: {
+  locations: Coverage[];
+  selected: Coverage | null;
+  satellite: boolean;
+  onSelect: (item: Coverage) => void;
+  onMapClick: (lng: number, lat: number) => void;
+}) {
+  const host = useRef<HTMLDivElement>(null);
+  const map = useRef<MapLibreMap | null>(null);
+  const markers = useRef<maplibregl.Marker[]>([]);
+  useEffect(() => {
+    if (!host.current || map.current) return;
+    const instance = new maplibregl.Map({
+      container: host.current,
+      style: streetMapStyle,
+      center: [-0.11, 51.51],
+      zoom: 10.2,
+      maxBounds: bounds,
+      attributionControl: false,
+    });
+    map.current = instance;
+    instance.addControl(
+      new maplibregl.NavigationControl({ showCompass: false }),
+      "bottom-right",
+    );
+    instance.on("click", (e) => onMapClick(e.lngLat.lng, e.lngLat.lat));
+    return () => {
+      instance.remove();
+      map.current = null;
+    };
+  }, [onMapClick]);
+  useEffect(() => {
+    const instance = map.current;
+    if (!instance || !instance.isStyleLoaded()) return;
+    if (satellite && !instance.getSource("satellite")) {
+      instance.addSource("satellite", {
+        type: "raster",
+        tiles: [
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        ],
+        tileSize: 256,
+        attribution: "Esri",
+      });
+      instance.addLayer({
+        id: "satellite",
+        type: "raster",
+        source: "satellite",
+      });
+    } else if (!satellite && instance.getLayer("satellite")) {
+      instance.removeLayer("satellite");
+      instance.removeSource("satellite");
+    }
+  }, [satellite]);
+  useEffect(() => {
+    if (!map.current) return;
+    markers.current.forEach((m) => m.remove());
+    markers.current = locations.map((item) => {
+      const el = document.createElement("button");
+      el.type = "button";
+      el.title = `${item.name} · ${money(item.rewardMinor)}`;
+      el.className = `${styles.marker} ${item.coverage < 40 ? styles.low : item.coverage < 70 ? styles.mid : styles.high}`;
+      el.innerHTML = `<span>${item.coverage}%</span>`;
+      el.onclick = (e) => {
+        e.stopPropagation();
+        onSelect(item);
+      };
+      return new maplibregl.Marker({ element: el })
+        .setLngLat([item.lng, item.lat])
+        .addTo(map.current!);
+    });
+    if (selected)
+      map.current.flyTo({
+        center: [selected.lng, selected.lat],
+        zoom: Math.max(map.current.getZoom(), 12),
+        duration: 500,
+      });
+  }, [locations, selected, onSelect]);
+  return (
+    <div ref={host} className={styles.map} aria-label="London coverage map" />
   );
-  const questions = [
-    "Is the route step-free?",
-    "What is blocking access?",
-    "How busy is it right now?",
-  ];
-  function purchase() {
-    setMessage("Demo report purchased · anonymized evidence unlocked");
-  }
-  async function fund() {
-    setMessage("Funding request queued…");
+}
+export default function BuyerPage() {
+  const [coverageLocations, setCoverageLocations] =
+    useState<Coverage[]>(locations);
+  const [selected, setSelected] = useState<Coverage | null>(locations[0]);
+  const [satellite, setSatellite] = useState(false);
+  const [query, setQuery] = useState("");
+  const [message, setMessage] = useState("");
+  const [requestOpen, setRequestOpen] = useState(false);
+  const [requirement, setRequirement] = useState(
+    "Access and obstruction check",
+  );
+  const [budget, setBudget] = useState("8");
+  useEffect(() => {
+    fetch("/api/fund")
+      .then((response) => response.json())
+      .then((data) => {
+        if (!Array.isArray(data.zones)) return;
+        const live = data.zones
+          .filter((zone: { safeForDemo?: boolean }) => zone.safeForDemo)
+          .map(
+            (
+              zone: {
+                id: string;
+                name: string;
+                coordinates: [number, number];
+                rewardMinor: number;
+                evidence: string;
+              },
+              index: number,
+            ) => {
+              const known = locations.find((item) => item.id === zone.id);
+              return {
+                id: zone.id,
+                name: zone.name,
+                lng: zone.coordinates[0],
+                lat: zone.coordinates[1],
+                coverage: known?.coverage ?? (index * 17 + 23) % 76,
+                freshness: known?.freshness ?? "Needs fresh evidence",
+                rewardMinor: zone.rewardMinor,
+                note: zone.evidence,
+              } satisfies Coverage;
+            },
+          );
+        if (live.length) {
+          setCoverageLocations(live);
+          setSelected(
+            (current) =>
+              live.find((item: Coverage) => item.id === current?.id) ?? live[0],
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
+  const matches = coverageLocations
+    .filter((i) => i.name.toLowerCase().includes(query.toLowerCase()))
+    .slice(0, 5);
+  async function postFund(amount: number, verb: string) {
+    if (!selected) return;
+    setMessage("Sending coverage request…");
     try {
       const r = await fetch("/api/fund", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           locationId: selected.id,
-          amountMinor: selected.priceMinor,
+          amountMinor: amount,
           currency: "GBP",
+          requirement,
+          safeForDemo: true,
+          name: selected.name,
+          coordinates: [selected.lng, selected.lat],
         }),
       });
       if (!r.ok) throw Error();
-      setFunded(true);
-      setMessage("Coverage request funded · receipt ready for the demo");
+      setMessage(`${selected.name} is funded · runners can now collect it`);
     } catch {
-      setFunded(true);
       setMessage(
-        "Demo funding recorded locally · connect /api/fund for live checkout",
+        `${verb} recorded for the demo · ${selected.name} · ${money(amount)} bounty`,
       );
     }
   }
@@ -122,202 +301,219 @@ export default function BuyerPage() {
         <nav>
           <Link href="/explore">Explore & Earn</Link>
           <b>Buyer</b>
-          <Link href="/operations">Authority</Link>
+          <Link href="/operations">Submissions</Link>
         </nav>
-        <span className={styles.status}>● DEMO EVIDENCE</span>
+        <span className={styles.status}>● BUYER CONSOLE</span>
       </header>
-      <section className={styles.intro}>
+      <section className={styles.hero}>
         <div>
-          <p className={styles.kicker}>Buyer data map · phase 3</p>
+          <p className={styles.eyebrow}>Coverage desk · London</p>
           <h1>
-            Buy the answer.
+            Find the
             <br />
-            <em>See the gaps.</em>
+            <em>missing view.</em>
           </h1>
-          <p className={styles.lede}>
-            A location dossier built from time-stamped, privacy-safe
-            observations. Runner evidence and external data stay clearly
-            labelled.
+          <p>
+            Click any point on the map to inspect evidence, buy a current
+            answer, or request fresh coverage.
           </p>
         </div>
         <div className={styles.search}>
-          <label htmlFor="location-search">Search locations</label>
+          <label htmlFor="location-search">Search London</label>
           <input
             id="location-search"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Try “south” or “river”"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setQuery(e.target.value)
+            }
+            placeholder="Camden, Greenwich…"
           />
-          <div className={styles.suggestions}>
-            {matches.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setSelectedId(item.id);
-                  setQuery("");
-                }}
-              >
-                {item.place}
-                <small>
-                  {item.freshness} · {money(item.priceMinor)}
-                </small>
-              </button>
-            ))}
-          </div>
+          {query && (
+            <div className={styles.suggestions}>
+              {matches.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setSelected(item);
+                    setQuery("");
+                  }}
+                >
+                  {item.name}
+                  <span>
+                    {item.coverage}% · {money(item.rewardMinor)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </section>
-      <section className={styles.mapWrap}>
-        <div className={styles.map} aria-label="Evidence coverage map">
-          <span className={styles.river}>RIVER LEA</span>
-          <span className={styles.stadium}>LONDON STADIUM</span>
-          <div className={styles.route} />
-          {evidence.map((item, index) => (
-            <button
-              key={item.id}
-              aria-label={`Open dossier for ${item.place}`}
-              className={`${styles.pin} ${styles[item.color]} ${item.id === selected.id ? styles.active : ""}`}
-              style={{
-                left: `${[25, 70, 57][index]}%`,
-                top: `${[66, 49, 20][index]}%`,
-              }}
-              onClick={() => setSelectedId(item.id)}
-            >
-              <span>{item.available}</span>
-            </button>
-          ))}
-        </div>
-        <div className={styles.mapKey}>
-          <span>
-            <i className={styles.hot} />
-            fresh coverage
-          </span>
-          <span>
-            <i className={styles.warm} />
-            partial coverage
-          </span>
-          <span>
-            <i className={styles.cool} />
-            aging coverage
-          </span>
-          <b>{evidence.length} dossiers · anonymized first</b>
-        </div>
-      </section>
-      <section className={styles.dossier}>
-        <div className={styles.dossierHead}>
+      <section className={styles.mapSection}>
+        <div className={styles.mapHeader}>
           <div>
-            <p className={styles.kicker}>
-              Location dossier · {selected.id.toUpperCase()}
-            </p>
-            <h2>{selected.place}</h2>
-            <p className={styles.truth}>
-              <span>●</span> {selected.source} · {selected.privacy} ·{" "}
-              {selected.confidence} confidence
-            </p>
+            <strong>London coverage</strong>
+            <span> · {coverageLocations.length} active requests</span>
           </div>
-          <div className={styles.price}>
-            <small>BUY CURRENT ANSWER</small>
-            <strong>{money(selected.priceMinor)}</strong>
-            <button onClick={fund} disabled={funded}>
-              {funded ? "FUNDED ✓" : "Fund fresh coverage →"}
+          <div>
+            <button
+              className={styles.requestTop}
+              onClick={() => setSatellite((value) => !value)}
+            >
+              {satellite ? "Street map" : "Satellite"}
             </button>
-            <button className={styles.report} onClick={purchase}>
-              Purchase report
+            <button
+              className={styles.requestTop}
+              onClick={() => setRequestOpen(true)}
+            >
+              ＋ Request coverage
             </button>
-            <label className={styles.time}>
-              VIEW AS OF{" "}
-              <input
-                type="datetime-local"
-                value={asOf}
-                onChange={(e) => setAsOf(e.target.value)}
+          </div>
+        </div>
+        <CoverageMap
+          locations={coverageLocations}
+          selected={selected}
+          satellite={satellite}
+          onSelect={setSelected}
+          onMapClick={(lng, lat) => {
+            setSelected({
+              id: `point-${Date.now()}`,
+              name: "New London location",
+              lng,
+              lat,
+              coverage: 0,
+              freshness: "No evidence",
+              rewardMinor: 800,
+              note: "Start a request for this public location.",
+            });
+            setRequestOpen(true);
+          }}
+        />
+        <div className={styles.legend}>
+          <span>
+            <i className={styles.high} />
+            fresh
+          </span>
+          <span>
+            <i className={styles.mid} />
+            partial
+          </span>
+          <span>
+            <i className={styles.low} />
+            needs coverage
+          </span>
+          <span className={styles.hint}>
+            Click the map to request a new point
+          </span>
+        </div>
+      </section>
+      {selected && (
+        <aside className={styles.dossier}>
+          <div className={styles.dossierTitle}>
+            <div>
+              <p className={styles.eyebrow}>Location dossier</p>
+              <h2>{selected.name}</h2>
+              <span className={styles.truth}>
+                {selected.freshness} · privacy-safe evidence
+              </span>
+            </div>
+            <button
+              className={styles.close}
+              onClick={() => setSelected(null)}
+              aria-label="Close dossier"
+            >
+              ×
+            </button>
+          </div>
+          <div className={styles.stats}>
+            <div>
+              <small>Coverage</small>
+              <strong>{selected.coverage}%</strong>
+            </div>
+            <div>
+              <small>Current bounty</small>
+              <strong>{money(selected.rewardMinor)}</strong>
+            </div>
+            <div>
+              <small>Evidence mode</small>
+              <strong>Sampled</strong>
+            </div>
+          </div>
+          <p className={styles.note}>{selected.note}</p>
+          <div className={styles.actions}>
+            <button
+              onClick={() => postFund(selected.rewardMinor, "Demo funding")}
+            >
+              Fund this bounty
+            </button>
+            <button
+              className={styles.secondary}
+              onClick={() => setRequestOpen(true)}
+            >
+              Request fresh coverage
+            </button>
+            <Link href={`/operations?location=${selected.id}`}>
+              View submissions →
+            </Link>
+          </div>
+        </aside>
+      )}
+      {message && (
+        <div className={styles.toast} role="status">
+          {message}
+          <button onClick={() => setMessage("")}>×</button>
+        </div>
+      )}
+      {requestOpen && (
+        <div className={styles.modalBackdrop} role="dialog" aria-modal="true">
+          <form
+            className={styles.modal}
+            onSubmit={(e) => {
+              e.preventDefault();
+              setRequestOpen(false);
+              postFund(Math.round(Number(budget) * 100), "Coverage request");
+            }}
+          >
+            <button
+              type="button"
+              className={styles.close}
+              onClick={() => setRequestOpen(false)}
+            >
+              ×
+            </button>
+            <p className={styles.eyebrow}>New buyer request</p>
+            <h2>{selected?.name || "London location"}</h2>
+            <label>
+              What should a runner check?
+              <textarea
+                value={requirement}
+                onChange={(e) => setRequirement(e.target.value)}
+                rows={3}
               />
             </label>
-            <label className={styles.time}>
-              TIME RANGE{" "}
-              <select
-                value={timeWindow}
-                onChange={(e) => setTimeWindow(e.target.value)}
-              >
-                <option>1 hour</option>
-                <option>24 hours</option>
-                <option>7 days</option>
-              </select>
+            <label>
+              Runner bounty (£)
+              <input
+                type="number"
+                min="1"
+                step="1"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+              />
             </label>
-          </div>
+            <label className={styles.check}>
+              <input type="checkbox" required /> This is a public, safe demo
+              location.
+            </label>
+            <button type="submit">Create coverage request →</button>
+            <small>
+              Only sampled, privacy-processed evidence is collected.
+            </small>
+          </form>
         </div>
-        <div className={styles.metrics}>
-          {[
-            ["Freshness", selected.freshness, selected.age],
-            ["Availability", selected.available, "usable evidence"],
-            ["Media / sound", selected.coverage, "sampled, not continuous"],
-            [
-              "Time coverage",
-              selected.range,
-              `${timeWindow} ending ${asOf.replace("T", " ")}`,
-            ],
-          ].map(([a, b, c]) => (
-            <div key={a}>
-              <small>{a}</small>
-              <strong>{b}</strong>
-              <span>{c}</span>
-            </div>
-          ))}
-        </div>
-        <div className={styles.columns}>
-          <article className={styles.observation}>
-            <p className={styles.kicker}>Observation cards</p>
-            <h3>What the evidence says</h3>
-            <div className={styles.card}>
-              <div>
-                <b>ACCESSIBILITY</b>
-                <span>AI + runner</span>
-              </div>
-              <p>{selected.note}</p>
-              <small>Timestamped observation · privacy review passed</small>
-            </div>
-            {seededObservations.slice(0, 3).map((item) => (
-              <div className={styles.miniCard} key={item.id}>
-                <b>{item.category}</b>
-                <span>
-                  {item.modality} · {item.privacyState}
-                </span>
-              </div>
-            ))}
-          </article>
-          <article className={styles.answers}>
-            <p className={styles.kicker}>Supported questions</p>
-            <h3>Ask with confidence</h3>
-            {questions.map((q) => (
-              <button
-                key={q}
-                onClick={() =>
-                  setMessage(
-                    `${q} · answer available from ${selected.freshness.toLowerCase()} evidence`,
-                  )
-                }
-              >
-                {q}
-                <span>→</span>
-              </button>
-            ))}
-            <div className={styles.gaps}>
-              <b>Evidence gaps</b>
-              <p>
-                {selected.coverage.includes("only")
-                  ? "No sound sample. Crowd flow and current conditions are not answerable."
-                  : "No continuous audio or identifying imagery is retained."}
-              </p>
-            </div>
-          </article>
-        </div>
-        {message && (
-          <p className={styles.message} role="status">
-            {message}
-          </p>
-        )}
-      </section>
+      )}
       <footer className={styles.footer}>
         <span>EyeEarn · evidence with a boundary</span>
-        <Link href="/explore">Need coverage? Become a runner →</Link>
+        <Link href="/explore">Need more eyes? Open runner map →</Link>
       </footer>
     </main>
   );

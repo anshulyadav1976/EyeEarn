@@ -1,0 +1,2969 @@
+{
+  "runs": [
+    {
+      "id": "RUN-87146513",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:56:40.442Z",
+      "routePoints": [
+        {
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "accuracy": 6,
+          "altitude": 11,
+          "altitudeAccuracy": 4,
+          "heading": 65,
+          "speed": 1.7,
+          "recordedAt": "2026-08-29T13:56:40.552Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-3C256DBE",
+          "category": "voice note",
+          "description": "Manual observation at South access route",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:56:41.034Z",
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:56:41.285Z",
+      "handedOffAt": "2026-08-29T13:56:41.285Z"
+    },
+    {
+      "id": "RUN-03AA8493",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "demo-borough-market"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:55:34.870Z",
+      "routePoints": [
+        {
+          "latitude": 51.537242601279786,
+          "longitude": -0.015279766526195244,
+          "accuracy": 8.900627298326585,
+          "altitude": 7.596488106064498,
+          "altitudeAccuracy": 3,
+          "heading": 315.7998460262854,
+          "speed": 2.211098278860021,
+          "recordedAt": "2026-08-29T13:55:27.010Z"
+        },
+        {
+          "latitude": 51.53715800276546,
+          "longitude": -0.015292976600988065,
+          "accuracy": 16.734219581820756,
+          "altitude": 10.197858560830355,
+          "altitudeAccuracy": 5.088275447827673,
+          "heading": null,
+          "speed": 0.7974794391783425,
+          "recordedAt": "2026-08-29T13:55:38.009Z"
+        },
+        {
+          "latitude": 51.53724287902045,
+          "longitude": -0.015353562981077325,
+          "accuracy": 16.44169547333915,
+          "altitude": 7.955932364799082,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.2537321519692537,
+          "recordedAt": "2026-08-29T13:55:39.009Z"
+        },
+        {
+          "latitude": 51.53731040600381,
+          "longitude": -0.015464462416132061,
+          "accuracy": 16.596823254887347,
+          "altitude": 8.078854820691049,
+          "altitudeAccuracy": 3,
+          "heading": 326.4999087023955,
+          "speed": 2.3185556153997116,
+          "recordedAt": "2026-08-29T13:55:40.010Z"
+        },
+        {
+          "latitude": 51.537359946226196,
+          "longitude": -0.015514132523884436,
+          "accuracy": 16.088116161384537,
+          "altitude": 8.608420903794467,
+          "altitudeAccuracy": 3,
+          "heading": 325.7097381654775,
+          "speed": 2.771510988510934,
+          "recordedAt": "2026-08-29T13:55:41.009Z"
+        },
+        {
+          "latitude": 51.53727038241572,
+          "longitude": -0.01545723601961862,
+          "accuracy": 11.63149297001067,
+          "altitude": 9.106202537193894,
+          "altitudeAccuracy": 3,
+          "heading": 318.5471928501116,
+          "speed": 2.651999759351958,
+          "recordedAt": "2026-08-29T13:55:42.010Z"
+        },
+        {
+          "latitude": 51.5372149932388,
+          "longitude": -0.01544305843708844,
+          "accuracy": 10.376225730664444,
+          "altitude": 9.79110437259078,
+          "altitudeAccuracy": 3,
+          "heading": 275.8821901972964,
+          "speed": 1.086806186907243,
+          "recordedAt": "2026-08-29T13:55:43.010Z"
+        },
+        {
+          "latitude": 51.53725556959702,
+          "longitude": -0.015443631761000297,
+          "accuracy": 10.998488719065834,
+          "altitude": 9.653797906823456,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.285949085515199,
+          "recordedAt": "2026-08-29T13:55:44.008Z"
+        },
+        {
+          "latitude": 51.53736083021052,
+          "longitude": -0.015511459698589216,
+          "accuracy": 13.220115024704938,
+          "altitude": 9.762624038383365,
+          "altitudeAccuracy": 3,
+          "heading": 341.21877968650455,
+          "speed": 2.335499102295708,
+          "recordedAt": "2026-08-29T13:55:45.009Z"
+        },
+        {
+          "latitude": 51.53722695705969,
+          "longitude": -0.015414986555502932,
+          "accuracy": 10.405744771208745,
+          "altitude": 9.983366788364947,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.7448402923920554,
+          "recordedAt": "2026-08-29T13:55:46.009Z"
+        },
+        {
+          "latitude": 51.53724418213597,
+          "longitude": -0.01542831506049589,
+          "accuracy": 11.833600884373862,
+          "altitude": 9.621779326349497,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.8655174390212251,
+          "recordedAt": "2026-08-29T13:55:47.008Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-835EC4B9",
+          "category": "voice note",
+          "description": "Manual observation at Borough Market access check",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:55:36.880Z",
+          "latitude": 51.537242601279786,
+          "longitude": -0.015279766526195244,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-EB078AC5",
+          "category": "voice note",
+          "description": "Manual observation at Borough Market access check",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:55:39.221Z",
+          "latitude": 51.53724287902045,
+          "longitude": -0.015353562981077325,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-212D46F7",
+          "category": "voice note",
+          "description": "Manual observation at Borough Market access check",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:55:40.506Z",
+          "latitude": 51.53731040600381,
+          "longitude": -0.015464462416132061,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-7BE22F94",
+          "category": "voice note",
+          "description": "Manual observation at Borough Market access check",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:55:44.925Z",
+          "latitude": 51.53725556959702,
+          "longitude": -0.015443631761000297,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:55:47.963Z",
+      "handedOffAt": "2026-08-29T13:55:47.963Z"
+    },
+    {
+      "id": "RUN-97C824DA",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "demo-borough-market"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:55:09.108Z",
+      "routePoints": [
+        {
+          "latitude": 51.53717762404547,
+          "longitude": -0.015272692463456115,
+          "accuracy": 11.712709146339481,
+          "altitude": 7.270949167199433,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.5355135001146668,
+          "recordedAt": "2026-08-29T13:55:10.011Z"
+        },
+        {
+          "latitude": 51.53713933158126,
+          "longitude": -0.015276979769624374,
+          "accuracy": 11.424717017157745,
+          "altitude": 7.25033538043499,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.14242367592019456,
+          "recordedAt": "2026-08-29T13:55:11.011Z"
+        },
+        {
+          "latitude": 51.537202937470475,
+          "longitude": -0.015274172701068503,
+          "accuracy": 10.556937585125128,
+          "altitude": 7.2710458263754845,
+          "altitudeAccuracy": 3,
+          "heading": 354.8059586175266,
+          "speed": 1.3654270619104663,
+          "recordedAt": "2026-08-29T13:55:12.011Z"
+        },
+        {
+          "latitude": 51.53720605223708,
+          "longitude": -0.015323357529974317,
+          "accuracy": 9.384946389838744,
+          "altitude": 7.385791640728712,
+          "altitudeAccuracy": 3,
+          "heading": 312.3984823062502,
+          "speed": 2.2897341597809278,
+          "recordedAt": "2026-08-29T13:55:13.012Z"
+        },
+        {
+          "latitude": 51.53718735285212,
+          "longitude": -0.01534733860489429,
+          "accuracy": 9.801186618521186,
+          "altitude": 7.478254321031272,
+          "altitudeAccuracy": 3,
+          "heading": 295.5550545840275,
+          "speed": 2.6069324121854325,
+          "recordedAt": "2026-08-29T13:55:14.010Z"
+        },
+        {
+          "latitude": 51.53716501637961,
+          "longitude": -0.01534522175377644,
+          "accuracy": 10.122390448856676,
+          "altitude": 7.538764336146414,
+          "altitudeAccuracy": 3,
+          "heading": 285.6230874646815,
+          "speed": 1.7320615197098486,
+          "recordedAt": "2026-08-29T13:55:15.011Z"
+        },
+        {
+          "latitude": 51.537159132828016,
+          "longitude": -0.01536519147413705,
+          "accuracy": 10.741527141086195,
+          "altitude": 7.564149675890803,
+          "altitudeAccuracy": 3,
+          "heading": 271.93896978436186,
+          "speed": 1.2992721664086646,
+          "recordedAt": "2026-08-29T13:55:16.011Z"
+        },
+        {
+          "latitude": 51.53712023296277,
+          "longitude": -0.01533990776205657,
+          "accuracy": 10.543618421665395,
+          "altitude": 7.645882803015411,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.0526745268309843,
+          "recordedAt": "2026-08-29T13:55:17.012Z"
+        },
+        {
+          "latitude": 51.5371135688498,
+          "longitude": -0.015299142000936511,
+          "accuracy": 11.1850203268376,
+          "altitude": 7.569301572628319,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.8060088264089195,
+          "recordedAt": "2026-08-29T13:55:18.011Z"
+        },
+        {
+          "latitude": 51.537134018614275,
+          "longitude": -0.015283434045726843,
+          "accuracy": 10.753235775912342,
+          "altitude": 7.523913916200399,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.38083475323106225,
+          "recordedAt": "2026-08-29T13:55:19.010Z"
+        },
+        {
+          "latitude": 51.53718166949839,
+          "longitude": -0.015257349061673439,
+          "accuracy": 11.907106172889863,
+          "altitude": 7.492523361928761,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.2343415218289864,
+          "recordedAt": "2026-08-29T13:55:20.010Z"
+        },
+        {
+          "latitude": 51.53722083107908,
+          "longitude": -0.015253608527960249,
+          "accuracy": 13.19329577352529,
+          "altitude": 7.439150202088058,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.6620340388285391,
+          "recordedAt": "2026-08-29T13:55:21.010Z"
+        },
+        {
+          "latitude": 51.53723843132617,
+          "longitude": -0.015202597018318326,
+          "accuracy": 13.603327574303629,
+          "altitude": 7.373482369817793,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.063466917266748,
+          "recordedAt": "2026-08-29T13:55:22.010Z"
+        },
+        {
+          "latitude": 51.53726961954692,
+          "longitude": -0.015176648020372182,
+          "accuracy": 13.71192944958664,
+          "altitude": 7.366278816945851,
+          "altitudeAccuracy": 3,
+          "heading": 333.7333728119367,
+          "speed": 1.6167162679242373,
+          "recordedAt": "2026-08-29T13:55:23.010Z"
+        },
+        {
+          "latitude": 51.53721788216193,
+          "longitude": -0.015230941009618072,
+          "accuracy": 11.644093243770135,
+          "altitude": 7.464183245785534,
+          "altitudeAccuracy": 3,
+          "heading": 322.82798192863396,
+          "speed": 1.7091472563494812,
+          "recordedAt": "2026-08-29T13:55:24.010Z"
+        },
+        {
+          "latitude": 51.53720301017308,
+          "longitude": -0.015246804640242374,
+          "accuracy": 10.445836621714191,
+          "altitude": 7.655350212939084,
+          "altitudeAccuracy": 3,
+          "heading": 320.49596020138495,
+          "speed": 1.7942795079595022,
+          "recordedAt": "2026-08-29T13:55:25.011Z"
+        },
+        {
+          "latitude": 51.53722032263071,
+          "longitude": -0.015268736194053974,
+          "accuracy": 11.145112719229138,
+          "altitude": 7.564085786230862,
+          "altitudeAccuracy": 3,
+          "heading": 315.7998634161469,
+          "speed": 2.2110982900847334,
+          "recordedAt": "2026-08-29T13:55:26.011Z"
+        },
+        {
+          "latitude": 51.537242601279786,
+          "longitude": -0.015279766526195244,
+          "accuracy": 8.900627298326585,
+          "altitude": 7.596488106064498,
+          "altitudeAccuracy": 3,
+          "heading": 315.7998460262854,
+          "speed": 2.211098278860021,
+          "recordedAt": "2026-08-29T13:55:27.010Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-5DC36AD5",
+          "category": "temporal_route_survey",
+          "description": "All frames show a stable indoor transport/work area with tables, seating, a plastic crate or bag, and loose charging cables on the carpeted floor. The aisle/floor space is partially obstructed by equipment and cables. No",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:55:17.623Z",
+          "latitude": 51.53712023296277,
+          "longitude": -0.01533990776205657,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:55:33.926Z",
+      "handedOffAt": "2026-08-29T13:55:33.926Z"
+    },
+    {
+      "id": "RUN-BAC8717B",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:51:31.265Z",
+      "routePoints": [
+        {
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "accuracy": 6,
+          "altitude": 11,
+          "altitudeAccuracy": 4,
+          "heading": 65,
+          "speed": 1.7,
+          "recordedAt": "2026-08-29T13:51:31.374Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-38C8128C",
+          "category": "voice note",
+          "description": "Manual observation at South access route",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:51:31.899Z",
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:51:32.140Z",
+      "handedOffAt": "2026-08-29T13:51:32.140Z"
+    },
+    {
+      "id": "RUN-B19CD588",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:48:33.478Z",
+      "routePoints": [
+        {
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "accuracy": 6,
+          "altitude": 11,
+          "altitudeAccuracy": 4,
+          "heading": 65,
+          "speed": 1.7,
+          "recordedAt": "2026-08-29T13:48:33.620Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-8C577C93",
+          "category": "voice note",
+          "description": "Manual observation at South access route",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:48:34.081Z",
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:48:34.324Z",
+      "handedOffAt": "2026-08-29T13:48:34.324Z"
+    },
+    {
+      "id": "RUN-49C3B7A0",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-river-gate"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:48:29.674Z",
+      "routePoints": [
+        {
+          "latitude": 51.53702598432182,
+          "longitude": -0.015396100752042246,
+          "accuracy": 3.0466289574316443,
+          "altitude": 8.622897606343031,
+          "altitudeAccuracy": 3,
+          "heading": 160.95419881272935,
+          "speed": 2.2757407872407533,
+          "recordedAt": "2026-08-29T13:48:33.014Z"
+        },
+        {
+          "latitude": 51.53699488432461,
+          "longitude": -0.015407037061304057,
+          "accuracy": 3.826709227108874,
+          "altitude": 8.115494417026639,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.905902723365517,
+          "recordedAt": "2026-08-29T13:48:36.014Z"
+        },
+        {
+          "latitude": 51.53698728803076,
+          "longitude": -0.015405527841871509,
+          "accuracy": 3.822530925410491,
+          "altitude": 8.319532160647213,
+          "altitudeAccuracy": 3,
+          "heading": 159.80996377377642,
+          "speed": 1.581168564286563,
+          "recordedAt": "2026-08-29T13:48:37.014Z"
+        },
+        {
+          "latitude": 51.536988280557445,
+          "longitude": -0.015403299962022502,
+          "accuracy": 3.6114375182315075,
+          "altitude": 8.097057056613266,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.1323636193738547,
+          "recordedAt": "2026-08-29T13:48:38.014Z"
+        },
+        {
+          "latitude": 51.536989218882496,
+          "longitude": -0.015392960873042852,
+          "accuracy": 3.4385773975389933,
+          "altitude": 7.853194679133594,
+          "altitudeAccuracy": 3,
+          "heading": 103.41826285846962,
+          "speed": 1.813935781211491,
+          "recordedAt": "2026-08-29T13:48:39.015Z"
+        },
+        {
+          "latitude": 51.536989493318366,
+          "longitude": -0.01537253079484579,
+          "accuracy": 3.346030332725347,
+          "altitude": 7.49473842792213,
+          "altitudeAccuracy": 3,
+          "heading": 103.17582252385154,
+          "speed": 1.984319243378277,
+          "recordedAt": "2026-08-29T13:48:40.014Z"
+        },
+        {
+          "latitude": 51.53699487037318,
+          "longitude": -0.01536845322731384,
+          "accuracy": 3.3147204313288605,
+          "altitude": 7.076515035703778,
+          "altitudeAccuracy": 3,
+          "heading": 82.53237329458862,
+          "speed": 1.647710957331442,
+          "recordedAt": "2026-08-29T13:48:41.015Z"
+        },
+        {
+          "latitude": 51.53699907088929,
+          "longitude": -0.015352254304578244,
+          "accuracy": 3.187060189391767,
+          "altitude": 6.876416957005858,
+          "altitudeAccuracy": 3,
+          "heading": 85.82054877330705,
+          "speed": 1.3749128685769643,
+          "recordedAt": "2026-08-29T13:48:42.013Z"
+        },
+        {
+          "latitude": 51.537002762942116,
+          "longitude": -0.015340497936114491,
+          "accuracy": 3.085474692735945,
+          "altitude": 6.82546095084399,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.477065299686249,
+          "recordedAt": "2026-08-29T13:48:43.015Z"
+        },
+        {
+          "latitude": 51.53700581405957,
+          "longitude": -0.015331146396585319,
+          "accuracy": 2.9995564066679905,
+          "altitude": 6.724237914197147,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.47099972992799094,
+          "recordedAt": "2026-08-29T13:48:44.015Z"
+        },
+        {
+          "latitude": 51.53700552484879,
+          "longitude": -0.015323723525330755,
+          "accuracy": 2.9271544558961,
+          "altitude": 6.6081670094281435,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.261345244649007,
+          "recordedAt": "2026-08-29T13:48:45.016Z"
+        },
+        {
+          "latitude": 51.53700426589152,
+          "longitude": -0.015318384231499362,
+          "accuracy": 2.861562084737072,
+          "altitude": 6.579674833454192,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.1651638794994785,
+          "recordedAt": "2026-08-29T13:48:46.014Z"
+        },
+        {
+          "latitude": 51.53700608141665,
+          "longitude": -0.015317994428405576,
+          "accuracy": 2.8367437996230596,
+          "altitude": 6.467921881005168,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.3613709428470309,
+          "recordedAt": "2026-08-29T13:48:47.014Z"
+        },
+        {
+          "latitude": 51.537006348229966,
+          "longitude": -0.015312827565736558,
+          "accuracy": 2.7634115061629894,
+          "altitude": 6.511288243345916,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.46539531869514805,
+          "recordedAt": "2026-08-29T13:48:48.013Z"
+        },
+        {
+          "latitude": 51.5370063354183,
+          "longitude": -0.015307973738567272,
+          "accuracy": 2.70060075208013,
+          "altitude": 6.5663404650986195,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.6874320073528882,
+          "recordedAt": "2026-08-29T13:48:49.016Z"
+        },
+        {
+          "latitude": 51.537009331249,
+          "longitude": -0.015303905721196678,
+          "accuracy": 2.645527509369132,
+          "altitude": 6.683389065787196,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.9607198083798424,
+          "recordedAt": "2026-08-29T13:48:50.013Z"
+        },
+        {
+          "latitude": 51.53701372096225,
+          "longitude": -0.015300956976250557,
+          "accuracy": 2.5971068762904252,
+          "altitude": 6.7908692406490445,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.3236965588948495,
+          "recordedAt": "2026-08-29T13:48:51.013Z"
+        },
+        {
+          "latitude": 51.53702018189884,
+          "longitude": -0.01529973361374483,
+          "accuracy": 2.5547157368534226,
+          "altitude": 6.932725541293621,
+          "altitudeAccuracy": 3,
+          "heading": 355.1266447669318,
+          "speed": 2.0783159713213606,
+          "recordedAt": "2026-08-29T13:48:52.014Z"
+        },
+        {
+          "latitude": 51.53702037162285,
+          "longitude": -0.015299441688478311,
+          "accuracy": 2.5390974235608104,
+          "altitude": 7.121220056898892,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.05473606167272,
+          "recordedAt": "2026-08-29T13:48:53.015Z"
+        },
+        {
+          "latitude": 51.53702037162285,
+          "longitude": -0.015299441688478311,
+          "accuracy": 2.539117083558942,
+          "altitude": 7.121220056898892,
+          "altitudeAccuracy": 3,
+          "heading": 341.0018122985008,
+          "speed": 1.6560070677476222,
+          "recordedAt": "2026-08-29T13:48:54.017Z"
+        },
+        {
+          "latitude": 51.537027754487326,
+          "longitude": -0.015300112298291226,
+          "accuracy": 2.493067490869307,
+          "altitude": 7.467662064358592,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.0580694960203028,
+          "recordedAt": "2026-08-29T13:48:55.015Z"
+        },
+        {
+          "latitude": 51.537026131045714,
+          "longitude": -0.015301045236404189,
+          "accuracy": 2.478180407609645,
+          "altitude": 7.594071578234434,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.7477412795095428,
+          "recordedAt": "2026-08-29T13:48:56.018Z"
+        },
+        {
+          "latitude": 51.53702888018241,
+          "longitude": -0.01530175725865823,
+          "accuracy": 2.4299851701525204,
+          "altitude": 7.559490915387869,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.19848795106957,
+          "recordedAt": "2026-08-29T13:48:57.013Z"
+        },
+        {
+          "latitude": 51.537042808779766,
+          "longitude": -0.01530573289079783,
+          "accuracy": 2.2352106898165234,
+          "altitude": 7.464481366798282,
+          "altitudeAccuracy": 3,
+          "heading": 179.68728863316917,
+          "speed": 2.16320904461782,
+          "recordedAt": "2026-08-29T13:48:58.013Z"
+        },
+        {
+          "latitude": 51.53704241364444,
+          "longitude": -0.015305599641170304,
+          "accuracy": 2.202873544389025,
+          "altitude": 7.316627791151404,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.5926964203641911,
+          "recordedAt": "2026-08-29T13:48:59.013Z"
+        },
+        {
+          "latitude": 51.53704192202092,
+          "longitude": -0.015305270172375695,
+          "accuracy": 2.176014099427254,
+          "altitude": 7.23235781583935,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.3456584822798034,
+          "recordedAt": "2026-08-29T13:49:00.013Z"
+        },
+        {
+          "latitude": 51.537041780726305,
+          "longitude": -0.01530496316202578,
+          "accuracy": 2.151728237216725,
+          "altitude": 7.158429743722081,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.7982683698013736,
+          "recordedAt": "2026-08-29T13:49:01.012Z"
+        },
+        {
+          "latitude": 51.53704318980027,
+          "longitude": -0.01530521590355504,
+          "accuracy": 2.1293677562213125,
+          "altitude": 7.1709707928821445,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.4570779208413519,
+          "recordedAt": "2026-08-29T13:49:02.013Z"
+        },
+        {
+          "latitude": 51.537044890731124,
+          "longitude": -0.01530553878946133,
+          "accuracy": 2.1081524189279435,
+          "altitude": 7.235119923017919,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.5827893602791576,
+          "recordedAt": "2026-08-29T13:49:03.013Z"
+        },
+        {
+          "latitude": 51.53704585110471,
+          "longitude": -0.015305589360632614,
+          "accuracy": 2.1034937249448196,
+          "altitude": 7.308943083509803,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.4839716382352566,
+          "recordedAt": "2026-08-29T13:49:04.013Z"
+        },
+        {
+          "latitude": 51.53704710092369,
+          "longitude": -0.01530510656258987,
+          "accuracy": 2.0927962810208327,
+          "altitude": 7.429081185720861,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.37452180438753113,
+          "recordedAt": "2026-08-29T13:49:05.013Z"
+        },
+        {
+          "latitude": 51.53705063302327,
+          "longitude": -0.015304184349143627,
+          "accuracy": 2.06539294882047,
+          "altitude": 7.465523174032569,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.44277535741051194,
+          "recordedAt": "2026-08-29T13:49:06.012Z"
+        },
+        {
+          "latitude": 51.537054832801154,
+          "longitude": -0.015303265679593997,
+          "accuracy": 2.041153836207635,
+          "altitude": 7.436494130641222,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.5217095374926803,
+          "recordedAt": "2026-08-29T13:49:07.013Z"
+        },
+        {
+          "latitude": 51.53705911890432,
+          "longitude": -0.015301673967732066,
+          "accuracy": 2.0182919905580192,
+          "altitude": 7.427568223327398,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.21408594858641206,
+          "recordedAt": "2026-08-29T13:49:08.012Z"
+        },
+        {
+          "latitude": 51.53706344684654,
+          "longitude": -0.015301183686003356,
+          "accuracy": 2,
+          "altitude": 7.4549246886745095,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.7641842370549902,
+          "recordedAt": "2026-08-29T13:49:09.013Z"
+        },
+        {
+          "latitude": 51.53706787088973,
+          "longitude": -0.015301300392369354,
+          "accuracy": 4.452955321086108,
+          "altitude": 7.078651596464047,
+          "altitudeAccuracy": 29.729274348930407,
+          "heading": null,
+          "speed": 0.8592708645589323,
+          "recordedAt": "2026-08-29T13:49:10.014Z"
+        },
+        {
+          "latitude": 51.53706405661867,
+          "longitude": -0.015301734037742334,
+          "accuracy": 2,
+          "altitude": 7.899273683317006,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.5072379381635853,
+          "recordedAt": "2026-08-29T13:49:11.014Z"
+        },
+        {
+          "latitude": 51.53706803399073,
+          "longitude": -0.015301700064016585,
+          "accuracy": 2,
+          "altitude": 7.840000635012984,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.4745869181215026,
+          "recordedAt": "2026-08-29T13:49:12.013Z"
+        },
+        {
+          "latitude": 51.53706808556518,
+          "longitude": -0.015301676140206532,
+          "accuracy": 2,
+          "altitude": 7.8353743478655815,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.8862633070374497,
+          "recordedAt": "2026-08-29T13:49:13.013Z"
+        },
+        {
+          "latitude": 51.53707011872643,
+          "longitude": -0.015300970821487094,
+          "accuracy": 2,
+          "altitude": 7.7092270497232676,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.385894946464927,
+          "recordedAt": "2026-08-29T13:49:14.013Z"
+        },
+        {
+          "latitude": 51.53706883167742,
+          "longitude": -0.015299646201864903,
+          "accuracy": 2.0000106883108097,
+          "altitude": 7.540092694573104,
+          "altitudeAccuracy": 3,
+          "heading": 150.8144197174391,
+          "speed": 1.9575072006397756,
+          "recordedAt": "2026-08-29T13:49:15.013Z"
+        },
+        {
+          "latitude": 51.53706874793769,
+          "longitude": -0.015297214578329563,
+          "accuracy": 2,
+          "altitude": 7.373406292870641,
+          "altitudeAccuracy": 3,
+          "heading": 151.86223907924753,
+          "speed": 1.9466363486616178,
+          "recordedAt": "2026-08-29T13:49:16.013Z"
+        },
+        {
+          "latitude": 51.537067862923514,
+          "longitude": -0.015295372471217306,
+          "accuracy": 2,
+          "altitude": 7.1849968098104,
+          "altitudeAccuracy": 3,
+          "heading": 168.62924447633623,
+          "speed": 2.148838304400368,
+          "recordedAt": "2026-08-29T13:49:17.012Z"
+        },
+        {
+          "latitude": 51.537062794533206,
+          "longitude": -0.015250176004410835,
+          "accuracy": 3.400904198337625,
+          "altitude": 7.040120456367731,
+          "altitudeAccuracy": 3,
+          "heading": 173.762867802841,
+          "speed": 2.1441500203992376,
+          "recordedAt": "2026-08-29T13:49:18.013Z"
+        },
+        {
+          "latitude": 51.53706265374609,
+          "longitude": -0.0152456204261923,
+          "accuracy": 3.3084427950486917,
+          "altitude": 6.921392678283155,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.2328607383863734,
+          "recordedAt": "2026-08-29T13:49:19.012Z"
+        },
+        {
+          "latitude": 51.53706237737289,
+          "longitude": -0.01523718762052138,
+          "accuracy": 3.2305283485434626,
+          "altitude": 6.8325147442519665,
+          "altitudeAccuracy": 3,
+          "heading": 116.87897236569984,
+          "speed": 1.673014443411508,
+          "recordedAt": "2026-08-29T13:49:20.013Z"
+        },
+        {
+          "latitude": 51.53706221996638,
+          "longitude": -0.015229331263513434,
+          "accuracy": 3.177164659620061,
+          "altitude": 6.789605378173292,
+          "altitudeAccuracy": 3,
+          "heading": 113.13570530147942,
+          "speed": 1.782187271203263,
+          "recordedAt": "2026-08-29T13:49:21.013Z"
+        },
+        {
+          "latitude": 51.53706145696802,
+          "longitude": -0.01522070904193976,
+          "accuracy": 3.133668711119677,
+          "altitude": 6.731542259454727,
+          "altitudeAccuracy": 3,
+          "heading": 118.0652489029897,
+          "speed": 2.1664538788884697,
+          "recordedAt": "2026-08-29T13:49:22.013Z"
+        },
+        {
+          "latitude": 51.53703969741172,
+          "longitude": -0.01512513959148663,
+          "accuracy": 5.005663242738482,
+          "altitude": 6.707981331273913,
+          "altitudeAccuracy": 3,
+          "heading": 121.35762017809363,
+          "speed": 2.0615060462698125,
+          "recordedAt": "2026-08-29T13:49:23.015Z"
+        },
+        {
+          "latitude": 51.537050387454784,
+          "longitude": -0.015124258114833517,
+          "accuracy": 4.84518986652264,
+          "altitude": 6.7157286405563354,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.702624907530173,
+          "recordedAt": "2026-08-29T13:49:24.015Z"
+        },
+        {
+          "latitude": 51.53704832034406,
+          "longitude": -0.0151250941118097,
+          "accuracy": 4.639837525780167,
+          "altitude": 7.131511187180877,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.09991269274651636,
+          "recordedAt": "2026-08-29T13:49:25.016Z"
+        },
+        {
+          "latitude": 51.537050756603676,
+          "longitude": -0.015128071251112683,
+          "accuracy": 4.825488360207167,
+          "altitude": 7.143094263970852,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.26671834607775363,
+          "recordedAt": "2026-08-29T13:49:26.015Z"
+        },
+        {
+          "latitude": 51.53704571369108,
+          "longitude": -0.015124797507754665,
+          "accuracy": 5.023295960881138,
+          "altitude": 7.234809371642768,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.24043310258654016,
+          "recordedAt": "2026-08-29T13:49:27.015Z"
+        },
+        {
+          "latitude": 51.5370486026161,
+          "longitude": -0.015112681099234583,
+          "accuracy": 4.719469538587487,
+          "altitude": 6.981516196392477,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.42779704880373914,
+          "recordedAt": "2026-08-29T13:49:28.014Z"
+        },
+        {
+          "latitude": 51.5370566933602,
+          "longitude": -0.015104786251830543,
+          "accuracy": 5.070784633670528,
+          "altitude": 6.82018793001771,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.4563696368912034,
+          "recordedAt": "2026-08-29T13:49:29.014Z"
+        },
+        {
+          "latitude": 51.53706625238922,
+          "longitude": -0.015114842315730685,
+          "accuracy": 5.000852979699181,
+          "altitude": 6.786835052073002,
+          "altitudeAccuracy": 3,
+          "heading": 343.4293310043456,
+          "speed": 1.785724471697771,
+          "recordedAt": "2026-08-29T13:49:30.014Z"
+        },
+        {
+          "latitude": 51.53707952378877,
+          "longitude": -0.015124141840484811,
+          "accuracy": 4.61478677048698,
+          "altitude": 6.834624863229692,
+          "altitudeAccuracy": 3,
+          "heading": 332.0779469647086,
+          "speed": 1.614204378219266,
+          "recordedAt": "2026-08-29T13:49:31.014Z"
+        },
+        {
+          "latitude": 51.537087549881875,
+          "longitude": -0.015135885035549744,
+          "accuracy": 4.319485225658275,
+          "altitude": 6.896920060738921,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.4647679554801212,
+          "recordedAt": "2026-08-29T13:49:32.015Z"
+        },
+        {
+          "latitude": 51.53709044761781,
+          "longitude": -0.0151421082666721,
+          "accuracy": 4.085939751149778,
+          "altitude": 7.014452467672527,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.5637383521552408,
+          "recordedAt": "2026-08-29T13:49:33.014Z"
+        },
+        {
+          "latitude": 51.53709338717266,
+          "longitude": -0.015144323167419637,
+          "accuracy": 3.8932994454793537,
+          "altitude": 6.996135240420699,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.46846603750803306,
+          "recordedAt": "2026-08-29T13:49:34.014Z"
+        },
+        {
+          "latitude": 51.537094833913066,
+          "longitude": -0.015143059531997582,
+          "accuracy": 3.74505110743934,
+          "altitude": 7.013517827726901,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.47858572458493237,
+          "recordedAt": "2026-08-29T13:49:35.014Z"
+        },
+        {
+          "latitude": 51.537095393770365,
+          "longitude": -0.015144015174201544,
+          "accuracy": 3.6834303713639946,
+          "altitude": 7.036919898353517,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 0.3342188288382549,
+          "recordedAt": "2026-08-29T13:49:36.015Z"
+        },
+        {
+          "latitude": 51.53708989987159,
+          "longitude": -0.015143610810633914,
+          "accuracy": 3.6796604580980357,
+          "altitude": 7.021449377760291,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.0485524811306224,
+          "recordedAt": "2026-08-29T13:49:37.014Z"
+        },
+        {
+          "latitude": 51.5370799534806,
+          "longitude": -0.015141066546246645,
+          "accuracy": 4.654652254179705,
+          "altitude": 7.013139289803803,
+          "altitudeAccuracy": 3,
+          "heading": null,
+          "speed": 1.2163442648686669,
+          "recordedAt": "2026-08-29T13:49:38.014Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-28F4DDD2",
+          "category": "transport_interior",
+          "description": "Across all frames, the enclosed cabin interior remains unchanged: fixed bench seating, a central basket/bag, loose cables on the carpeted floor, and limited aisle clearance. No visible signage, route information, or cong",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:48:39.748Z",
+          "latitude": 51.536989218882496,
+          "longitude": -0.015392960873042852,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-961FD902",
+          "category": "Interior operational condition",
+          "description": "Across the frames, the interior layout remains unchanged: loose cables trail across the carpeted floor, with a crate and bags/equipment beneath tables and seats. A person moves through the aisle, but no major congestion ",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:48:45.716Z",
+          "latitude": 51.53700552484879,
+          "longitude": -0.015323723525330755,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-99AF2333",
+          "category": "vehicle/interior equipment",
+          "description": "Across all frames, the interior remains unchanged: seating, a storage crate/bag, and loose cables occupy the carpeted floor. The cables and low-clearance layout present a persistent trip/obstruction hazard. No signage or",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:48:57.732Z",
+          "latitude": 51.53702888018241,
+          "longitude": -0.01530175725865823,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-054E40DF",
+          "category": "temporal_route_survey",
+          "description": "Across all three frames, the interior setup remains unchanged: chairs, a bag, equipment cases, and loose cables occupy the floor area, creating a cluttered potential trip hazard. No meaningful changes, signage, waste, or",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:49:09.734Z",
+          "latitude": 51.53706344684654,
+          "longitude": -0.015301183686003356,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-B9A155E4",
+          "category": "interior operational conditions",
+          "description": "Across all frames, the setup remains largely unchanged: loose cables lie across the carpet around table and chair legs, with a basket/bag stored underneath, creating clutter and a potential trip or access hazard. No mean",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:49:21.747Z",
+          "latitude": 51.53706221996638,
+          "longitude": -0.015229331263513434,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-C717EDEA",
+          "category": "transport_interior",
+          "description": "Across all frames, the vehicle interior remains unchanged: table and seating over carpeted flooring, with a backpack and loose charging cables on the floor. Cables and bag create a minor trip/obstruction hazard. No visib",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:49:27.753Z",
+          "latitude": 51.53704571369108,
+          "longitude": -0.015124797507754665,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:49:38.778Z",
+      "handedOffAt": "2026-08-29T13:49:38.778Z"
+    },
+    {
+      "id": "RUN-FCE458EE",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:47:38.768Z",
+      "routePoints": [
+        {
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "accuracy": 6,
+          "altitude": 11,
+          "altitudeAccuracy": 4,
+          "heading": 65,
+          "speed": 1.7,
+          "recordedAt": "2026-08-29T13:47:38.876Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-AC2101B8",
+          "category": "voice note",
+          "description": "Manual observation at South access route",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:47:39.381Z",
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:47:39.634Z",
+      "handedOffAt": "2026-08-29T13:47:39.634Z"
+    },
+    {
+      "id": "RUN-3ABD47D6",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access"
+      ],
+      "status": "live",
+      "startedAt": "2026-08-29T13:45:56.782Z",
+      "routePoints": [],
+      "observations": [
+        {
+          "id": "OBS-F316E4B6",
+          "category": "voice note",
+          "description": "Manual observation at South access route",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:45:57.400Z",
+          "latitude": 51.5055,
+          "longitude": -0.091,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0
+    },
+    {
+      "id": "RUN-0D58FD99",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:45:21.614Z",
+      "routePoints": [
+        {
+          "latitude": 51.536609,
+          "longitude": -0.0145072,
+          "accuracy": 3.0230000019073486,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 13.934720039367676,
+          "speed": 2.4123172760009766,
+          "recordedAt": "2026-08-29T13:45:26.540Z"
+        },
+        {
+          "latitude": 51.5366309,
+          "longitude": -0.0145019,
+          "accuracy": 3.0269999504089355,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 9.737746238708496,
+          "speed": 2.3978309631347656,
+          "recordedAt": "2026-08-29T13:45:26.963Z"
+        },
+        {
+          "latitude": 51.5366504,
+          "longitude": -0.0145014,
+          "accuracy": 3.0280001163482666,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 8.260565757751465,
+          "speed": 2.380397319793701,
+          "recordedAt": "2026-08-29T13:45:27.962Z"
+        },
+        {
+          "latitude": 51.5366725,
+          "longitude": -0.0145034,
+          "accuracy": 3.0239999294281006,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 359.03924560546875,
+          "speed": 2.350410223007202,
+          "recordedAt": "2026-08-29T13:45:28.962Z"
+        },
+        {
+          "latitude": 51.5366936,
+          "longitude": -0.0145103,
+          "accuracy": 3.0239999294281006,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 355.90606689453125,
+          "speed": 2.2620301246643066,
+          "recordedAt": "2026-08-29T13:45:29.963Z"
+        },
+        {
+          "latitude": 51.5367014,
+          "longitude": -0.0145139,
+          "accuracy": 3.0239999294281006,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 353.2796325683594,
+          "speed": 2.1160051822662354,
+          "recordedAt": "2026-08-29T13:45:30.416Z"
+        },
+        {
+          "latitude": 51.5367139,
+          "longitude": -0.014519,
+          "accuracy": 3.0199999809265137,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 348.9098205566406,
+          "speed": 2.213381290435791,
+          "recordedAt": "2026-08-29T13:45:30.962Z"
+        },
+        {
+          "latitude": 51.536737,
+          "longitude": -0.0145275,
+          "accuracy": 3.0199999809265137,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 343.95538330078125,
+          "speed": 2.2557504177093506,
+          "recordedAt": "2026-08-29T13:45:31.963Z"
+        },
+        {
+          "latitude": 51.5367508,
+          "longitude": -0.0145352,
+          "accuracy": 3.0999999046325684,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 341.8811950683594,
+          "speed": 2.18131685256958,
+          "recordedAt": "2026-08-29T13:45:32.612Z"
+        },
+        {
+          "latitude": 51.5367595,
+          "longitude": -0.0145367,
+          "accuracy": 3.0989999771118164,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 340.1288757324219,
+          "speed": 2.249528408050537,
+          "recordedAt": "2026-08-29T13:45:32.963Z"
+        },
+        {
+          "latitude": 51.5367668,
+          "longitude": -0.0145402,
+          "accuracy": 3.117000102996826,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 336.9664306640625,
+          "speed": 2.189671277999878,
+          "recordedAt": "2026-08-29T13:45:33.312Z"
+        },
+        {
+          "latitude": 51.5367739,
+          "longitude": -0.014545,
+          "accuracy": 3.1679999828338623,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 334.027099609375,
+          "speed": 2.175861120223999,
+          "recordedAt": "2026-08-29T13:45:33.659Z"
+        },
+        {
+          "latitude": 51.53678,
+          "longitude": -0.01455,
+          "accuracy": 3.2269999980926514,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 332.0476379394531,
+          "speed": 2.173062801361084,
+          "recordedAt": "2026-08-29T13:45:33.965Z"
+        },
+        {
+          "latitude": 51.5368023,
+          "longitude": -0.0145532,
+          "accuracy": 3.257999897003174,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 332.88671875,
+          "speed": 2.2421669960021973,
+          "recordedAt": "2026-08-29T13:45:34.963Z"
+        },
+        {
+          "latitude": 51.5368191,
+          "longitude": -0.0145648,
+          "accuracy": 3.309000015258789,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 326.9562072753906,
+          "speed": 2.1093356609344482,
+          "recordedAt": "2026-08-29T13:45:35.876Z"
+        },
+        {
+          "latitude": 51.5368355,
+          "longitude": -0.0145767,
+          "accuracy": 3.305999994277954,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 327.59698486328125,
+          "speed": 2.1985268592834473,
+          "recordedAt": "2026-08-29T13:45:36.598Z"
+        },
+        {
+          "latitude": 51.5368472,
+          "longitude": -0.0145836,
+          "accuracy": 3.2820000648498535,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 330.3655700683594,
+          "speed": 2.5022635459899902,
+          "recordedAt": "2026-08-29T13:45:36.963Z"
+        },
+        {
+          "latitude": 51.5368721,
+          "longitude": -0.0146054,
+          "accuracy": 3.25600004196167,
+          "altitude": 48.70000076293945,
+          "altitudeAccuracy": null,
+          "heading": 330.81915283203125,
+          "speed": 2.5568902492523193,
+          "recordedAt": "2026-08-29T13:45:37.962Z"
+        },
+        {
+          "latitude": 51.5368741,
+          "longitude": -0.0146071,
+          "accuracy": 3.263000011444092,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 330.1619567871094,
+          "speed": 2.4690396785736084,
+          "recordedAt": "2026-08-29T13:45:38.237Z"
+        },
+        {
+          "latitude": 51.536896,
+          "longitude": -0.0146362,
+          "accuracy": 3.183000087738037,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 322.2679138183594,
+          "speed": 2.5971364974975586,
+          "recordedAt": "2026-08-29T13:45:38.963Z"
+        },
+        {
+          "latitude": 51.536913,
+          "longitude": -0.0146685,
+          "accuracy": 3.1649999618530273,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 316.966552734375,
+          "speed": 2.665480136871338,
+          "recordedAt": "2026-08-29T13:45:39.963Z"
+        },
+        {
+          "latitude": 51.5369304,
+          "longitude": -0.0147049,
+          "accuracy": 3.125999927520752,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 311.4697265625,
+          "speed": 2.710258960723877,
+          "recordedAt": "2026-08-29T13:45:40.963Z"
+        },
+        {
+          "latitude": 51.5369433,
+          "longitude": -0.0147452,
+          "accuracy": 3.0980000495910645,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 302.83929443359375,
+          "speed": 2.6901004314422607,
+          "recordedAt": "2026-08-29T13:45:41.963Z"
+        },
+        {
+          "latitude": 51.5369515,
+          "longitude": -0.0147873,
+          "accuracy": 3.0139999389648438,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 295.0027770996094,
+          "speed": 2.6262147426605225,
+          "recordedAt": "2026-08-29T13:45:42.963Z"
+        },
+        {
+          "latitude": 51.5369589,
+          "longitude": -0.0148175,
+          "accuracy": 3.11299991607666,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 292.4833068847656,
+          "speed": 2.437671661376953,
+          "recordedAt": "2026-08-29T13:45:43.834Z"
+        },
+        {
+          "latitude": 51.5369573,
+          "longitude": -0.0148357,
+          "accuracy": 3.0889999866485596,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 287.1709899902344,
+          "speed": 2.3855862617492676,
+          "recordedAt": "2026-08-29T13:45:44.199Z"
+        },
+        {
+          "latitude": 51.5369589,
+          "longitude": -0.0148497,
+          "accuracy": 3.115000009536743,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 284.1984558105469,
+          "speed": 2.3827905654907227,
+          "recordedAt": "2026-08-29T13:45:44.574Z"
+        },
+        {
+          "latitude": 51.5369581,
+          "longitude": -0.0148689,
+          "accuracy": 3.1059999465942383,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 280.5914611816406,
+          "speed": 2.4835684299468994,
+          "recordedAt": "2026-08-29T13:45:44.963Z"
+        },
+        {
+          "latitude": 51.5369581,
+          "longitude": -0.0148808,
+          "accuracy": 3.140000104904175,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 281.1188659667969,
+          "speed": 2.291280746459961,
+          "recordedAt": "2026-08-29T13:45:45.316Z"
+        },
+        {
+          "latitude": 51.5369593,
+          "longitude": -0.0148933,
+          "accuracy": 3.1740000247955322,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 283.3009033203125,
+          "speed": 2.2905008792877197,
+          "recordedAt": "2026-08-29T13:45:45.671Z"
+        },
+        {
+          "latitude": 51.5369591,
+          "longitude": -0.0149106,
+          "accuracy": 3.1619999408721924,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 282.54925537109375,
+          "speed": 2.4910056591033936,
+          "recordedAt": "2026-08-29T13:45:45.963Z"
+        },
+        {
+          "latitude": 51.5369605,
+          "longitude": -0.0149258,
+          "accuracy": 3.190999984741211,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 285.1868591308594,
+          "speed": 2.3375608921051025,
+          "recordedAt": "2026-08-29T13:45:46.371Z"
+        },
+        {
+          "latitude": 51.5369628,
+          "longitude": -0.0149405,
+          "accuracy": 3.2230000495910645,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 285.9164123535156,
+          "speed": 2.3378169536590576,
+          "recordedAt": "2026-08-29T13:45:46.778Z"
+        },
+        {
+          "latitude": 51.5369624,
+          "longitude": -0.0149558,
+          "accuracy": 3.2060000896453857,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 283.6544189453125,
+          "speed": 2.288494110107422,
+          "recordedAt": "2026-08-29T13:45:47.135Z"
+        },
+        {
+          "latitude": 51.5369636,
+          "longitude": -0.0149686,
+          "accuracy": 3.2100000381469727,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 280.8050231933594,
+          "speed": 2.2853572368621826,
+          "recordedAt": "2026-08-29T13:45:47.499Z"
+        },
+        {
+          "latitude": 51.536965,
+          "longitude": -0.014983,
+          "accuracy": 3.2290000915527344,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 279.15484619140625,
+          "speed": 2.281318187713623,
+          "recordedAt": "2026-08-29T13:45:47.896Z"
+        },
+        {
+          "latitude": 51.5369642,
+          "longitude": -0.0150007,
+          "accuracy": 3.2269999980926514,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 275.68475341796875,
+          "speed": 2.3236873149871826,
+          "recordedAt": "2026-08-29T13:45:48.231Z"
+        },
+        {
+          "latitude": 51.5369638,
+          "longitude": -0.0150325,
+          "accuracy": 3.194999933242798,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 272.81329345703125,
+          "speed": 2.429173469543457,
+          "recordedAt": "2026-08-29T13:45:48.962Z"
+        },
+        {
+          "latitude": 51.5369645,
+          "longitude": -0.0150732,
+          "accuracy": 3.2139999866485596,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 279.51983642578125,
+          "speed": 2.4367313385009766,
+          "recordedAt": "2026-08-29T13:45:49.963Z"
+        },
+        {
+          "latitude": 51.5369685,
+          "longitude": -0.0151117,
+          "accuracy": 3.1640000343322754,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 284.69659423828125,
+          "speed": 2.4226763248443604,
+          "recordedAt": "2026-08-29T13:45:50.963Z"
+        },
+        {
+          "latitude": 51.5369692,
+          "longitude": -0.0151188,
+          "accuracy": 3.1510000228881836,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 283.3251647949219,
+          "speed": 2.202101469039917,
+          "recordedAt": "2026-08-29T13:45:51.215Z"
+        },
+        {
+          "latitude": 51.536972,
+          "longitude": -0.0151433,
+          "accuracy": 3.128000020980835,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 277.8699035644531,
+          "speed": 2.1916697025299072,
+          "recordedAt": "2026-08-29T13:45:51.956Z"
+        },
+        {
+          "latitude": 51.536974,
+          "longitude": -0.0151605,
+          "accuracy": 3.128000020980835,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 276.3660583496094,
+          "speed": 2.2463200092315674,
+          "recordedAt": "2026-08-29T13:45:52.290Z"
+        },
+        {
+          "latitude": 51.5369751,
+          "longitude": -0.0151754,
+          "accuracy": 3.125999927520752,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 277.0966491699219,
+          "speed": 2.2584996223449707,
+          "recordedAt": "2026-08-29T13:45:52.677Z"
+        },
+        {
+          "latitude": 51.5369771,
+          "longitude": -0.0151902,
+          "accuracy": 3.0899999141693115,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 278.3066101074219,
+          "speed": 2.433258295059204,
+          "recordedAt": "2026-08-29T13:45:52.963Z"
+        },
+        {
+          "latitude": 51.5369785,
+          "longitude": -0.0152077,
+          "accuracy": 3.0829999446868896,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 278.841552734375,
+          "speed": 2.298253297805786,
+          "recordedAt": "2026-08-29T13:45:53.418Z"
+        },
+        {
+          "latitude": 51.5369796,
+          "longitude": -0.0152207,
+          "accuracy": 3.1019999980926514,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 278.6626892089844,
+          "speed": 2.297771453857422,
+          "recordedAt": "2026-08-29T13:45:53.773Z"
+        },
+        {
+          "latitude": 51.5369828,
+          "longitude": -0.0152405,
+          "accuracy": 3.0869998931884766,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 280.2311706542969,
+          "speed": 2.364715337753296,
+          "recordedAt": "2026-08-29T13:45:54.178Z"
+        },
+        {
+          "latitude": 51.5369844,
+          "longitude": -0.0152534,
+          "accuracy": 3.0959999561309814,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 283.1954650878906,
+          "speed": 2.3569624423980713,
+          "recordedAt": "2026-08-29T13:45:54.513Z"
+        },
+        {
+          "latitude": 51.5369867,
+          "longitude": -0.0152682,
+          "accuracy": 3.121999979019165,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 283.6197509765625,
+          "speed": 2.3585212230682373,
+          "recordedAt": "2026-08-29T13:45:54.900Z"
+        },
+        {
+          "latitude": 51.5369897,
+          "longitude": -0.0152843,
+          "accuracy": 3.122999906539917,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 282.72039794921875,
+          "speed": 2.42084002494812,
+          "recordedAt": "2026-08-29T13:45:55.254Z"
+        },
+        {
+          "latitude": 51.5369918,
+          "longitude": -0.0152992,
+          "accuracy": 3.135999917984009,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 280.0660095214844,
+          "speed": 2.418948173522949,
+          "recordedAt": "2026-08-29T13:45:55.629Z"
+        },
+        {
+          "latitude": 51.5369938,
+          "longitude": -0.0153132,
+          "accuracy": 3.128000020980835,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 280.1153869628906,
+          "speed": 2.480971336364746,
+          "recordedAt": "2026-08-29T13:45:55.962Z"
+        },
+        {
+          "latitude": 51.5369955,
+          "longitude": -0.0153282,
+          "accuracy": 3.131999969482422,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 278.6587829589844,
+          "speed": 2.408594846725464,
+          "recordedAt": "2026-08-29T13:45:56.351Z"
+        },
+        {
+          "latitude": 51.5369968,
+          "longitude": -0.0153427,
+          "accuracy": 3.1419999599456787,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 276.63427734375,
+          "speed": 2.413691997528076,
+          "recordedAt": "2026-08-29T13:45:56.737Z"
+        },
+        {
+          "latitude": 51.5369979,
+          "longitude": -0.0153527,
+          "accuracy": 3.117000102996826,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 275.20648193359375,
+          "speed": 2.492323875427246,
+          "recordedAt": "2026-08-29T13:45:56.962Z"
+        },
+        {
+          "latitude": 51.5369992,
+          "longitude": -0.015374,
+          "accuracy": 3.128000020980835,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 274.4454650878906,
+          "speed": 2.4373817443847656,
+          "recordedAt": "2026-08-29T13:45:57.498Z"
+        },
+        {
+          "latitude": 51.5370001,
+          "longitude": -0.0153882,
+          "accuracy": 3.135999917984009,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 276.0982971191406,
+          "speed": 2.4334347248077393,
+          "recordedAt": "2026-08-29T13:45:57.851Z"
+        },
+        {
+          "latitude": 51.5370037,
+          "longitude": -0.0154029,
+          "accuracy": 3.13700008392334,
+          "altitude": 48,
+          "altitudeAccuracy": null,
+          "heading": 280.102294921875,
+          "speed": 2.429363250732422,
+          "recordedAt": "2026-08-29T13:45:58.217Z"
+        },
+        {
+          "latitude": 51.537012,
+          "longitude": -0.015442,
+          "accuracy": 3.11299991607666,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 282.820068359375,
+          "speed": 2.497985601425171,
+          "recordedAt": "2026-08-29T13:45:58.962Z"
+        },
+        {
+          "latitude": 51.5370137,
+          "longitude": -0.0154486,
+          "accuracy": 3.11899995803833,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 281.9930114746094,
+          "speed": 2.410386323928833,
+          "recordedAt": "2026-08-29T13:45:59.332Z"
+        },
+        {
+          "latitude": 51.5370152,
+          "longitude": -0.0154606,
+          "accuracy": 3.131999969482422,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 280.4988708496094,
+          "speed": 2.3922462463378906,
+          "recordedAt": "2026-08-29T13:45:59.697Z"
+        },
+        {
+          "latitude": 51.5370173,
+          "longitude": -0.0154712,
+          "accuracy": 3.1080000400543213,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 280.06640625,
+          "speed": 2.4831528663635254,
+          "recordedAt": "2026-08-29T13:45:59.961Z"
+        },
+        {
+          "latitude": 51.5370234,
+          "longitude": -0.01551,
+          "accuracy": 3.1040000915527344,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 286.68560791015625,
+          "speed": 2.4563918113708496,
+          "recordedAt": "2026-08-29T13:46:00.962Z"
+        },
+        {
+          "latitude": 51.5370321,
+          "longitude": -0.0155498,
+          "accuracy": 3.1089999675750732,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 291.29107666015625,
+          "speed": 2.4803643226623535,
+          "recordedAt": "2026-08-29T13:46:01.962Z"
+        },
+        {
+          "latitude": 51.5370386,
+          "longitude": -0.0155891,
+          "accuracy": 3.0859999656677246,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 291.92437744140625,
+          "speed": 2.486285448074341,
+          "recordedAt": "2026-08-29T13:46:02.963Z"
+        },
+        {
+          "latitude": 51.5370453,
+          "longitude": -0.0156279,
+          "accuracy": 3.0920000076293945,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 296.04974365234375,
+          "speed": 2.450136184692383,
+          "recordedAt": "2026-08-29T13:46:03.963Z"
+        },
+        {
+          "latitude": 51.5370501,
+          "longitude": -0.0156674,
+          "accuracy": 3.0339999198913574,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 288.860107421875,
+          "speed": 2.466336250305176,
+          "recordedAt": "2026-08-29T13:46:04.962Z"
+        },
+        {
+          "latitude": 51.5370518,
+          "longitude": -0.015709,
+          "accuracy": 3.0209999084472656,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 272.32183837890625,
+          "speed": 2.4470713138580322,
+          "recordedAt": "2026-08-29T13:46:05.961Z"
+        },
+        {
+          "latitude": 51.5370493,
+          "longitude": -0.0157331,
+          "accuracy": 3.0840001106262207,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 264.0672607421875,
+          "speed": 2.278806686401367,
+          "recordedAt": "2026-08-29T13:46:06.659Z"
+        },
+        {
+          "latitude": 51.5370477,
+          "longitude": -0.0157485,
+          "accuracy": 3.072000026702881,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 260.7586975097656,
+          "speed": 2.46246075630188,
+          "recordedAt": "2026-08-29T13:46:06.962Z"
+        },
+        {
+          "latitude": 51.5370446,
+          "longitude": -0.0157905,
+          "accuracy": 3.066999912261963,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 255.5682830810547,
+          "speed": 2.4645543098449707,
+          "recordedAt": "2026-08-29T13:46:07.963Z"
+        },
+        {
+          "latitude": 51.5370424,
+          "longitude": -0.0158318,
+          "accuracy": 3.058000087738037,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 255.33712768554688,
+          "speed": 2.4740920066833496,
+          "recordedAt": "2026-08-29T13:46:08.962Z"
+        },
+        {
+          "latitude": 51.537042,
+          "longitude": -0.0158722,
+          "accuracy": 3.059000015258789,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 253.83181762695312,
+          "speed": 2.501094341278076,
+          "recordedAt": "2026-08-29T13:46:09.962Z"
+        },
+        {
+          "latitude": 51.537042,
+          "longitude": -0.0159116,
+          "accuracy": 3.069000005722046,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 259.1802978515625,
+          "speed": 2.4791359901428223,
+          "recordedAt": "2026-08-29T13:46:10.962Z"
+        },
+        {
+          "latitude": 51.5370445,
+          "longitude": -0.0159521,
+          "accuracy": 3.009000062942505,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 262.9495544433594,
+          "speed": 2.4800522327423096,
+          "recordedAt": "2026-08-29T13:46:11.961Z"
+        },
+        {
+          "latitude": 51.5370483,
+          "longitude": -0.015992,
+          "accuracy": 3.009000062942505,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 264.2907409667969,
+          "speed": 2.4578473567962646,
+          "recordedAt": "2026-08-29T13:46:12.962Z"
+        },
+        {
+          "latitude": 51.5370521,
+          "longitude": -0.0160337,
+          "accuracy": 3.009000062942505,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 262.6497497558594,
+          "speed": 2.5057811737060547,
+          "recordedAt": "2026-08-29T13:46:13.962Z"
+        },
+        {
+          "latitude": 51.5370553,
+          "longitude": -0.0160771,
+          "accuracy": 3.009999990463257,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 261.2035217285156,
+          "speed": 2.5868849754333496,
+          "recordedAt": "2026-08-29T13:46:14.963Z"
+        },
+        {
+          "latitude": 51.5370548,
+          "longitude": -0.0160966,
+          "accuracy": 3.0439999103546143,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 262.0950622558594,
+          "speed": 2.4896249771118164,
+          "recordedAt": "2026-08-29T13:46:15.457Z"
+        },
+        {
+          "latitude": 51.5370576,
+          "longitude": -0.0161206,
+          "accuracy": 3.0380001068115234,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 265.61163330078125,
+          "speed": 2.585676908493042,
+          "recordedAt": "2026-08-29T13:46:15.963Z"
+        },
+        {
+          "latitude": 51.5370613,
+          "longitude": -0.0161649,
+          "accuracy": 3.0360000133514404,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 268.15301513671875,
+          "speed": 2.684805154800415,
+          "recordedAt": "2026-08-29T13:46:16.963Z"
+        },
+        {
+          "latitude": 51.537069,
+          "longitude": -0.0162087,
+          "accuracy": 3.0390000343322754,
+          "altitude": 48.5,
+          "altitudeAccuracy": null,
+          "heading": 296.2296142578125,
+          "speed": 2.7155003547668457,
+          "recordedAt": "2026-08-29T13:46:17.962Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-73A0913F",
+          "category": "sports facility survey",
+          "description": "Across all frames, the artificial-turf field, red running track, goals, and adjacent stadium building remain accessible and unobstructed. Track and field markings are visible; a few small items/litter and a turf maintena",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:46:13.728Z",
+          "latitude": 51.5370483,
+          "longitude": -0.015992,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:46:18.212Z",
+      "handedOffAt": "2026-08-29T13:46:18.212Z"
+    },
+    {
+      "id": "RUN-2DF3A4F8",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-river-gate",
+        "zone-south-access",
+        "zone-north-loop"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:17:41.600Z",
+      "routePoints": [
+        {
+          "latitude": 51.536385149592476,
+          "longitude": -0.014684852939376656,
+          "accuracy": 5.4102124618287215,
+          "altitude": 6.219215930439532,
+          "altitudeAccuracy": 3,
+          "heading": 45.807299857642576,
+          "speed": 2.394240749403932,
+          "recordedAt": "2026-08-29T13:17:44.999Z"
+        },
+        {
+          "latitude": 51.5364029171801,
+          "longitude": -0.014645786453596252,
+          "accuracy": 5.5033072363136295,
+          "altitude": 6.247725388035178,
+          "altitudeAccuracy": 3,
+          "heading": 43.185705067453,
+          "speed": 2.7572250166831545,
+          "recordedAt": "2026-08-29T13:17:45.999Z"
+        },
+        {
+          "latitude": 51.536416645314894,
+          "longitude": -0.014622539224919462,
+          "accuracy": 5.494189099855778,
+          "altitude": 6.517273821868002,
+          "altitudeAccuracy": 3,
+          "heading": 43.14420511579593,
+          "speed": 2.4828547682747977,
+          "recordedAt": "2026-08-29T13:17:46.999Z"
+        },
+        {
+          "latitude": 51.53643236089944,
+          "longitude": -0.01459968556860211,
+          "accuracy": 5.542321384078579,
+          "altitude": 6.895727902650833,
+          "altitudeAccuracy": 3,
+          "heading": 39.075645451140126,
+          "speed": 2.3304966633364104,
+          "recordedAt": "2026-08-29T13:17:47.999Z"
+        },
+        {
+          "latitude": 51.536441270425364,
+          "longitude": -0.014583866113473273,
+          "accuracy": 5.730072528446938,
+          "altitude": 6.9359777653589845,
+          "altitudeAccuracy": 3.012195315231015,
+          "heading": 40.84502313578521,
+          "speed": 2.254592234220308,
+          "recordedAt": "2026-08-29T13:17:48.999Z"
+        },
+        {
+          "latitude": 51.536455132029644,
+          "longitude": -0.014567719502606838,
+          "accuracy": 5.818743079392359,
+          "altitude": 6.785506705753505,
+          "altitudeAccuracy": 3.0448428594065837,
+          "heading": 40.02762845176367,
+          "speed": 2.280850245980036,
+          "recordedAt": "2026-08-29T13:17:49.999Z"
+        },
+        {
+          "latitude": 51.536476958147155,
+          "longitude": -0.014559565780915272,
+          "accuracy": 6.019246355657573,
+          "altitude": 7.079546062275767,
+          "altitudeAccuracy": 3,
+          "heading": 30.76765422847073,
+          "speed": 2.3651025740861833,
+          "recordedAt": "2026-08-29T13:17:50.999Z"
+        },
+        {
+          "latitude": 51.5364986317488,
+          "longitude": -0.014547383813096147,
+          "accuracy": 6.302282826652887,
+          "altitude": 7.276756559498608,
+          "altitudeAccuracy": 3.223403103362268,
+          "heading": 27.62759216253678,
+          "speed": 2.335301844590903,
+          "recordedAt": "2026-08-29T13:17:51.999Z"
+        },
+        {
+          "latitude": 51.53652351093746,
+          "longitude": -0.014549231246125047,
+          "accuracy": 6.4338676847381455,
+          "altitude": 7.650990595109761,
+          "altitudeAccuracy": 3.2936367746124757,
+          "heading": 17.99244064191308,
+          "speed": 2.4037110484445203,
+          "recordedAt": "2026-08-29T13:17:52.999Z"
+        },
+        {
+          "latitude": 51.5365508481037,
+          "longitude": -0.014548744130931652,
+          "accuracy": 6.433867692754233,
+          "altitude": 7.922616126015782,
+          "altitudeAccuracy": 3.3034580215125207,
+          "heading": 14.19567717441839,
+          "speed": 2.589435162059804,
+          "recordedAt": "2026-08-29T13:17:53.999Z"
+        },
+        {
+          "latitude": 51.53656653717592,
+          "longitude": -0.014548928014873655,
+          "accuracy": 6.477676167033917,
+          "altitude": 7.762430256232619,
+          "altitudeAccuracy": 3.1904360538513004,
+          "heading": 14.579510820170757,
+          "speed": 2.232497088422681,
+          "recordedAt": "2026-08-29T13:17:54.999Z"
+        },
+        {
+          "latitude": 51.536585166541215,
+          "longitude": -0.014549177921646719,
+          "accuracy": 6.668824468434144,
+          "altitude": 7.83750940207392,
+          "altitudeAccuracy": 3.240515999222102,
+          "heading": 10.35176726211669,
+          "speed": 2.1357174808988235,
+          "recordedAt": "2026-08-29T13:17:55.999Z"
+        },
+        {
+          "latitude": 51.53661646353041,
+          "longitude": -0.01455875931373895,
+          "accuracy": 6.668824458386275,
+          "altitude": 7.9055156679823995,
+          "altitudeAccuracy": 3.276173670381773,
+          "heading": 4.2138485686506035,
+          "speed": 2.3900184407410388,
+          "recordedAt": "2026-08-29T13:17:56.999Z"
+        },
+        {
+          "latitude": 51.536638421406494,
+          "longitude": -0.014558392789824464,
+          "accuracy": 6.694165552162882,
+          "altitude": 7.977674832567573,
+          "altitudeAccuracy": 3.3321063183478605,
+          "heading": 4.625635515802148,
+          "speed": 2.498650055578536,
+          "recordedAt": "2026-08-29T13:17:57.999Z"
+        },
+        {
+          "latitude": 51.536652667287626,
+          "longitude": -0.014542236473334916,
+          "accuracy": 6.803235891245471,
+          "altitude": 7.8676407197490335,
+          "altitudeAccuracy": 3.1688748486918303,
+          "heading": 7.380893625799145,
+          "speed": 2.151649722658268,
+          "recordedAt": "2026-08-29T13:17:58.999Z"
+        },
+        {
+          "latitude": 51.536673443255246,
+          "longitude": -0.014552158625823793,
+          "accuracy": 6.699777628719687,
+          "altitude": 8.325839441269636,
+          "altitudeAccuracy": 3.3391620119893464,
+          "heading": 358.10686348820025,
+          "speed": 2.1718240047967843,
+          "recordedAt": "2026-08-29T13:17:59.999Z"
+        },
+        {
+          "latitude": 51.536692429476,
+          "longitude": -0.01456256265361842,
+          "accuracy": 6.540270322868515,
+          "altitude": 8.409321835264564,
+          "altitudeAccuracy": 3.2222072047081363,
+          "heading": 352.314925126572,
+          "speed": 2.270927198907952,
+          "recordedAt": "2026-08-29T13:18:00.999Z"
+        },
+        {
+          "latitude": 51.53671515287268,
+          "longitude": -0.014575041538714058,
+          "accuracy": 6.435021681684751,
+          "altitude": 8.433211320079863,
+          "altitudeAccuracy": 3,
+          "heading": 348.9730813369684,
+          "speed": 2.374209812187021,
+          "recordedAt": "2026-08-29T13:18:01.999Z"
+        },
+        {
+          "latitude": 51.53673652589637,
+          "longitude": -0.01458595971415008,
+          "accuracy": 6.310112321222371,
+          "altitude": 8.297048909589648,
+          "altitudeAccuracy": 3,
+          "heading": 348.0917525344317,
+          "speed": 2.4307933620418782,
+          "recordedAt": "2026-08-29T13:18:02.999Z"
+        },
+        {
+          "latitude": 51.536754226604685,
+          "longitude": -0.014603505396539623,
+          "accuracy": 6.288415732352724,
+          "altitude": 8.099737679585814,
+          "altitudeAccuracy": 3.031118295829812,
+          "heading": 341.7512563100645,
+          "speed": 2.432877151148288,
+          "recordedAt": "2026-08-29T13:18:03.999Z"
+        },
+        {
+          "latitude": 51.53677768452215,
+          "longitude": -0.014622924206369535,
+          "accuracy": 6.3005524324193845,
+          "altitude": 8.010748075321317,
+          "altitudeAccuracy": 3.0279911342331864,
+          "heading": 335.9296323814172,
+          "speed": 2.6627103766848235,
+          "recordedAt": "2026-08-29T13:18:04.999Z"
+        },
+        {
+          "latitude": 51.53680162106171,
+          "longitude": -0.014644375709259062,
+          "accuracy": 6.212680098855097,
+          "altitude": 7.800968237221241,
+          "altitudeAccuracy": 3,
+          "heading": 332.39944716033756,
+          "speed": 2.74973744589469,
+          "recordedAt": "2026-08-29T13:18:05.999Z"
+        },
+        {
+          "latitude": 51.53682303981233,
+          "longitude": -0.014670071416722408,
+          "accuracy": 6.191684703865212,
+          "altitude": 7.4692965457215905,
+          "altitudeAccuracy": 3,
+          "heading": 329.4572778998329,
+          "speed": 2.8693688243623265,
+          "recordedAt": "2026-08-29T13:18:06.999Z"
+        },
+        {
+          "latitude": 51.53684316674119,
+          "longitude": -0.01469256253644144,
+          "accuracy": 6.128745730443837,
+          "altitude": 7.561361690983176,
+          "altitudeAccuracy": 3,
+          "heading": 325.36606343804687,
+          "speed": 2.6696049233472032,
+          "recordedAt": "2026-08-29T13:18:07.999Z"
+        },
+        {
+          "latitude": 51.53685606630758,
+          "longitude": -0.014712854807093053,
+          "accuracy": 6.030049484224367,
+          "altitude": 7.334640049375594,
+          "altitudeAccuracy": 3,
+          "heading": 320.69360426067783,
+          "speed": 2.418177446182847,
+          "recordedAt": "2026-08-29T13:18:08.999Z"
+        },
+        {
+          "latitude": 51.53687010317048,
+          "longitude": -0.014740067690900256,
+          "accuracy": 6.121992429369838,
+          "altitude": 7.437348704785109,
+          "altitudeAccuracy": 3.035407630750637,
+          "heading": 318.6141319075015,
+          "speed": 2.362099969992558,
+          "recordedAt": "2026-08-29T13:18:09.999Z"
+        },
+        {
+          "latitude": 51.53688272953302,
+          "longitude": -0.014770776853931954,
+          "accuracy": 6.238862225029517,
+          "altitude": 7.692418035119772,
+          "altitudeAccuracy": 3.0215198749220034,
+          "heading": 313.09041931917255,
+          "speed": 2.4071343178185636,
+          "recordedAt": "2026-08-29T13:18:10.999Z"
+        },
+        {
+          "latitude": 51.53689965021165,
+          "longitude": -0.014793272893633412,
+          "accuracy": 6.18969811955264,
+          "altitude": 7.550316723994911,
+          "altitudeAccuracy": 3,
+          "heading": 310.5426547827036,
+          "speed": 2.557677816066966,
+          "recordedAt": "2026-08-29T13:18:11.999Z"
+        },
+        {
+          "latitude": 51.53691720789681,
+          "longitude": -0.014816623205403147,
+          "accuracy": 6.34323360529136,
+          "altitude": 8.201837961561978,
+          "altitudeAccuracy": 3.0073064420364823,
+          "heading": 309.48816882079853,
+          "speed": 2.601050413126273,
+          "recordedAt": "2026-08-29T13:18:12.999Z"
+        },
+        {
+          "latitude": 51.53692791697447,
+          "longitude": -0.014846380890516913,
+          "accuracy": 6.244873721009809,
+          "altitude": 8.043773469515145,
+          "altitudeAccuracy": 3,
+          "heading": 301.27093815092564,
+          "speed": 2.5238216980427186,
+          "recordedAt": "2026-08-29T13:18:13.999Z"
+        },
+        {
+          "latitude": 51.53692684800488,
+          "longitude": -0.01489177369080797,
+          "accuracy": 6.27065097437808,
+          "altitude": 7.298108061775565,
+          "altitudeAccuracy": 3.1329503051153607,
+          "heading": 293.32763362008734,
+          "speed": 2.619114650917322,
+          "recordedAt": "2026-08-29T13:18:14.999Z"
+        },
+        {
+          "latitude": 51.53693290566256,
+          "longitude": -0.014927517816918213,
+          "accuracy": 6.214495745775023,
+          "altitude": 7.487718637101352,
+          "altitudeAccuracy": 3.1045446034229336,
+          "heading": 292.6123039473192,
+          "speed": 2.5342990516395507,
+          "recordedAt": "2026-08-29T13:18:15.999Z"
+        },
+        {
+          "latitude": 51.5369399286414,
+          "longitude": -0.014972193402661772,
+          "accuracy": 6.235581126708887,
+          "altitude": 7.656731998547912,
+          "altitudeAccuracy": 3.00229013729015,
+          "heading": 289.39702046168026,
+          "speed": 2.6891300791542894,
+          "recordedAt": "2026-08-29T13:18:16.999Z"
+        },
+        {
+          "latitude": 51.53694152599405,
+          "longitude": -0.015008159510181205,
+          "accuracy": 6.271021469131649,
+          "altitude": 7.581031234934926,
+          "altitudeAccuracy": 3.0317537789974907,
+          "heading": 285.04446593202147,
+          "speed": 2.544266951046271,
+          "recordedAt": "2026-08-29T13:18:17.999Z"
+        },
+        {
+          "latitude": 51.536948665303264,
+          "longitude": -0.01504888445218218,
+          "accuracy": 6.338599147979064,
+          "altitude": 7.946599092334509,
+          "altitudeAccuracy": 3,
+          "heading": 285.42742463100296,
+          "speed": 2.8675163626303366,
+          "recordedAt": "2026-08-29T13:18:18.999Z"
+        },
+        {
+          "latitude": 51.53695048512035,
+          "longitude": -0.015088714523140267,
+          "accuracy": 6.308249390529131,
+          "altitude": 7.892457813024521,
+          "altitudeAccuracy": 3.110383600180845,
+          "heading": 279.97597329237993,
+          "speed": 2.7441339025164337,
+          "recordedAt": "2026-08-29T13:18:19.999Z"
+        },
+        {
+          "latitude": 51.536953664001906,
+          "longitude": -0.015136891013099972,
+          "accuracy": 6.376356059395091,
+          "altitude": 7.49771304987371,
+          "altitudeAccuracy": 3,
+          "heading": 280.7406158411585,
+          "speed": 2.79638903148537,
+          "recordedAt": "2026-08-29T13:18:20.999Z"
+        },
+        {
+          "latitude": 51.53696342737414,
+          "longitude": -0.015185016163884962,
+          "accuracy": 6.37635606827246,
+          "altitude": 7.481420618481934,
+          "altitudeAccuracy": 3,
+          "heading": 279.93999882171056,
+          "speed": 2.8720982967293773,
+          "recordedAt": "2026-08-29T13:18:21.998Z"
+        },
+        {
+          "latitude": 51.53697061073597,
+          "longitude": -0.015229159561606167,
+          "accuracy": 6.36267204216423,
+          "altitude": 7.333337142132223,
+          "altitudeAccuracy": 3,
+          "heading": 280.8640528944597,
+          "speed": 2.8458173845857955,
+          "recordedAt": "2026-08-29T13:18:22.998Z"
+        },
+        {
+          "latitude": 51.536975814605654,
+          "longitude": -0.015261267025444808,
+          "accuracy": 6.566142844670561,
+          "altitude": 7.371309642679989,
+          "altitudeAccuracy": 3,
+          "heading": 280.94400289018677,
+          "speed": 2.668002660292078,
+          "recordedAt": "2026-08-29T13:18:23.998Z"
+        },
+        {
+          "latitude": 51.53698292785244,
+          "longitude": -0.0153031865937706,
+          "accuracy": 6.523197746063518,
+          "altitude": 7.140671154484153,
+          "altitudeAccuracy": 3,
+          "heading": 282.10843292570706,
+          "speed": 2.8080945501572754,
+          "recordedAt": "2026-08-29T13:18:24.998Z"
+        },
+        {
+          "latitude": 51.536988421061295,
+          "longitude": -0.015340801160389375,
+          "accuracy": 6.560278702131328,
+          "altitude": 7.193012911826372,
+          "altitudeAccuracy": 3.196640695702492,
+          "heading": 280.08719798469804,
+          "speed": 2.8380731103995696,
+          "recordedAt": "2026-08-29T13:18:25.998Z"
+        },
+        {
+          "latitude": 51.53699400625499,
+          "longitude": -0.015377235433463369,
+          "accuracy": 6.490752324091903,
+          "altitude": 7.121729317121208,
+          "altitudeAccuracy": 3,
+          "heading": 280.30511673650597,
+          "speed": 2.903225038386341,
+          "recordedAt": "2026-08-29T13:18:26.998Z"
+        },
+        {
+          "latitude": 51.53699669654409,
+          "longitude": -0.015418354415143738,
+          "accuracy": 6.54673309668114,
+          "altitude": 7.404616550542414,
+          "altitudeAccuracy": 3.1589245042387635,
+          "heading": 279.5759926821947,
+          "speed": 2.866249721387775,
+          "recordedAt": "2026-08-29T13:18:27.998Z"
+        },
+        {
+          "latitude": 51.537003118299545,
+          "longitude": -0.015458085247550307,
+          "accuracy": 6.4636742113812655,
+          "altitude": 7.4968937039375305,
+          "altitudeAccuracy": 3.1304894257631974,
+          "heading": 281.245693317114,
+          "speed": 2.879841610652757,
+          "recordedAt": "2026-08-29T13:18:28.998Z"
+        },
+        {
+          "latitude": 51.53701276799694,
+          "longitude": -0.015505033531832883,
+          "accuracy": 6.4155145028895415,
+          "altitude": 7.617314577102661,
+          "altitudeAccuracy": 3.112594704575981,
+          "heading": 283.61088732207395,
+          "speed": 3.051736841459099,
+          "recordedAt": "2026-08-29T13:18:29.998Z"
+        },
+        {
+          "latitude": 51.5370156977182,
+          "longitude": -0.015542461932011465,
+          "accuracy": 6.357724696341397,
+          "altitude": 7.800685732625425,
+          "altitudeAccuracy": 3.1243374795090864,
+          "heading": 280.93134496289406,
+          "speed": 2.917397590905258,
+          "recordedAt": "2026-08-29T13:18:30.998Z"
+        },
+        {
+          "latitude": 51.537012106525815,
+          "longitude": -0.015590846964474303,
+          "accuracy": 6.357724688547873,
+          "altitude": 7.646517960354686,
+          "altitudeAccuracy": 3,
+          "heading": 275.47581951270655,
+          "speed": 2.811984672447533,
+          "recordedAt": "2026-08-29T13:18:31.998Z"
+        },
+        {
+          "latitude": 51.53701204221873,
+          "longitude": -0.015618103595340266,
+          "accuracy": 6.309287517890334,
+          "altitude": 7.426404671743512,
+          "altitudeAccuracy": 3.0804745990659312,
+          "heading": 279.0959135114375,
+          "speed": 2.583468116849512,
+          "recordedAt": "2026-08-29T13:18:32.998Z"
+        },
+        {
+          "latitude": 51.53702781243635,
+          "longitude": -0.01564792138042092,
+          "accuracy": 6.27201252681415,
+          "altitude": 7.635727537795901,
+          "altitudeAccuracy": 3.1126711283578947,
+          "heading": 290.310186183552,
+          "speed": 2.9102749588939343,
+          "recordedAt": "2026-08-29T13:18:33.998Z"
+        },
+        {
+          "latitude": 51.537032012666124,
+          "longitude": -0.015680238183725957,
+          "accuracy": 6.259719120980103,
+          "altitude": 7.57970602158457,
+          "altitudeAccuracy": 3.0875146969890888,
+          "heading": 280.75902533051215,
+          "speed": 2.7116895944834245,
+          "recordedAt": "2026-08-29T13:18:34.998Z"
+        },
+        {
+          "latitude": 51.53702400237874,
+          "longitude": -0.01572954236931651,
+          "accuracy": 6.247233163960115,
+          "altitude": 7.176304494030774,
+          "altitudeAccuracy": 3,
+          "heading": 273.98687540660865,
+          "speed": 2.778144070697907,
+          "recordedAt": "2026-08-29T13:18:35.998Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-F55571BF",
+          "category": "route survey",
+          "description": "Wet red running track with clear white lane markings. One runner is present; no visible obstructions, signage, waste, or equipment issues.",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:17:47.490Z",
+          "latitude": 51.536416645314894,
+          "longitude": -0.014622539224919462,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-A7C3E2DB",
+          "category": "voice note",
+          "description": "Manual observation at River gate approach",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T13:17:56.532Z",
+          "latitude": 51.536585166541215,
+          "longitude": -0.014549177921646719,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-514D9C76",
+          "category": "infrastructure and operational conditions",
+          "description": "Wet athletics track with puddles, temporary crowd barriers, fencing, stadium structures and a large steel tower. Access appears partially constrained; no significant congestion or visible waste. Signage is present but un",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:17:53.442Z",
+          "latitude": 51.53652351093746,
+          "longitude": -0.014549231246125047,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-6885B6D5",
+          "category": "route_survey",
+          "description": "Wet stadium running track with standing water and reflections. Lane markings are visible; a few people are present near the far side, with low congestion. Perimeter fencing, stadium signage and advertising boards are in ",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:17:59.458Z",
+          "latitude": 51.536652667287626,
+          "longitude": -0.014542236473334916,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-D1A7FB5D",
+          "category": "sports facility route survey",
+          "description": "Outdoor athletics track is wet with standing water and reflective surfaces after rain. Lane markings and fencing are intact; stadium signage is visible. A blue cover/tarp and a few staff or spectators are along the left ",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:18:05.457Z",
+          "latitude": 51.53677768452215,
+          "longitude": -0.014622924206369535,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-475D6D75",
+          "category": "route-survey",
+          "description": "Wet athletics track beside a stadium grandstand. Lane markings are clear; temporary barriers and signage line the edge. One runner is present, with no visible congestion or waste. Overcast conditions and standing moistur",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T13:18:17.480Z",
+          "latitude": 51.5369399286414,
+          "longitude": -0.014972193402661772,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:18:37.066Z",
+      "handedOffAt": "2026-08-29T13:18:37.066Z"
+    },
+    {
+      "id": "RUN-B30F16EF",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access",
+        "zone-river-gate",
+        "zone-north-loop"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T13:14:44.343Z",
+      "routePoints": [],
+      "observations": [],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T13:14:58.085Z",
+      "handedOffAt": "2026-08-29T13:14:58.085Z"
+    },
+    {
+      "id": "RUN-537FC972",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access",
+        "zone-river-gate",
+        "zone-north-loop"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T12:57:06.925Z",
+      "routePoints": [
+        {
+          "latitude": 51.5389,
+          "longitude": -0.01795,
+          "accuracy": 7,
+          "altitude": 12,
+          "altitudeAccuracy": 4,
+          "heading": 80,
+          "speed": 1.8,
+          "recordedAt": "2026-08-29T12:57:06.967Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-B5037BB1",
+          "category": "voice note",
+          "description": "Manual observation at South access route",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T12:57:07.193Z",
+          "latitude": 51.5389,
+          "longitude": -0.01795,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [
+        {
+          "zoneId": "zone-south-access",
+          "accepted": true,
+          "completedAt": "2026-08-29T12:57:07.242Z",
+          "rewardMinor": 3680
+        }
+      ],
+      "earnedMinor": 3680,
+      "finishedAt": "2026-08-29T12:57:07.314Z",
+      "handedOffAt": "2026-08-29T12:57:07.314Z"
+    },
+    {
+      "id": "RUN-148482FD",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access",
+        "zone-river-gate",
+        "zone-north-loop"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T12:56:25.320Z",
+      "routePoints": [
+        {
+          "latitude": 51.5389,
+          "longitude": -0.01795,
+          "accuracy": 7,
+          "altitude": 12,
+          "altitudeAccuracy": 4,
+          "heading": 80,
+          "speed": 1.8,
+          "recordedAt": "2026-08-29T12:56:25.385Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-E834E279",
+          "category": "voice note",
+          "description": "Manual observation at South access route",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T12:56:25.520Z",
+          "latitude": 51.5389,
+          "longitude": -0.01795,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [
+        {
+          "zoneId": "zone-south-access",
+          "accepted": true,
+          "completedAt": "2026-08-29T12:56:25.590Z",
+          "rewardMinor": 2760
+        }
+      ],
+      "earnedMinor": 2760,
+      "finishedAt": "2026-08-29T12:56:25.686Z",
+      "handedOffAt": "2026-08-29T12:56:25.686Z"
+    },
+    {
+      "id": "RUN-F10F549E",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access",
+        "zone-river-gate",
+        "zone-north-loop"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T12:55:51.258Z",
+      "routePoints": [
+        {
+          "latitude": 51.5389,
+          "longitude": -0.01795,
+          "accuracy": 7,
+          "altitude": 12,
+          "altitudeAccuracy": 4,
+          "heading": 80,
+          "speed": 1.8,
+          "recordedAt": "2026-08-29T12:55:51.301Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-D28DF07C",
+          "category": "voice note",
+          "description": "Manual observation at South access route",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T12:55:51.465Z",
+          "latitude": 51.5389,
+          "longitude": -0.01795,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [
+        {
+          "zoneId": "zone-south-access",
+          "accepted": true,
+          "completedAt": "2026-08-29T12:55:51.528Z",
+          "rewardMinor": 1840
+        }
+      ],
+      "earnedMinor": 1840,
+      "finishedAt": "2026-08-29T12:55:51.609Z",
+      "handedOffAt": "2026-08-29T12:55:51.609Z"
+    },
+    {
+      "id": "RUN-47D764F8",
+      "runnerName": "Automated demo runner",
+      "zoneIds": [
+        "zone-river-gate"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T12:54:54.615Z",
+      "routePoints": [],
+      "observations": [
+        {
+          "id": "OBS-AUTOMATED",
+          "category": "accessibility",
+          "description": "Manual demo evidence",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T12:00:00.000Z",
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [
+        {
+          "zoneId": "zone-river-gate",
+          "accepted": true,
+          "completedAt": "2026-08-29T12:54:54.666Z",
+          "rewardMinor": 810
+        }
+      ],
+      "earnedMinor": 810,
+      "finishedAt": "2026-08-29T12:54:54.684Z",
+      "handedOffAt": "2026-08-29T12:54:54.684Z"
+    }
+  ],
+  "bounties": [
+    {
+      "id": "demo-borough-market",
+      "rewardMinor": 750,
+      "zone": {
+        "id": "demo-borough-market",
+        "name": "Borough Market access check",
+        "coordinates": [
+          -0.091,
+          51.5055
+        ],
+        "rewardMinor": 750,
+        "reason": "buyer-requested",
+        "evidence": "Check crowd flow, kerbs and temporary obstructions · buyer-funded refresh",
+        "band": "priority",
+        "safeForDemo": true,
+        "routeIndex": 100
+      }
+    },
+    {
+      "id": "point-1788011154718",
+      "rewardMinor": 700,
+      "zone": {
+        "id": "point-1788011154718",
+        "name": "New London location",
+        "coordinates": [
+          -0.02979463500994939,
+          51.53444878776233
+        ],
+        "rewardMinor": 700,
+        "reason": "buyer-requested",
+        "evidence": "Demo kerb and crowd-flow check · buyer-funded refresh",
+        "band": "priority",
+        "safeForDemo": true,
+        "routeIndex": 101
+      }
+    },
+    {
+      "id": "point-1788011256579",
+      "rewardMinor": 700,
+      "zone": {
+        "id": "point-1788011256579",
+        "name": "New London location",
+        "coordinates": [
+          0.029256878661840346,
+          51.52088558985764
+        ],
+        "rewardMinor": 700,
+        "reason": "buyer-requested",
+        "evidence": "Demo kerb and crowd-flow check · buyer-funded refresh",
+        "band": "priority",
+        "safeForDemo": true,
+        "routeIndex": 102
+      }
+    },
+    {
+      "id": "zone-south-access",
+      "rewardMinor": 3020
+    }
+  ]
+}

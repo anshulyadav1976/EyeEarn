@@ -9,14 +9,16 @@ import {
   type RoutePoint,
 } from "@/lib/phase2-backbone";
 import { getRun, listRuns, saveRun } from "@/lib/phase2-store";
-import { fundedDemoZones } from "@/lib/demo-funding";
+import { fundedDemoZones, hydrateFunding } from "@/lib/demo-funding";
 
 const json = (data: unknown, status = 200) => Response.json(data, { status });
 export async function GET() {
+  await hydrateFunding();
   return json({ runs: await listRuns() });
 }
 export async function POST(request: Request) {
   try {
+    await hydrateFunding();
     const length = Number(request.headers.get("content-length") || 0);
     if (length > 500_000) return json({ error: "Request too large" }, 413);
     const body: unknown = await request.json();

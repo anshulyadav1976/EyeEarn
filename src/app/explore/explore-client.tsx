@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { streetMapStyle } from "@/lib/map-styles";
 import { buildItinerary } from "@/lib/itinerary";
 import {
   fuseVoiceWithVisual,
@@ -12,7 +13,6 @@ import {
 } from "@/lib/evidence-fusion";
 import type { BountyZone } from "@/lib/eyeearn-data";
 import styles from "./explore.module.css";
-import overlay from "./map-overlay.module.css";
 
 type SensorState = "idle" | "requesting" | "granted" | "unavailable" | "denied";
 type PositionSnapshot = {
@@ -46,8 +46,7 @@ type SpeechRecognitionLike = {
   start: () => void;
   stop: () => void;
   onresult:
-    | ((event: { results: Array<Array<{ transcript: string }>> }) => void)
-    | null;
+    ((event: { results: Array<Array<{ transcript: string }>> }) => void) | null;
   onerror: (() => void) | null;
   onend: (() => void) | null;
 };
@@ -134,6 +133,11 @@ export default function ExploreClient({
   const [device, setDevice] = useState<DeviceProfile | null>(null);
   const [motion, setMotion] = useState("waiting");
   const [restored, setRestored] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const [coveredKm, setCoveredKm] = useState(0);
+  const [routePoints, setRoutePoints] = useState<[number, number][]>([]);
+  const [showDetails, setShowDetails] = useState(false);
+  const [satellite, setSatellite] = useState(false);
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -151,6 +155,8 @@ export default function ExploreClient({
   const runIdRef = useRef<string | null>(null);
   const pointBuffer = useRef<PositionSnapshot[]>([]);
   const pointFlushTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const runStartedAt = useRef<number | null>(null);
+  const lastRoutePoint = useRef<PositionSnapshot | null>(null);
 
   useEffect(() => {
     const refreshBounties = () =>
@@ -166,6 +172,18 @@ export default function ExploreClient({
   }, []);
   const selected =
     liveZones.find((zone) => zone.id === selectedId) ?? liveZones[0];
+  const plannedRoute = useMemo<[number, number][]>(() => {
+    if (!selected) return route;
+    const [lng, lat] = selected.coordinates;
+    const spread = Math.max(0.004, Math.min(0.012, distance / 220));
+    return [
+      [lng - spread, lat - spread * 0.45],
+      [lng - spread * 0.4, lat - spread * 0.7],
+      [lng, lat],
+      [lng + spread * 0.45, lat + spread * 0.55],
+      [lng + spread, lat + spread * 0.2],
+    ];
+  }, [selected, distance, route]);
   const itinerary = useMemo(
     () =>
       buildItinerary(
@@ -184,8 +202,12 @@ export default function ExploreClient({
       try {
         const data = JSON.parse(saved);
         queueMicrotask(() => {
-        if (zones.some((zone) => zone.id === data.selectedId && zone.safeForDemo))
-          setSelectedId(data.selectedId);
+          if (
+            zones.some(
+              (zone) => zone.id === data.selectedId && zone.safeForDemo,
+            )
+          )
+            setSelectedId(data.selectedId);
           setDuration(Number(data.duration) || 30);
           setDistance(Number(data.distance) || 2.5);
           setEarningsTarget(Number(data.earningsTarget) || 0);
@@ -235,9 +257,9 @@ export default function ExploreClient({
     if (!mapContainer.current || map.current) return;
     const instance = new maplibregl.Map({
       container: mapContainer.current,
-      style: "https://tiles.openfreemap.org/styles/liberty",
-      center: [-0.0171, 51.5403],
-      zoom: 14.8,
+      style: streetMapStyle,
+      center: [-0.1276, 51.5072],
+      zoom: 10.6,
       attributionControl: false,
     });
     instance.addControl(
@@ -251,7 +273,7 @@ export default function ExploreClient({
         data: {
           type: "Feature",
           properties: {},
-          geometry: { type: "LineString", coordinates: route },
+          geometry: { type: "LineString", coordinates: plannedRoute },
         },
       });
       instance.addLayer({
@@ -270,22 +292,97 @@ export default function ExploreClient({
         source: "safe-route",
         paint: { "line-color": "#ff4d2e", "line-width": 5 },
       });
+      instance.addSource("live-route", {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          properties: {},
+          geometry: { type: "LineString", coordinates: [] },
+        },
+      });
+      instance.addLayer({
+        id: "live-route",
+        type: "line",
+        source: "live-route",
+        paint: { "line-color": "#1f9d70", "line-width": 5 },
+      });
     });
     map.current = instance;
     return () => {
       instance.remove();
       map.current = null;
     };
-  }, [route, zones]);
+  }, [plannedRoute]);
 
   useEffect(() => {
-    if (selected && map.current)
-      map.current.easeTo({
-        center: selected.coordinates,
-        zoom: 15.3,
-        duration: 700,
+    const instance = map.current;
+    if (!instance || !instance.isStyleLoaded()) return;
+    const data = {
+      type: "Feature",
+      properties: {},
+      geometry: { type: "LineString", coordinates: routePoints },
+    } as GeoJSON.Feature;
+    const source = instance.getSource("live-route") as
+      maplibregl.GeoJSONSource | undefined;
+    source?.setData(data);
+  }, [routePoints]);
+
+  useEffect(() => {
+    const instance = map.current;
+    if (!instance || !instance.isStyleLoaded()) return;
+    if (satellite && !instance.getSource("satellite")) {
+      instance.addSource("satellite", {
+        type: "raster",
+        tiles: [
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        ],
+        tileSize: 256,
+        attribution: "Esri",
       });
-  }, [selected]);
+      instance.addLayer(
+        {
+          id: "satellite",
+          type: "raster",
+          source: "satellite",
+          paint: { "raster-opacity": 0.94 },
+        },
+        instance.getLayer("route-casing") ? "route-casing" : undefined,
+      );
+    } else if (!satellite && instance.getLayer("satellite"))
+      instance.removeLayer("satellite");
+  }, [satellite]);
+
+  useEffect(() => {
+    const instance = map.current;
+    if (!instance || !liveZones.length) return;
+    const markers: maplibregl.Marker[] = [];
+    liveZones.forEach((zone) => {
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = `${styles.mapMarker} ${styles[zone.band]}`;
+      el.textContent = zone.safeForDemo
+        ? `£${(zone.rewardMinor / 100).toFixed(0)}`
+        : "×";
+      el.setAttribute(
+        "aria-label",
+        `${zone.name}, £${(zone.rewardMinor / 100).toFixed(2)}`,
+      );
+      el.disabled = !zone.safeForDemo;
+      el.onclick = () => {
+        setSelectedId(zone.id);
+        instance.easeTo({
+          center: zone.coordinates,
+          zoom: 14.5,
+          duration: 600,
+        });
+      };
+      const marker = new maplibregl.Marker({ element: el, anchor: "center" })
+        .setLngLat(zone.coordinates)
+        .addTo(instance);
+      markers.push(marker);
+    });
+    return () => markers.forEach((marker) => marker.remove());
+  }, [liveZones]);
 
   const cleanup = useCallback(() => {
     mediaStreams.current.forEach((stream) =>
@@ -372,6 +469,7 @@ export default function ExploreClient({
     lastBrightness.current = brightness;
     analysisInFlight.current = true;
     try {
+      const blobs: Blob[] = [];
       let facesRedacted = false;
       const FaceDetectorCtor = (
         globalThis as unknown as {
@@ -382,33 +480,43 @@ export default function ExploreClient({
           };
         }
       ).FaceDetector;
-      if (FaceDetectorCtor) {
-        const faces = await new FaceDetectorCtor().detect(canvas);
-        for (const face of faces) {
-          const b = face.boundingBox;
-          context.save();
-          context.filter = "blur(18px)";
-          context.drawImage(
-            canvas,
-            b.x,
-            b.y,
-            b.width,
-            b.height,
-            b.x,
-            b.y,
-            b.width,
-            b.height,
-          );
-          context.restore();
-          facesRedacted = true;
+      for (let frameIndex = 0; frameIndex < 3; frameIndex += 1) {
+        if (frameIndex)
+          await new Promise((resolve) => window.setTimeout(resolve, 500));
+        context.drawImage(source, 0, 0, canvas.width, canvas.height);
+        let frameRedacted = false;
+        if (FaceDetectorCtor) {
+          const faces = await new FaceDetectorCtor().detect(canvas);
+          for (const face of faces) {
+            const b = face.boundingBox;
+            context.save();
+            context.filter = "blur(18px)";
+            context.drawImage(
+              canvas,
+              b.x,
+              b.y,
+              b.width,
+              b.height,
+              b.x,
+              b.y,
+              b.width,
+              b.height,
+            );
+            context.restore();
+            frameRedacted = true;
+          }
         }
+        const blob = await new Promise<Blob | null>((resolve) =>
+          canvas.toBlob(resolve, "image/jpeg", 0.7),
+        );
+        if (blob) blobs.push(blob);
+        facesRedacted = facesRedacted || frameRedacted;
       }
-      const blob = await new Promise<Blob | null>((resolve) =>
-        canvas.toBlob(resolve, "image/jpeg", 0.7),
-      );
-      if (!blob) return;
+      if (!blobs.length) return;
       const form = new FormData();
-      form.append("frame", blob, `frame-${Date.now()}.jpg`);
+      blobs.forEach((blob, index) =>
+        form.append("frames", blob, `frame-${Date.now()}-${index}.jpg`),
+      );
       form.append(
         "metadata",
         JSON.stringify({
@@ -428,7 +536,9 @@ export default function ExploreClient({
       if (!response.ok)
         throw new Error(result.error || "Frame analysis failed");
       setAnalyses((current) => [result, ...current].slice(0, 4));
-      setFrameCount((count) => count + 1);
+      setFrameCount(
+        (count) => count + Number(result.framesAnalyzed || blobs.length),
+      );
       setStatus(`Observed: ${result.category}`);
       void persistObservation({
         id: result.id,
@@ -463,7 +573,7 @@ export default function ExploreClient({
       body: JSON.stringify({
         action: "start",
         runnerName,
-        zoneIds: itinerary.zoneIds,
+        zoneIds: selected ? [selected.id] : [],
       }),
     });
     const started = await startResponse.json();
@@ -565,6 +675,27 @@ export default function ExploreClient({
             recordedAt: new Date(event.timestamp).toISOString(),
           };
           latestPosition.current = next;
+          const previous = lastRoutePoint.current;
+          if (previous) {
+            const lat = ((next.latitude - previous.latitude) * Math.PI) / 180;
+            const lon = ((next.longitude - previous.longitude) * Math.PI) / 180;
+            const a =
+              Math.sin(lat / 2) ** 2 +
+              Math.cos((previous.latitude * Math.PI) / 180) *
+                Math.cos((next.latitude * Math.PI) / 180) *
+                Math.sin(lon / 2) ** 2;
+            setCoveredKm(
+              (value) =>
+                value + 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)),
+            );
+          }
+          lastRoutePoint.current = next;
+          setRoutePoints((points) =>
+            [
+              ...points,
+              [next.longitude, next.latitude] as [number, number],
+            ].slice(-500),
+          );
           pointBuffer.current.push(next);
           if (pointBuffer.current.length >= 5) void flushPoints();
           setPosition(next);
@@ -614,6 +745,11 @@ export default function ExploreClient({
       setSensors((current) => ({ ...current, motion: "granted" }));
     } else setSensors((current) => ({ ...current, motion: "unavailable" }));
     setRunLive(true);
+    runStartedAt.current = Date.now();
+    lastRoutePoint.current = null;
+    setElapsed(0);
+    setCoveredKm(0);
+    setRoutePoints([]);
     setStatus("Survey live — collecting only while this page remains open");
     pointFlushTimer.current = setInterval(() => void flushPoints(), 5000);
     localStorage.setItem(
@@ -627,7 +763,7 @@ export default function ExploreClient({
         privacy: "frames sampled; no continuous video/audio",
       }),
     );
-    if (cameraStream) frameTimer.current = setInterval(captureFrame, 3000);
+    if (cameraStream) frameTimer.current = setInterval(captureFrame, 6000);
   };
 
   const completeSelected = async () => {
@@ -674,6 +810,7 @@ export default function ExploreClient({
       }
     }
     cleanup();
+    runStartedAt.current = null;
     setRunLive(false);
     setStatus(
       `Run handed off · £${(earned / 100).toFixed(2)} accepted earnings`,
@@ -778,6 +915,15 @@ export default function ExploreClient({
       .catch(() => setVoiceMode("browser fallback · typed transcript"));
   }, [runLive]);
 
+  useEffect(() => {
+    if (!runLive) return;
+    const timer = window.setInterval(() => {
+      if (runStartedAt.current)
+        setElapsed(Math.floor((Date.now() - runStartedAt.current) / 1000));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [runLive]);
+
   return (
     <main className={styles.page}>
       <header className={styles.header}>
@@ -800,45 +946,29 @@ export default function ExploreClient({
             className={styles.map}
             aria-label="Prepared safe route and bounty zones"
           />
-          <div
-            className={overlay.mapOverlay}
-            aria-label="Route overlay fallback"
-          >
-            <span className={overlay.stadiumLabel}>London Stadium</span>
-            <span className={overlay.riverLabel}>River Lea</span>
-            <svg
-              viewBox="0 0 1000 700"
-              preserveAspectRatio="none"
-              aria-hidden="true"
+          <div className={styles.mapControls}>
+            <button
+              type="button"
+              onClick={() => setSatellite((value) => !value)}
             >
-              <path
-                className={overlay.routeCase}
-                d="M135 560 C250 660 680 650 820 490 C920 375 835 145 625 120 C390 92 180 230 150 410 C140 470 145 520 135 560"
-              />
-              <path
-                className={overlay.route}
-                d="M135 560 C250 660 680 650 820 490 C920 375 835 145 625 120 C390 92 180 230 150 410 C140 470 145 520 135 560"
-              />
-            </svg>
-            {liveZones.map((zone, index) => (
-              <button
-                key={zone.id}
-                title={zone.name}
-                aria-label={`${zone.name} ${zone.safeForDemo ? `£${(zone.rewardMinor / 100).toFixed(2)}` : "restricted"}`}
-                disabled={!zone.safeForDemo}
-                onClick={() => setSelectedId(zone.id)}
-                className={`${styles.marker} ${overlay.marker} ${styles[zone.band]} ${!zone.safeForDemo ? styles.restricted : ""} ${zone.id === selectedId ? overlay.active : ""}`}
-                style={{
-                  left: `${[25, 74, 60, 18][index]}%`,
-                  top: `${[72, 55, 18, 35][index]}%`,
-                }}
-              >
-                {zone.safeForDemo
-                  ? `£${(zone.rewardMinor / 100).toFixed(0)}`
-                  : "×"}
-              </button>
-            ))}
+              {satellite ? "Street map" : "Satellite"}
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                map.current?.fitBounds(
+                  [
+                    [-0.52, 51.28],
+                    [0.32, 51.72],
+                  ],
+                  { padding: 48, duration: 700 },
+                )
+              }
+            >
+              London
+            </button>
           </div>
+          <div className={styles.mapHint}>Tap a bounty to see the brief</div>
           <div className={styles.mapLegend}>
             <b>Bounty value</b>
             <span>
@@ -858,7 +988,121 @@ export default function ExploreClient({
               Restricted
             </span>
           </div>
-          <div className={styles.routeTag}>Prepared safe route · 2.5 km</div>
+          <div className={styles.routeTag}>
+            {runLive ? "Live route · collecting" : "London coverage map"}
+          </div>
+          {selected && (
+            <div className={styles.bountyPopup}>
+              <span className={styles.popupLabel}>{selected.band} bounty</span>
+              <strong>{selected.name}</strong>
+              <p>{reasonCopy[selected.reason]}</p>
+              <div>
+                <b>£{(selected.rewardMinor / 100).toFixed(2)}</b>
+                <span>
+                  {itinerary.estimatedDistanceKm} km ·{" "}
+                  {itinerary.estimatedDurationMinutes} min
+                </span>
+              </div>
+            </div>
+          )}
+          <div className={styles.runDock}>
+            {runLive ? (
+              <>
+                <div className={styles.liveStats}>
+                  <span>
+                    <b>
+                      {Math.floor(elapsed / 60)}:
+                      {String(elapsed % 60).padStart(2, "0")}
+                    </b>
+                    <small>elapsed</small>
+                  </span>
+                  <span>
+                    <b>{coveredKm.toFixed(2)} km</b>
+                    <small>distance</small>
+                  </span>
+                  <span>
+                    <b>
+                      {coveredKm && elapsed
+                        ? `${(coveredKm / (elapsed / 3600)).toFixed(1)} km/h`
+                        : "—"}
+                    </b>
+                    <small>pace</small>
+                  </span>
+                  <span>
+                    <b>£{(runEarned / 100).toFixed(2)}</b>
+                    <small>earned</small>
+                  </span>
+                </div>
+                <div className={styles.dockActions}>
+                  <button
+                    className={styles.captureAction}
+                    type="button"
+                    onClick={() =>
+                      saveVoice(`Manual observation at ${selected.name}`)
+                    }
+                  >
+                    ＋ Add observation
+                  </button>
+                  <button
+                    className={styles.detailToggle}
+                    type="button"
+                    onClick={() => setShowDetails((value) => !value)}
+                  >
+                    {showDetails ? "Hide details" : "Details"}
+                  </button>
+                  <button
+                    className={styles.finishDock}
+                    type="button"
+                    onClick={finishRun}
+                  >
+                    Finish run
+                  </button>
+                </div>
+              </>
+            ) : (
+              <button
+                className={styles.startDock}
+                type="button"
+                onClick={startRun}
+              >
+                Start earning run <span>→</span>
+              </button>
+            )}
+          </div>
+          {showDetails && (
+            <div className={styles.detailsPanel} aria-live="polite">
+              <div>
+                <b>Collection status</b>
+                <span>{status}</span>
+              </div>
+              <div>
+                <b>Permissions</b>
+                <span>
+                  {Object.entries(sensors)
+                    .map(([name, state]) => `${name}: ${state}`)
+                    .join(" · ")}
+                </span>
+              </div>
+              <div>
+                <b>Evidence</b>
+                <span>
+                  {frameCount} frames analysed · {voices.length} voice notes ·{" "}
+                  {analyses.length} reports
+                </span>
+              </div>
+              {position && (
+                <div>
+                  <b>GPS</b>
+                  <span>
+                    ±{Math.round(position.accuracy)} m ·{" "}
+                    {position.speed === null
+                      ? "speed unavailable"
+                      : `${position.speed.toFixed(1)} m/s`}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <aside className={styles.planner}>
           <p className={styles.kicker}>Earn Map · safe demo route</p>
