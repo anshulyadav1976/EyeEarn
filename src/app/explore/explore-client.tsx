@@ -120,7 +120,6 @@ export default function ExploreClient({
   const [runPaused, setRunPaused] = useState(false);
   const [micMuted, setMicMuted] = useState(false);
   const [mapReady, setMapReady] = useState(false);
-  const [projectedRoute, setProjectedRoute] = useState("");
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -324,19 +323,6 @@ export default function ExploreClient({
       properties: {},
       geometry: { type: "LineString", coordinates: plannedRoute },
     });
-    const projectRoute = () => {
-      setProjectedRoute(
-        plannedRoute
-          .map((point) => {
-            const projected = instance.project(point);
-            return `${projected.x},${projected.y}`;
-          })
-          .join(" "),
-      );
-    };
-    instance.on("move", projectRoute);
-    instance.on("resize", projectRoute);
-    projectRoute();
     instance.fitBounds(
       plannedRoute.reduce(
         (bounds, point) => bounds.extend(point),
@@ -344,10 +330,6 @@ export default function ExploreClient({
       ),
       { padding: 84, maxZoom: 14.2, duration: 650 },
     );
-    return () => {
-      instance.off("move", projectRoute);
-      instance.off("resize", projectRoute);
-    };
   }, [mapReady, plannedRoute]);
 
   useEffect(() => {
@@ -935,18 +917,6 @@ export default function ExploreClient({
             className={styles.map}
             aria-label="Prepared safe route and bounty zones"
           />
-          {selected && projectedRoute && (
-            <svg
-              className={styles.routeOverlay}
-              aria-label={`Exact ${selected.name} circuit`}
-            >
-              <polyline
-                className={styles.routeCasing}
-                points={projectedRoute}
-              />
-              <polyline className={styles.routeLine} points={projectedRoute} />
-            </svg>
-          )}
           {selected && (
             <div className={styles.itineraryBadge}>
               <span>★ {plannedRoute.length} stops</span>

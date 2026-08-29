@@ -115,6 +115,6 @@ Verification passed: browser interaction and visual inspection of Home, Explore,
 - Adopted Saira Condensed for display type and Roboto for small copy, controls and navigation.
 - Completed the Buyer request path: select building/circle/rectangle, click the map, name the location, size the area, describe the evidence, choose bounty and demo payment source, then publish.
 - Aligned the Buyer primary navigation on one baseline and applied the landing survey-grid background to Buyer and Public Evidence.
-- Fixed the invisible Explorer itinerary at the presentation layer by projecting the actual route coordinates into a map-synchronized SVG; it remains aligned as the map moves and now forms a clean closed circuit.
+- Removed the temporary map-synchronized SVG circuit overlay; native route data and itinerary guidance remain available without the extra presentation layer.
 
-Verification passed: desktop and 390 px Playwright runs, rotating headline RUN→DRIVE, aligned Buyer header, complete unsent payment form, nine-point visible Stratford circuit, no horizontal overflow or console errors, ESLint, TypeScript, six unit tests and production build.
+Verification passed: desktop and 390 px Playwright runs, rotating headline RUN→DRIVE, aligned Buyer header, complete unsent payment form, no horizontal overflow or console errors, ESLint, TypeScript, six unit tests and production build.
