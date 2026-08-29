@@ -134,3 +134,9 @@ Verification passed: all six production captures completed without browser conso
 - Presented the recognition roles for YOLOv8, Grounding DINO, SAM 2, DPT, Luna and ElevenLabs Scribe without changing inference, storage, API routes or environment configuration.
 
 Verification passed: desktop and 390 px browser review, all four images loaded, trace playback and reduced-motion completion, zero horizontal overflow, no browser console errors, ESLint and TypeScript.
+
+## Landing tagline fit
+
+- Kept “Run where the map needs eyes.” on one calibrated line from 1024 px desktop upward while preserving the existing mobile wrap.
+
+Verification passed at 1024, 1440 and 1920 px with the full 32 px page padding, no overflow and no browser console errors.

@@ -118,10 +118,10 @@
 
 .statement {
   margin: clamp(2.6rem, 6vw, 5rem) 0 0;
-  max-width: 1200px;
-  font-size: clamp(3rem, 7vw, 7rem);
+  font-size: clamp(2.35rem, 5.7vw, 7rem);
   line-height: 0.9;
   letter-spacing: -0.065em;
+  white-space: nowrap;
   text-transform: uppercase;
 }
 
@@ -330,6 +330,7 @@
   }
   .statement {
     font-size: clamp(2.65rem, 14vw, 4.4rem);
+    white-space: normal;
   }
   .heroFoot {
     display: grid;
