@@ -88,3 +88,11 @@ Verification passed again: full desktop runner interaction, fake camera/micropho
 - Added three clearly labelled derived-only TfL-shaped demo fixtures and a developer-facing evidence passport page.
 
 Verification passed: owner-driven desktop interaction across Phases 5–8, Authority filtering and map-mode switching, intelligence gap funding, replay playback/scrubbing/end state, public API assertions, responsive checks at phone width, no local HTTP/console failures, unit tests, ESLint, TypeScript and production build.
+
+## Landing-page reference refinement
+
+- Adapted the supplied Claude export's strongest visual cues: a light London survey grid, oversized pink movement headline, condensed utility typography and a restrained animated edge signal.
+- Preserved six direct demo destinations and added clear Earn/Buy calls to action instead of copying the export's heavier runtime and canvas implementation.
+- Corrected the Git commit identity to the GitHub account's verified noreply address so connected Vercel deployments can resolve the author.
+
+Verification passed: desktop and 390 px browser review, six-card navigation, Explore handoff, responsive overflow, console/network checks, ESLint, TypeScript and production build.

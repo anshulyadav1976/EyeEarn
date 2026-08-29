@@ -1,109 +1,128 @@
 import Link from "next/link";
+import styles from "./page.module.css";
 
 const roles = [
   {
     code: "01",
     title: "Explore & Earn",
-    copy: "Choose a valuable coverage gap, follow its itinerary and film a privacy-processed evidence run.",
+    copy: "Choose a London bounty, follow its itinerary and collect privacy-processed evidence.",
     href: "/explore",
-    action: "Start the field demo",
-    state: "Live",
+    action: "Open earn map",
+    state: "Ready",
   },
   {
     code: "02",
-    title: "Buyer Map",
-    copy: "Inspect what is known, click where evidence is missing and fund a fresh runner bounty.",
+    title: "Buy Intelligence",
+    copy: "Inspect known coverage, click an evidence gap and fund a fresh runner mission.",
     href: "/buyer",
     action: "Open buyer map",
-    state: "Live",
+    state: "Ready",
   },
   {
     code: "03",
-    title: "Authority Live",
-    copy: "Watch routes, evidence states and the city evidence ribbon from one operational field view.",
+    title: "Authority Atlas",
+    copy: "See London routes, evidence signals and review states from one operational view.",
     href: "/operations",
-    action: "Open Live + Atlas",
-    state: "Phase 5",
+    action: "Open operations",
+    state: "Live",
   },
   {
     code: "04",
-    title: "Ask EyeEarn",
-    copy: "Answer a buyer question with cited observations—or propose a bounty when coverage is too thin.",
+    title: "Ask the Street",
+    copy: "Get a cited answer—or create a new bounty when the evidence is not strong enough.",
     href: "/intelligence",
-    action: "Run cited intelligence",
-    state: "Phase 6",
+    action: "Ask EyeEarn",
+    state: "Cited",
   },
   {
     code: "05",
-    title: "Run Replay",
-    copy: "Turn the real route, observations and accepted earnings into a short cinematic proof of value.",
+    title: "Replay a Run",
+    copy: "Watch a recorded route, its evidence and accepted earnings unfold together.",
     href: "/replay",
-    action: "Play the evidence",
-    state: "Phase 7",
+    action: "Play evidence",
+    state: "Recorded",
   },
   {
     code: "06",
     title: "Public Evidence",
-    copy: "Inspect the privacy-safe GeoJSON product and clearly labelled external demo fixtures.",
+    copy: "Inspect the privacy-safe GeoJSON product without raw people, video or audio.",
     href: "/developers",
-    action: "View the public API",
-    state: "Phase 8",
+    action: "View public API",
+    state: "V1",
   },
 ];
 
 export default function Home() {
   return (
-    <main className="shell-page">
-      <header className="topbar">
-        <Link className="wordmark" href="/" aria-label="EyeEarn home">
+    <main className={styles.page}>
+      <div className={styles.edgePulse} aria-hidden="true" />
+      <header className={styles.header}>
+        <Link className={styles.brand} href="/" aria-label="EyeEarn home">
           EYE<span>EARN</span>
         </Link>
-        <div className="topbar-status">
-          <i /> FIVE-MINUTE DEMO · PHASE 8
-        </div>
+        <span className={styles.system}>Field system · London · Phase 8</span>
+        <nav aria-label="Primary navigation">
+          <Link href="/explore">Earn</Link>
+          <Link href="/buyer">Buy</Link>
+          <Link href="/operations">Operate</Link>
+        </nav>
       </header>
-      <section className="thesis">
-        <p className="eyebrow">Movement becomes verified place intelligence</p>
+
+      <section className={styles.hero}>
+        <p className={styles.eyebrow}>Movement-powered place intelligence</p>
         <h1>
-          Run where the map
-          <br />
-          needs <em>eyes.</em>
+          <span>Run</span>
+          <span>and earn.</span>
         </h1>
-        <p className="lede">
-          EyeEarn rewards explorers for filling valuable real-world evidence
-          gaps, then turns privacy-processed observations into cited answers for
-          buyers and operators.
+        <p className={styles.statement}>
+          Run where the map needs <em>eyes.</em>
         </p>
-        <div className="market-loop" aria-label="EyeEarn product loop">
-          {["Demand", "Bounty", "Run", "Evidence", "Earn", "Answer"].map(
-            (item, index) => (
-              <span key={item}>
-                {item}
-                {index < 5 && <b aria-hidden="true">→</b>}
-              </span>
-            ),
-          )}
+        <div className={styles.heroFoot}>
+          <p>
+            EyeEarn pays explorers to fill real-world evidence gaps, then turns
+            privacy-processed observations into cited answers.
+          </p>
+          <div className={styles.actions}>
+            <Link className={styles.primary} href="/explore">
+              Start earning <span aria-hidden="true">↗</span>
+            </Link>
+            <Link className={styles.secondary} href="/buyer">
+              Buy coverage
+            </Link>
+          </div>
+        </div>
+        <a className={styles.scrollCue} href="#demo-surfaces">
+          Explore the system <span aria-hidden="true">↓</span>
+        </a>
+      </section>
+
+      <section className={styles.surfaces} id="demo-surfaces">
+        <div className={styles.sectionHead}>
+          <p>One field system</p>
+          <h2>Six ways to prove the loop.</h2>
+          <span>Demand → bounty → run → evidence → earn → answer</span>
+        </div>
+        <div className={styles.grid}>
+          {roles.map((role) => (
+            <article className={styles.card} key={role.code}>
+              <div className={styles.meta}>
+                <span>{role.code}</span>
+                <small>{role.state}</small>
+              </div>
+              <h3>{role.title}</h3>
+              <p>{role.copy}</p>
+              <Link href={role.href}>
+                {role.action}
+                <span aria-hidden="true">↗</span>
+              </Link>
+            </article>
+          ))}
         </div>
       </section>
-      <section className="role-grid" aria-label="Choose a role">
-        {roles.map((role) => (
-          <article className="role-card" key={role.code}>
-            <div className="role-meta">
-              <span>{role.code}</span>
-              <small>{role.state}</small>
-            </div>
-            <h2>{role.title}</h2>
-            <p>{role.copy}</p>
-            <Link href={role.href}>
-              {role.action}
-              <span aria-hidden="true">↗</span>
-            </Link>
-          </article>
-        ))}
-      </section>
-      <footer className="shell-footer">
-        <span>Runner → evidence → cited answer → replay</span>
-        <Link href="/build-status.html">Build status</Link>
+
+      <footer className={styles.footer}>
+        <span>Privacy processed · evidence grounded · London demo</span>
+        <Link href="/build-status.html">Build status ↗</Link>
       </footer>
     </main>
   );

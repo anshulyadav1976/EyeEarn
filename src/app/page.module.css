@@ -1,0 +1,380 @@
+.page {
+  --paper: #fafaf8;
+  --ink: #141618;
+  --muted: #60656a;
+  --hair: #deded9;
+  --pink: #ff1f6b;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(#e8e8e3 1px, transparent 1px),
+    linear-gradient(90deg, #e8e8e3 1px, transparent 1px);
+  background-size: 52px 52px;
+  font-family: "Arial Narrow", "Aptos Narrow", Arial, sans-serif;
+}
+
+.edgePulse {
+  position: fixed;
+  z-index: 20;
+  top: 38vh;
+  right: 9px;
+  width: 2px;
+  height: 118px;
+  background: linear-gradient(
+    transparent,
+    var(--pink),
+    #fff,
+    var(--pink),
+    transparent
+  );
+  filter: drop-shadow(0 0 7px var(--pink));
+  animation: drift 5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.header {
+  position: relative;
+  z-index: 10;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0 2rem;
+  border-bottom: 1px solid var(--hair);
+  background: #fafaf8e8;
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  font-size: 1.35rem;
+  font-weight: 950;
+  letter-spacing: -0.045em;
+}
+
+.brand span {
+  color: var(--pink);
+}
+
+.system,
+.header nav,
+.eyebrow,
+.scrollCue,
+.sectionHead > p,
+.sectionHead > span,
+.meta,
+.card > a,
+.footer {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.system {
+  color: #73777a;
+}
+
+.header nav {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: auto;
+}
+
+.header nav a:hover {
+  color: var(--pink);
+}
+
+.hero {
+  min-height: calc(100vh - 72px);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(5rem, 10vh, 8rem) 2rem 5rem;
+}
+
+.eyebrow {
+  margin: 0 0 1.6rem;
+  color: #74787b;
+}
+
+.hero h1 {
+  margin: 0;
+  color: var(--pink);
+  font-size: clamp(6rem, 15vw, 14rem);
+  font-weight: 950;
+  line-height: 0.7;
+  letter-spacing: -0.075em;
+  text-transform: uppercase;
+  text-shadow: 0 0 25px #ff1f6b28;
+}
+
+.hero h1 span {
+  display: block;
+}
+
+.statement {
+  margin: clamp(2.6rem, 6vw, 5rem) 0 0;
+  max-width: 1200px;
+  font-size: clamp(3rem, 7vw, 7rem);
+  line-height: 0.9;
+  letter-spacing: -0.065em;
+  text-transform: uppercase;
+}
+
+.statement em {
+  color: var(--pink);
+  font-style: normal;
+}
+
+.heroFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.heroFoot > p {
+  max-width: 580px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.actions a {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0 1rem;
+  border: 1px solid var(--ink);
+  font-weight: 850;
+  text-transform: uppercase;
+  transition: transform 160ms ease;
+}
+
+.actions .primary {
+  color: #fff;
+  border-color: var(--pink);
+  background: var(--pink);
+}
+
+.actions a:hover {
+  transform: translateY(-2px);
+}
+
+.scrollCue {
+  position: absolute;
+  bottom: 1.6rem;
+  left: 2rem;
+  display: flex;
+  gap: 0.8rem;
+  color: #777b7e;
+}
+
+.surfaces {
+  position: relative;
+  z-index: 2;
+  padding: 7rem 2rem 5rem;
+  border-top: 1px solid var(--hair);
+  background: #fafaf8f2;
+}
+
+.sectionHead {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr) auto;
+  gap: 2rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+
+.sectionHead > p,
+.sectionHead > span {
+  margin: 0;
+  color: #707478;
+}
+
+.sectionHead h2 {
+  max-width: 780px;
+  margin: 0;
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 0.88;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--hair);
+  border-left: 1px solid var(--hair);
+}
+
+.card {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem;
+  border-right: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+  background: #ffffffb8;
+  transition:
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  color: #777b7e;
+}
+
+.meta small {
+  padding: 0.25rem 0.45rem;
+  border: 1px solid currentColor;
+  font: inherit;
+}
+
+.card h3 {
+  margin: 2.8rem 0 0.7rem;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.card p {
+  max-width: 36ch;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.card > a {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--hair);
+  color: var(--pink);
+}
+
+.card:hover {
+  color: #fff;
+  background: var(--pink);
+}
+
+.card:hover p,
+.card:hover .meta,
+.card:hover > a {
+  color: #fff;
+  border-color: #ffffff70;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  color: #696d70;
+  border-top: 1px solid var(--hair);
+  background: var(--paper);
+}
+
+.footer a {
+  color: var(--pink);
+}
+
+@keyframes drift {
+  to {
+    transform: translateY(20vh);
+  }
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sectionHead {
+    grid-template-columns: 1fr;
+  }
+  .sectionHead > span {
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    min-height: 64px;
+    padding: 0 1rem;
+  }
+  .system {
+    display: none;
+  }
+  .header nav {
+    gap: 0.8rem;
+    letter-spacing: 0.08em;
+  }
+  .hero {
+    min-height: calc(100svh - 64px);
+    padding: 4rem 1rem 5rem;
+  }
+  .hero h1 {
+    font-size: clamp(5.3rem, 26vw, 8rem);
+    line-height: 0.74;
+  }
+  .statement {
+    font-size: clamp(2.65rem, 14vw, 4.4rem);
+  }
+  .heroFoot {
+    display: grid;
+  }
+  .actions {
+    align-items: stretch;
+  }
+  .actions a {
+    flex: 1;
+    gap: 0.5rem;
+    padding-inline: 0.75rem;
+    font-size: 0.75rem;
+  }
+  .scrollCue {
+    left: 1rem;
+  }
+  .surfaces {
+    padding: 5rem 1rem 3rem;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    min-height: 245px;
+  }
+  .footer {
+    display: grid;
+    padding-inline: 1rem;
+    line-height: 1.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edgePulse {
+    animation: none;
+  }
+  .actions a,
+  .card {
+    transition: none;
+  }
+}
