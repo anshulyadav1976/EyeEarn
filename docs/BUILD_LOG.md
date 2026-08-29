@@ -20,3 +20,24 @@
 - Explicitly blocked privacy-risk output from buyer use unless required redaction has passed.
 
 Verification passed: Node itinerary test, ESLint, production build, real Luna-medium analysis of a test frame, desktop/mobile Playwright flow, refresh persistence, restricted-zone exclusion, sensor denial degradation, GPS update, responsive overflow, console and Cloudflare checks. Manual confirmation on the actual phone is the remaining human gate.
+
+## Phase 2 — real collection and earnings loop
+
+- Added a persisted demo run ledger and optional RLS-enabled Supabase/Postgres schema.
+- Wired runner start, batched GPS writes, accuracy preservation, impossible-jump rejection, visual/manual/voice observations, acceptance-only simulated earnings, and finish/handoff.
+- Added a clearly labelled manual evidence path so camera, microphone, model, or GPS degradation cannot block the demo.
+
+## Phase 3 — Buyer Location Dossier
+
+- Added a coverage/freshness map, search, selectable dossiers, time range, modalities, sample cards, privacy/provenance labels, supported questions, gaps and indicative pricing.
+- Added simulated report purchase and fresh-coverage funding.
+- Buyer funding creates/increases the same safe Explorer bounty, which refreshes without a second map implementation and becomes the accepted runner payout.
+
+## Phase 4 — rich evidence fusion
+
+- Preserved one compressed frame every three seconds, one analysis in flight and manual fallback.
+- Added short hold-to-speak/browser and typed observations, optional ElevenLabs Realtime Scribe token issuance, timestamp/runner/GPS attachment and visual/voice fusion.
+- Scrubbed contact-shaped text, persisted only short structured notes, never continuous audio, and exposed derived/anonymized buyer status first.
+- Faces are blurred with the native detector where available; Luna flags faces/plates and risky evidence is held when redaction cannot be confirmed.
+
+The combined Phase 1–4 actual-phone permission/walking flow remains the final human test gate, as requested.
