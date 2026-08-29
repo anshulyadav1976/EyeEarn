@@ -85,7 +85,7 @@
 }
 .labIntro {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(430px, 1.1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(430px, 1fr);
   gap: clamp(2rem, 5vw, 6rem);
   padding: clamp(4rem, 7vw, 7rem) 0 2.5rem;
   border-bottom: 1px solid #17191b;
@@ -101,9 +101,9 @@
   text-transform: uppercase;
 }
 .labIntro h2 {
-  max-width: 10ch;
+  max-width: 16ch;
   margin: 0;
-  font-size: clamp(3.2rem, 7.3vw, 7.4rem);
+  font-size: clamp(2.7rem, 4.5vw, 4.8rem);
   font-weight: 400;
   letter-spacing: -0.07em;
   line-height: 0.82;
@@ -711,7 +711,7 @@
     padding-top: 4rem;
   }
   .labIntro h2 {
-    font-size: clamp(3rem, 17vw, 5rem);
+    font-size: clamp(2.6rem, 12vw, 4rem);
   }
   .pipeline {
     grid-template-columns: 1fr;

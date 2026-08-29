@@ -76,9 +76,11 @@ export default function ProcessingLab() {
         <div>
           <p>EyeEarn evidence engine · trace 048A</p>
           <h2 id="processing-lab-title">
-            From video to
+            What Cars Can&apos;t Capture:
             <br />
-            <em>anonymized enriched data.</em>
+            One Recording For
+            <br />
+            <em>Ultra Enriched Data</em>
           </h2>
         </div>
         <div className={styles.labIntroCopy}>

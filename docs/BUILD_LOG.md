@@ -148,3 +148,7 @@ Verification passed at 1024, 1440 and 1920 px with the full 32 px page padding, 
 - Reframed the structured observation as an explicit example with “What EyeEarn found” and “Why it matters” instead of presenting it as a display headline.
 
 Verification passed on desktop and 390 px mobile: expected page order, no playback control, readable explanation and output labels, zero horizontal overflow and no browser console errors.
+
+## Public evidence headline
+
+- Replaced the processing-lab title with “What Cars Can't Capture: One Recording For Ultra Enriched Data” and recalibrated its desktop/mobile scale for the longer message.
