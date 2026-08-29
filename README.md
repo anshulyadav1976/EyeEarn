@@ -4,7 +4,7 @@ EyeEarn pays explorers to fill valuable real-world evidence gaps, then turns pri
 
 ## Current scope
 
-This repository is implemented through Phase 4 of the supplied hackathon plan. It includes a London-wide runner map, persistent run/earn loop, buyer coverage-request map, shared bounties, sampled visual/voice evidence fusion, and a submitted-run operations map with flat and perspective views.
+This repository is implemented through Phase 8 of the supplied hackathon plan. It includes a London-wide runner map, persistent run/earn loop, buyer coverage requests, shared bounties, sampled visual/voice evidence fusion, authority operations, cited buyer intelligence, recorded-run replay, and a privacy-safe public evidence API.
 
 ```bash
 npm install
@@ -12,6 +12,15 @@ npm run dev
 ```
 
 Open `http://localhost:3000` and `http://localhost:3000/build-status.html`.
+
+Main demo routes:
+
+- `/explore` — choose a bounty, run and film.
+- `/buyer` — inspect or fund London coverage.
+- `/operations` — live/atlas authority evidence view.
+- `/intelligence` — grounded questions with evidence citations and gap-to-bounty funding.
+- `/replay` — play a completed route, evidence and earnings back over time.
+- `/developers` — inspect the public GeoJSON surface and labelled external fixtures.
 
 ## Data and AI boundaries
 
@@ -23,4 +32,4 @@ Open `http://localhost:3000` and `http://localhost:3000/build-status.html`.
 - Local development writes to `.data/phase2.sqlite` and refreshes the committed `.data/phase2.json` demo snapshot. Vercel can seed from that snapshot, but its runtime writes are ephemeral; use the documented optional database schema for durable deployed collection.
 - The signed-in ChatGPT/Codex session is not copied into the app. OpenAI application APIs require server-side API credentials.
 
-See [docs/DATA_COLLECTION.md](docs/DATA_COLLECTION.md), [docs/PRIVACY.md](docs/PRIVACY.md), and [docs/BUILD_LOG.md](docs/BUILD_LOG.md).
+See [docs/PHASE5_8_DEMO.md](docs/PHASE5_8_DEMO.md), [docs/DATA_COLLECTION.md](docs/DATA_COLLECTION.md), [docs/PRIVACY.md](docs/PRIVACY.md), and [docs/BUILD_LOG.md](docs/BUILD_LOG.md).

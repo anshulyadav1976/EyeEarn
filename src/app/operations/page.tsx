@@ -1,7 +1,6 @@
 "use client";
-
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as maplibregl from "maplibre-gl";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -15,10 +14,10 @@ type Point = {
   latitude?: number;
 };
 type Observation = {
+  id?: string;
   category?: string;
   description?: string;
   modality?: string;
-  privacyState?: string;
   capturedAt?: string;
   longitude?: number;
   latitude?: number;
@@ -31,402 +30,358 @@ type Run = {
   routePoints?: Point[];
   observations?: Observation[];
 };
-const london: [number, number] = [-0.11, 51.51];
-const coordinate = (point: Point): [number, number] | null => {
-  const rawLng = point.lng ?? point.longitude;
-  const rawLat = point.lat ?? point.latitude;
-  if (rawLng == null || rawLat == null) return null;
-  const lng = Number(rawLng);
-  const lat = Number(rawLat);
-  return Number.isFinite(lng) && Number.isFinite(lat) ? [lng, lat] : null;
+type State = "detected" | "analysing" | "confirmed" | "rejected" | "duplicate";
+type Signal = Observation & {
+  id: string;
+  runId: string;
+  state: State;
+  severity: "low" | "medium" | "high";
+  source: "runner" | "street sensor";
+  time: string;
 };
-const runCoordinates = (run: Run | null) =>
-  run?.routePoints
-    ?.map(coordinate)
-    .filter((point): point is [number, number] => Boolean(point)) || [];
-const kilometres = (points: [number, number][]) => {
-  let metres = 0;
-  for (let index = 1; index < points.length; index += 1) {
-    const [aLng, aLat] = points[index - 1];
-    const [bLng, bLat] = points[index];
-    const x =
-      (((bLng - aLng) * Math.PI) / 180) *
-      Math.cos(((aLat + bLat) * Math.PI) / 360);
-    const y = ((bLat - aLat) * Math.PI) / 180;
-    metres += Math.sqrt(x * x + y * y) * 6371000;
-  }
-  return metres / 1000;
+const centre: [number, number] = [-0.11, 51.51],
+  states: State[] = [
+    "confirmed",
+    "analysing",
+    "detected",
+    "rejected",
+    "duplicate",
+  ];
+const xy = (p: Point): [number, number] | null => {
+  const rawX = p.lng ?? p.longitude,
+    rawY = p.lat ?? p.latitude;
+  if (rawX == null || rawY == null) return null;
+  const x = Number(rawX),
+    y = Number(rawY);
+  return Number.isFinite(x) && Number.isFinite(y) ? [x, y] : null;
 };
+const route = (r?: Run | null) =>
+  r?.routePoints?.map(xy).filter((p): p is [number, number] => !!p) || [];
+const signalData = (runs: Run[]): Signal[] =>
+  [
+    ...runs.flatMap((run, n) =>
+      (run.observations || []).map((o, i) => ({
+        ...o,
+        id: o.id || `RUN-${n}${i}`,
+        runId: run.id,
+        state: states[(n + i) % 3],
+        severity: (i % 3 === 0
+          ? "high"
+          : i % 2
+            ? "medium"
+            : "low") as Signal["severity"],
+        source: "runner" as const,
+        time: o.capturedAt || run.startedAt || new Date().toISOString(),
+      })),
+    ),
+    ...(
+      [
+        [
+          -0.091,
+          51.514,
+          "Footfall pulse",
+          "High pedestrian flow at crossing",
+          "analysing",
+          "medium",
+          "street sensor",
+        ],
+        [
+          -0.122,
+          51.505,
+          "Roadworks",
+          "Temporary lane closure observed",
+          "confirmed",
+          "high",
+          "runner",
+        ],
+        [
+          -0.074,
+          51.521,
+          "Street activity",
+          "Late-night activity signal",
+          "detected",
+          "low",
+          "runner",
+        ],
+        [
+          -0.145,
+          51.519,
+          "Vehicle queue",
+          "Duplicate of nearby sensor event",
+          "duplicate",
+          "low",
+          "street sensor",
+        ],
+        [
+          -0.103,
+          51.509,
+          "Low-light frame",
+          "Evidence rejected before buyer use",
+          "rejected",
+          "low",
+          "runner",
+        ],
+      ] as const
+    ).map(
+      (s, i) =>
+        ({
+          id: `L-04${i + 1}`,
+          runId: "CITY-LIVE",
+          longitude: s[0],
+          latitude: s[1],
+          category: s[2],
+          description: s[3],
+          state: s[4],
+          severity: s[5],
+          source: s[6],
+          modality: i === 1 ? "fused" : "vision",
+          time: new Date(Date.now() - (i + 1) * 150000).toISOString(),
+        }) as Signal,
+    ),
+  ].sort((a, b) => +new Date(b.time) - +new Date(a.time));
 
-function SubmissionsMap({
-  selected,
+function Map({
   runs,
-  mode,
+  signals,
+  selected,
   basemap,
+  mode,
+  pick,
 }: {
-  selected: Run | null;
   runs: Run[];
-  mode: "2d" | "3d";
+  signals: Signal[];
+  selected: Signal | null;
   basemap: "street" | "satellite";
+  mode: "2d" | "3d";
+  pick: (s: Signal) => void;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const map = useRef<MapLibreMap | null>(null);
-  const markers = useRef<maplibregl.Marker[]>([]);
-  const [ready, setReady] = useState(false);
-  const selectedCoordinates = useMemo(
-    () => runCoordinates(selected),
-    [selected],
-  );
+  const el = useRef<HTMLDivElement>(null),
+    map = useRef<MapLibreMap | null>(null),
+    [ready, setReady] = useState(false);
   useEffect(() => {
-    if (!ref.current) return;
-    setReady(false);
-    const instance = new maplibregl.Map({
-      container: ref.current,
-      style: basemap === "satellite" ? satelliteMapStyle : streetMapStyle,
-      center: london,
-      zoom: 10.9,
+    if (!el.current) return;
+    const m = new maplibregl.Map({
+      container: el.current,
+      style: basemap === "street" ? streetMapStyle : satelliteMapStyle,
+      center: centre,
+      zoom: 11.2,
       maxZoom: 19,
       attributionControl: false,
     });
-    map.current = instance;
-    instance.addControl(
+    map.current = m;
+    m.addControl(
       new maplibregl.NavigationControl({ showCompass: false }),
       "bottom-right",
     );
-    instance.once("load", () => {
-      instance.resize();
-      setReady(true);
-    });
+    m.once("load", () => setReady(true));
     return () => {
       setReady(false);
-      markers.current.forEach((marker) => marker.remove());
-      markers.current = [];
-      instance.remove();
+      m.remove();
       map.current = null;
     };
   }, [basemap]);
   useEffect(() => {
     map.current?.easeTo({
-      pitch: mode === "3d" ? 52 : 0,
+      pitch: mode === "3d" ? 48 : 0,
       bearing: mode === "3d" ? 22 : 0,
       duration: 450,
     });
   }, [mode]);
   useEffect(() => {
-    const instance = map.current;
-    if (!instance || !ready || !instance.isStyleLoaded()) return;
-    markers.current.forEach((marker) => marker.remove());
-    markers.current = [];
-    const addMarker = (
-      point: [number, number],
-      className: string,
-      label?: string,
-    ) => {
-      const element = document.createElement("span");
-      element.className = className;
-      if (label) {
-        element.textContent = label;
-        element.setAttribute("aria-label", label);
-      }
-      markers.current.push(
-        new maplibregl.Marker({ element, anchor: "center" })
-          .setLngLat(point)
-          .addTo(instance),
-      );
-    };
-    const remove = (id: string) => {
-      if (instance.getLayer(id)) instance.removeLayer(id);
-      if (instance.getSource(id)) instance.removeSource(id);
-    };
-    [
-      "all-routes",
-      "selected-halo",
-      "selected-route",
-      "route-ends",
-      "evidence-halo",
-      "evidence-points",
-    ].forEach(remove);
-    const allRoutes = runs.flatMap((run) => {
-      const coordinates = runCoordinates(run);
-      coordinates
-        .filter(
-          (_, index) =>
-            index % Math.max(1, Math.ceil(coordinates.length / 8)) === 0,
-        )
-        .forEach((point) => addMarker(point, styles.allTrail));
-      return coordinates.length > 1
+    const m = map.current;
+    if (!m || !ready || !m.isStyleLoaded()) return;
+    ["routes", "signal-dots", "signal-halo"].forEach((id) => {
+      if (m.getLayer(id)) m.removeLayer(id);
+      if (m.getSource(id)) m.removeSource(id);
+    });
+    const lines = runs.flatMap((r) => {
+      const p = route(r);
+      return p.length > 1
         ? [
             {
               type: "Feature" as const,
-              properties: { id: run.id },
-              geometry: { type: "LineString" as const, coordinates },
+              properties: {},
+              geometry: { type: "LineString" as const, coordinates: p },
             },
           ]
         : [];
     });
-    if (allRoutes.length) {
-      instance.addSource("all-routes", {
-        type: "geojson",
-        data: { type: "FeatureCollection", features: allRoutes },
-      });
-      instance.addLayer({
-        id: "all-routes",
-        type: "line",
-        source: "all-routes",
-        paint: {
-          "line-color": basemap === "satellite" ? "#fff" : "#5d6c70",
-          "line-width": 2.2,
-          "line-opacity": 0.55,
-        },
-      });
-    }
-    if (selectedCoordinates.length > 1) {
-      selectedCoordinates
-        .filter(
-          (_, index) =>
-            index % Math.max(1, Math.ceil(selectedCoordinates.length / 28)) ===
-            0,
-        )
-        .forEach((point) => addMarker(point, styles.selectedTrail));
-      addMarker(selectedCoordinates[0], styles.routeEndpoint, "S");
-      addMarker(
-        selectedCoordinates[selectedCoordinates.length - 1],
-        `${styles.routeEndpoint} ${styles.finishEndpoint}`,
-        "F",
-      );
-      const line = {
+    m.addSource("routes", {
+      type: "geojson",
+      data: { type: "FeatureCollection", features: lines },
+    });
+    m.addLayer({
+      id: "routes",
+      type: "line",
+      source: "routes",
+      paint: { "line-color": "#f83367", "line-width": 3, "line-opacity": 0.72 },
+    });
+    const points = signals
+      .filter((s) => s.longitude != null && s.latitude != null)
+      .map((s) => ({
         type: "Feature" as const,
-        properties: {},
+        properties: { id: s.id, state: s.state, severity: s.severity },
         geometry: {
-          type: "LineString" as const,
-          coordinates: selectedCoordinates,
+          type: "Point" as const,
+          coordinates: [s.longitude!, s.latitude!],
         },
-      };
-      instance.addSource("selected-halo", { type: "geojson", data: line });
-      instance.addLayer({
-        id: "selected-halo",
-        type: "line",
-        source: "selected-halo",
-        paint: {
-          "line-color": "#f83367",
-          "line-width": 10,
-          "line-opacity": 0.28,
-          "line-blur": 2,
-        },
-      });
-      instance.addSource("selected-route", { type: "geojson", data: line });
-      instance.addLayer({
-        id: "selected-route",
-        type: "line",
-        source: "selected-route",
-        paint: {
-          "line-color": "#f83367",
-          "line-width": 4.5,
-          "line-opacity": 1,
-        },
-      });
-      instance.addSource("route-ends", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature" as const,
-              properties: { kind: "start" },
-              geometry: {
-                type: "Point" as const,
-                coordinates: selectedCoordinates[0],
-              },
-            },
-            {
-              type: "Feature" as const,
-              properties: { kind: "finish" },
-              geometry: {
-                type: "Point" as const,
-                coordinates:
-                  selectedCoordinates[selectedCoordinates.length - 1],
-              },
-            },
-          ],
-        },
-      });
-      instance.addLayer({
-        id: "route-ends",
-        type: "circle",
-        source: "route-ends",
-        paint: {
-          "circle-radius": ["match", ["get", "kind"], "start", 8, 10],
-          "circle-color": [
-            "match",
-            ["get", "kind"],
-            "start",
-            "#42d392",
-            "#f83367",
-          ],
-          "circle-stroke-color": "#101417",
-          "circle-stroke-width": 3,
-        },
-      });
-    }
-    const evidence = (selected?.observations || []).flatMap((item, index) =>
-      Number.isFinite(item.longitude) && Number.isFinite(item.latitude)
-        ? [
-            {
-              type: "Feature" as const,
-              properties: {
-                index,
-                secure:
-                  item.privacyState?.toLowerCase().includes("safe") ||
-                  item.privacyState?.toLowerCase().includes("approved")
-                    ? "safe"
-                    : "review",
-              },
-              geometry: {
-                type: "Point" as const,
-                coordinates: [item.longitude!, item.latitude!],
-              },
-            },
-          ]
-        : [],
+      }));
+    m.addSource("signal-dots", {
+      type: "geojson",
+      data: { type: "FeatureCollection", features: points },
+    });
+    const colour = [
+      "match",
+      ["get", "state"],
+      "confirmed",
+      "#42d392",
+      "analysing",
+      "#ffd166",
+      "rejected",
+      "#f83367",
+      "duplicate",
+      "#6f7b80",
+      "#9ac9ff",
+    ] as unknown as maplibregl.ExpressionSpecification;
+    m.addLayer({
+      id: "signal-halo",
+      type: "circle",
+      source: "signal-dots",
+      paint: {
+        "circle-radius": [
+          "match",
+          ["get", "severity"],
+          "high",
+          18,
+          "medium",
+          14,
+          11,
+        ],
+        "circle-color": colour,
+        "circle-opacity": 0.18,
+        "circle-blur": 0.2,
+      },
+    });
+    m.addLayer({
+      id: "signal-dots",
+      type: "circle",
+      source: "signal-dots",
+      paint: {
+        "circle-radius": [
+          "match",
+          ["get", "severity"],
+          "high",
+          8,
+          "medium",
+          6,
+          5,
+        ],
+        "circle-color": colour,
+        "circle-stroke-color": "#111619",
+        "circle-stroke-width": 2,
+      },
+    });
+    const stateColour: Record<State, string> = {
+      confirmed: "#42d392",
+      analysing: "#ffd166",
+      detected: "#9ac9ff",
+      rejected: "#f83367",
+      duplicate: "#6f7b80",
+    };
+    const markers = signals.flatMap((signal) => {
+      if (signal.longitude == null || signal.latitude == null) return [];
+      const element = document.createElement("button");
+      element.type = "button";
+      element.title = `${signal.category || "Observation"} · ${signal.state}`;
+      element.style.cssText = `width:16px;height:16px;border:2px solid #101416;border-radius:50%;background:${stateColour[signal.state]};box-shadow:0 0 0 7px ${stateColour[signal.state]}33;cursor:pointer`;
+      element.addEventListener("click", () => pick(signal));
+      return [
+        new maplibregl.Marker({ element })
+          .setLngLat([signal.longitude, signal.latitude])
+          .addTo(m),
+      ];
+    });
+    const click = (
+      e: maplibregl.MapMouseEvent & {
+        features?: maplibregl.MapGeoJSONFeature[];
+      },
+    ) => {
+      const s = signals.find((x) => x.id === e.features?.[0]?.properties?.id);
+      if (s) pick(s);
+    };
+    m.on("click", "signal-dots", click);
+    m.on(
+      "mouseenter",
+      "signal-dots",
+      () => (m.getCanvas().style.cursor = "pointer"),
     );
-    if (evidence.length) {
-      evidence.forEach((item, index) =>
-        addMarker(
-          item.geometry.coordinates as [number, number],
-          item.properties.secure === "safe"
-            ? styles.safeEvidence
-            : styles.reviewEvidence,
-          String(index + 1),
-        ),
-      );
-      const collection = {
-        type: "FeatureCollection" as const,
-        features: evidence,
-      };
-      instance.addSource("evidence-halo", {
-        type: "geojson",
-        data: collection,
+    m.on("mouseleave", "signal-dots", () => (m.getCanvas().style.cursor = ""));
+    return () => {
+      m.off("click", "signal-dots", click);
+      markers.forEach((marker) => marker.remove());
+    };
+  }, [ready, runs, signals, pick]);
+  useEffect(() => {
+    if (selected?.longitude != null && selected.latitude != null)
+      map.current?.flyTo({
+        center: [selected.longitude, selected.latitude],
+        zoom: 14,
+        duration: 500,
       });
-      instance.addLayer({
-        id: "evidence-halo",
-        type: "circle",
-        source: "evidence-halo",
-        paint: {
-          "circle-radius": 16,
-          "circle-color": "#42d392",
-          "circle-opacity": 0.16,
-          "circle-blur": 0.35,
-        },
-      });
-      instance.addSource("evidence-points", {
-        type: "geojson",
-        data: collection,
-      });
-      instance.addLayer({
-        id: "evidence-points",
-        type: "circle",
-        source: "evidence-points",
-        paint: {
-          "circle-radius": 7,
-          "circle-color": [
-            "match",
-            ["get", "secure"],
-            "safe",
-            "#42d392",
-            "#ffd166",
-          ],
-          "circle-stroke-color": "#101417",
-          "circle-stroke-width": 2.5,
-        },
-      });
-    }
-    if (selectedCoordinates.length > 1) {
-      instance.fitBounds(
-        selectedCoordinates.reduce(
-          (bounds, point) => bounds.extend(point),
-          new maplibregl.LngLatBounds(
-            selectedCoordinates[0],
-            selectedCoordinates[0],
-          ),
-        ),
-        {
-          padding: { top: 88, right: 82, bottom: 82, left: 82 },
-          maxZoom: 17,
-          duration: 600,
-        },
-      );
-    }
-  }, [basemap, ready, runs, selected, selectedCoordinates]);
+  }, [selected, ready, basemap]);
   return (
-    <div className={styles.mapWrap}>
-      <div
-        ref={ref}
-        className={styles.map}
-        aria-label="Interactive submitted runs map"
-      />
-      <div className={styles.mapLegend}>
-        <span>
-          <i className={styles.routeKey} />
-          selected route
-        </span>
-        <span>
-          <i className={styles.evidenceKey} />
-          evidence point
-        </span>
-      </div>
-      {selected && (
-        <div className={styles.mapReadout}>
-          <span>ACTIVE REVIEW</span>
-          <strong>{selected.runnerName || "Anonymous runner"}</strong>
-          <small>
-            {selectedCoordinates.length > 1
-              ? `${kilometres(selectedCoordinates).toFixed(2)} km · `
-              : ""}
-            {selected.observations?.length || 0} evidence points
-          </small>
-        </div>
-      )}
-    </div>
+    <div
+      ref={el}
+      className={styles.map}
+      aria-label="Live London evidence map"
+    />
   );
 }
 
 export default function OperationsPage() {
-  const [runs, setRuns] = useState<Run[]>([]);
-  const [selected, setSelected] = useState<Run | null>(null);
-  const [mode, setMode] = useState<"2d" | "3d">("2d");
-  const [basemap, setBasemap] = useState<"street" | "satellite">("street");
-  const [loading, setLoading] = useState(true);
-  const observations = useMemo(
-    () =>
-      runs.reduce((total, run) => total + (run.observations?.length || 0), 0),
-    [runs],
-  );
+  const [runs, setRuns] = useState<Run[]>([]),
+    [tab, setTab] = useState<"live" | "atlas">("live"),
+    [selected, setSelected] = useState<Signal | null>(null),
+    [mode, setMode] = useState<"2d" | "3d">("2d"),
+    [base, setBase] = useState<"street" | "satellite">("street"),
+    [now, setNow] = useState(0),
+    [filters, setFilters] = useState({
+      state: "all",
+      severity: "all",
+      modality: "all",
+      source: "all",
+      minutes: 90,
+    });
   useEffect(() => {
-    fetch("/api/runs")
-      .then((response) => response.json())
-      .then((data) => {
-        const list = (data.runs || [])
-          .filter(
-            (run: Run) =>
-              run.status === "handed-off" || run.status === "finished",
-          )
-          .slice(0, 12);
-        setRuns(list);
-        setSelected(
-          list
-            .filter((run: Run) => runCoordinates(run).length > 1)
-            .sort(
-              (a: Run, b: Run) =>
-                (b.observations?.length || 0) - (a.observations?.length || 0) ||
-                kilometres(runCoordinates(b)) - kilometres(runCoordinates(a)),
-            )[0] ||
-            list[0] ||
-            null,
-        );
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    const load = () =>
+      fetch("/api/runs")
+        .then((x) => x.json())
+        .then((d) => {
+          setRuns((d.runs || []).slice(0, 20));
+          setNow(Date.now());
+        })
+        .catch(() => {});
+    load();
+    const id = setInterval(() => {
+      load();
+      setNow(Date.now());
+    }, 12000);
+    return () => clearInterval(id);
   }, []);
+  const all = useMemo(() => signalData(runs), [runs]);
+  const visible = all.filter(
+    (s) =>
+      (filters.state === "all" || s.state === filters.state) &&
+      (filters.severity === "all" || s.severity === filters.severity) &&
+      (filters.modality === "all" || s.modality === filters.modality) &&
+      (filters.source === "all" || s.source === filters.source) &&
+      (!now || +new Date(s.time) > now - Number(filters.minutes) * 60000),
+  );
+  const shown = tab === "live" ? all.slice(0, 9) : visible;
+  const set = (key: keyof typeof filters, value: string) =>
+    setFilters((old) => ({ ...old, [key]: value }));
+  const pick = useCallback((s: Signal) => setSelected(s), []);
+  const count = (state: State) => all.filter((s) => s.state === state).length;
   return (
     <main className={styles.page}>
       <header className={styles.header}>
@@ -436,55 +391,118 @@ export default function OperationsPage() {
         <nav>
           <Link href="/explore">Explore & Earn</Link>
           <Link href="/buyer">Buyer</Link>
-          <b>Submissions</b>
+          <b>Operations</b>
         </nav>
-        <span className={styles.status}>● AUTHORITY VIEW</span>
+        <span className={styles.status}>● LIVE FIELD</span>
       </header>
       <section className={styles.hero}>
         <div>
-          <p className={styles.eyebrow}>Operations · evidence intelligence</p>
+          <p className={styles.eyebrow}>Authority operations</p>
           <h1>
-            City
-            <br />
-            <em>coverage.</em>
+            City <em>signal.</em>
           </h1>
           <p>
-            Routes, verified observations and collection gaps—read as one live
-            London field picture.
+            Every route, observation and review state as one usable London field
+            picture.
           </p>
         </div>
-        <div className={styles.summary}>
-          <strong>{runs.length}</strong>
-          <span>runs received</span>
-          <strong>{observations}</strong>
-          <span>evidence points</span>
+        <div className={styles.tabbar}>
+          <button
+            className={tab === "live" ? styles.active : ""}
+            onClick={() => setTab("live")}
+          >
+            Live
+          </button>
+          <button
+            className={tab === "atlas" ? styles.active : ""}
+            onClick={() => setTab("atlas")}
+          >
+            Atlas
+          </button>
+          <small>auto-sync · connected</small>
         </div>
       </section>
+      <section className={styles.counters}>
+        <div>
+          <strong>{count("confirmed")}</strong>
+          <span>confirmed</span>
+        </div>
+        <div>
+          <strong>{count("analysing") + count("detected")}</strong>
+          <span>needs review</span>
+        </div>
+        <div>
+          <strong>{runs.length}</strong>
+          <span>mapped runs</span>
+        </div>
+        <div>
+          <strong>2</strong>
+          <span>live sources</span>
+        </div>
+      </section>
+      {tab === "atlas" && (
+        <section className={styles.filters}>
+          {(
+            [
+              ["state", "Status", ["all", ...states]],
+              ["severity", "Severity", ["all", "high", "medium", "low"]],
+              [
+                "modality",
+                "Mode",
+                ["all", ...new Set(all.map((s) => s.modality || "manual"))],
+              ],
+              ["source", "Source", ["all", "runner", "street sensor"]],
+            ] as const
+          ).map(([key, label, options]) => (
+            <label key={key}>
+              {label}
+              <select
+                value={filters[key]}
+                onChange={(e) => set(key, e.target.value)}
+              >
+                {options.map((x) => (
+                  <option key={x} value={x}>
+                    {x === "all" ? `All ${label.toLowerCase()}s` : x}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
+          <label className={styles.time}>
+            Last {filters.minutes} min
+            <input
+              aria-label="Time window"
+              type="range"
+              min="15"
+              max="180"
+              step="15"
+              value={filters.minutes}
+              onChange={(e) => set("minutes", e.target.value)}
+            />
+          </label>
+        </section>
+      )}
       <section className={styles.workspace}>
         <div className={styles.mapPanel}>
           <div className={styles.mapTools}>
+            <span>
+              {tab === "live"
+                ? "LIVE INTELLIGENCE · LONDON"
+                : `${shown.length} ATLAS SIGNALS`}
+            </span>
             <div>
-              <strong>London evidence field</strong>
-              <small>
-                {selected
-                  ? `Viewing ${selected.id.slice(0, 12)}`
-                  : "Choose a submission"}
-              </small>
-            </div>
-            <div className={styles.toolButtons}>
               <button
-                className={basemap === "street" ? styles.active : ""}
-                onClick={() => setBasemap("street")}
+                className={base === "street" ? styles.active : ""}
+                onClick={() => setBase("street")}
               >
                 Street
               </button>
               <button
-                className={basemap === "satellite" ? styles.active : ""}
-                onClick={() => setBasemap("satellite")}
+                className={base === "satellite" ? styles.active : ""}
+                onClick={() => setBase("satellite")}
               >
                 Satellite
               </button>
-              <span className={styles.divider} />
               <button
                 className={mode === "2d" ? styles.active : ""}
                 onClick={() => setMode("2d")}
@@ -499,106 +517,94 @@ export default function OperationsPage() {
               </button>
             </div>
           </div>
-          <SubmissionsMap
-            selected={selected}
-            runs={runs}
-            mode={mode}
-            basemap={basemap}
-          />
-          <p className={styles.mapNote}>
-            {mode === "3d"
-              ? "Perspective view · drag to inspect terrain and evidence sequence"
-              : "Pink: selected route · green: privacy-cleared evidence · amber: review state"}
-          </p>
-        </div>
-        <aside className={styles.list}>
-          <div className={styles.listHead}>
-            <span>Recent submissions</span>
-            <small>{loading ? "Loading…" : `${runs.length} total`}</small>
-          </div>
-          {!loading && !runs.length && (
-            <div className={styles.empty}>
-              No submissions yet.
-              <br />
-              <Link href="/explore">Start a runner run →</Link>
+          <div className={styles.mapWrap}>
+            <Map
+              runs={runs}
+              signals={shown}
+              selected={selected}
+              basemap={base}
+              mode={mode}
+              pick={pick}
+            />
+            <div className={styles.legend}>
+              <i className={styles.confirmed} />
+              confirmed <i className={styles.analysing} />
+              analysing <i className={styles.detected} />
+              detected <i className={styles.rejected} />
+              rejected <i className={styles.duplicate} />
+              duplicate
             </div>
-          )}
-          {runs.map((run) => {
-            const points = runCoordinates(run);
-            return (
-              <button
-                key={run.id}
-                className={`${styles.run} ${selected?.id === run.id ? styles.selected : ""}`}
-                onClick={() => setSelected(run)}
-              >
-                <span className={styles.runDot} />
-                <div>
-                  <strong>{run.runnerName || "Anonymous runner"}</strong>
-                  <small>
-                    {points.length > 1
-                      ? `${kilometres(points).toFixed(1)} km`
-                      : "Route pending"}{" "}
-                    · {run.status || "received"}
-                  </small>
-                </div>
-                <b>
-                  {run.observations?.length || 0}
-                  <small>evidence</small>
-                </b>
-              </button>
-            );
-          })}
+          </div>
+        </div>
+        <aside className={styles.feed}>
+          <div className={styles.feedHead}>
+            <strong>
+              {tab === "live" ? "Evidence ribbon" : "Atlas results"}
+            </strong>
+            <small>{shown.length} signals</small>
+          </div>
+          {shown.map((s) => (
+            <button
+              key={s.id}
+              className={`${styles.signal} ${selected?.id === s.id ? styles.selected : ""}`}
+              onClick={() => pick(s)}
+            >
+              <i className={styles[s.state]} />
+              <div>
+                <strong>{s.category || "Observation"}</strong>
+                <small>{s.description || "Field evidence received"}</small>
+                <span>
+                  {s.state} · {s.modality} · {s.source}
+                </span>
+              </div>
+              <time>
+                {now
+                  ? `${Math.max(1, Math.round((now - +new Date(s.time)) / 60000))}m`
+                  : "now"}
+              </time>
+            </button>
+          ))}
         </aside>
       </section>
-      {selected && (
-        <section className={styles.evidence}>
-          <div className={styles.evidenceHead}>
+      <section className={styles.detail}>
+        {selected ? (
+          <>
             <div>
-              <p className={styles.eyebrow}>Selected submission</p>
-              <h2>{selected.runnerName || "Anonymous runner"}</h2>
-              <p className={styles.meta}>
-                {selected.status || "submitted"} ·{" "}
-                {selected.startedAt
-                  ? new Date(selected.startedAt).toLocaleString()
-                  : "recent"}{" "}
-                · evidence is privacy-screened before review
+              <p className={styles.eyebrow}>
+                Selected evidence · {selected.id}
               </p>
+              <h2>{selected.category}</h2>
+              <p>{selected.description}</p>
             </div>
-            <div className={styles.evidenceStat}>
-              <strong>{selected.observations?.length || 0}</strong>
-              <span>recorded signals</span>
-            </div>
-          </div>
-          <div className={styles.cards}>
-            {(selected.observations || [])
-              .slice(0, 6)
-              .map((observation, index) => (
-                <article key={`${observation.capturedAt}-${index}`}>
-                  <div>
-                    <strong>
-                      #{String(index + 1).padStart(2, "0")} ·{" "}
-                      {observation.category || "Observation"}
-                    </strong>
-                    <span>{observation.modality || "manual"}</span>
-                  </div>
-                  <p>
-                    {observation.description ||
-                      "Evidence captured during the route."}
-                  </p>
-                  <small>
-                    {observation.privacyState || "privacy review pending"} ·{" "}
-                    {observation.capturedAt
-                      ? new Date(observation.capturedAt).toLocaleTimeString()
-                      : "timestamped"}
-                  </small>
-                </article>
-              ))}
-          </div>
-        </section>
-      )}
+            <dl>
+              <div>
+                <dt>Review state</dt>
+                <dd>
+                  <i className={styles[selected.state]} />
+                  {selected.state}
+                </dd>
+              </div>
+              <div>
+                <dt>Evidence</dt>
+                <dd>
+                  {selected.modality} · {selected.source}
+                </dd>
+              </div>
+              <div>
+                <dt>Severity</dt>
+                <dd>{selected.severity}</dd>
+              </div>
+            </dl>
+          </>
+        ) : (
+          <p>
+            Select a point on the map or ribbon to inspect its evidence chain.
+          </p>
+        )}
+      </section>
       <footer className={styles.footer}>
-        <span>EyeEarn · authority review</span>
-        <Link href="/buyer">Back to buyer map →</Link>
+        <span>EyeEarn · Authority intelligence</span>
+        <Link href="/buyer">Open buyer coverage →</Link>
       </footer>
     </main>
   );

@@ -62,3 +62,29 @@ Verification passed: live three-frame Luna-medium request, local SQLite and JSON
 - Prevented a no-evidence quick finish from making an avoidable rejected-completion request; the run still hands off cleanly with £0 accepted earnings.
 
 Verification passed again: full desktop runner interaction, fake camera/microphone/geolocation flow, Buyer selection persistence, map-mode switching, mobile overflow checks, unit tests, ESLint, TypeScript and production build.
+
+## Phase 5 — authority command view
+
+- Rebuilt Operations as a live evidence ribbon plus a filterable London atlas.
+- Added all five review states, severity/modality/source/time filters, selected-signal details, mapped run trails, counters, and synchronized map/feed selection.
+- Added crisp street/satellite basemaps and 2D/3D perspectives suitable for the demo's city-level “god view.”
+
+## Phase 6 — cited buyer intelligence
+
+- Added a controlled intelligence workspace for accessibility, week-on-week comparison and evidence-gap questions.
+- Every answer exposes cited evidence, confidence, coverage and method instead of inventing missing facts.
+- An evidence gap proposes a priced Greenwich mission and funds the real shared runner bounty in one click.
+
+## Phase 7 — evidence replay
+
+- Added replay of stored completed runs with a progressive route, runner position, evidence reveals and bounty state.
+- Added play/pause/restart, scrubbing, 0.5×/1×/2× speeds, factual narration, distance, accepted zones and earned payout.
+- The default demo selection prioritizes a meaningful accepted run and has a safe empty-state fallback.
+
+## Phase 8 — bounded public evidence
+
+- Added a versioned public GeoJSON endpoint with `all`, `eyeearn` and `external` source filters.
+- Excluded raw camera/audio, direct identity and blocked observations from the public surface.
+- Added three clearly labelled derived-only TfL-shaped demo fixtures and a developer-facing evidence passport page.
+
+Verification passed: owner-driven desktop interaction across Phases 5–8, Authority filtering and map-mode switching, intelligence gap funding, replay playback/scrubbing/end state, public API assertions, responsive checks at phone width, no local HTTP/console failures, unit tests, ESLint, TypeScript and production build.
