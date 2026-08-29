@@ -1,0 +1,5 @@
+-- Optional Supabase/Postgres shape; the demo route uses .data/phase2.json when unset.
+create table if not exists runs (id text primary key, runner_name text not null, zone_ids jsonb not null, status text not null, started_at timestamptz not null, finished_at timestamptz, handed_off_at timestamptz, earned_minor integer not null default 0);
+create table if not exists route_points (id bigserial primary key, run_id text references runs(id) on delete cascade, latitude double precision not null, longitude double precision not null, accuracy double precision, recorded_at timestamptz not null);
+create table if not exists observations (id text primary key, run_id text references runs(id) on delete cascade, category text not null, description text not null, modality text not null, captured_at timestamptz not null, latitude double precision, longitude double precision, privacy_state text not null default 'safe');
+create table if not exists completions (run_id text references runs(id) on delete cascade, zone_id text not null, accepted boolean not null, completed_at timestamptz not null, reward_minor integer not null default 0, primary key (run_id, zone_id));
