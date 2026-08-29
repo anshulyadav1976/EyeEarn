@@ -130,7 +130,7 @@ Verification passed: all six production captures completed without browser conso
 ## Public evidence processing lab
 
 - Added the frontend-only “From video to anonymized enriched data” section above the Public Evidence API surface.
-- Added a seven-stage interactive evidence trace, four supplied recognition visuals, synchronized sensor and voice context, a structured buyer-safe observation, eight extracted-data dimensions and an explicit transient-versus-public privacy boundary.
+- Added a seven-stage evidence pipeline, four supplied recognition visuals, synchronized sensor and voice context, a structured buyer-safe observation, eight extracted-data dimensions and an explicit transient-versus-public privacy boundary.
 - Presented the recognition roles for YOLOv8, Grounding DINO, SAM 2, DPT, Luna and ElevenLabs Scribe without changing inference, storage, API routes or environment configuration.
 
 Verification passed: desktop and 390 px browser review, all four images loaded, trace playback and reduced-motion completion, zero horizontal overflow, no browser console errors, ESLint and TypeScript.
@@ -140,3 +140,11 @@ Verification passed: desktop and 390 px browser review, all four images loaded, 
 - Kept “Run where the map needs eyes.” on one calibrated line from 1024 px desktop upward while preserving the existing mobile wrap.
 
 Verification passed at 1024, 1440 and 1920 px with the full 32 px page padding, no overflow and no browser console errors.
+
+## Public evidence clarity pass
+
+- Moved the Evidence Passport and “Useful data. No raw people.” statement to the bottom as the page’s closing principle.
+- Removed processing-trace playback and its client-side state, then expanded the opening explanation into a plain-language account of phone context, model enrichment and place-based time series.
+- Reframed the structured observation as an explicit example with “What EyeEarn found” and “Why it matters” instead of presenting it as a display headline.
+
+Verification passed on desktop and 390 px mobile: expected page order, no playback control, readable explanation and output labels, zero horizontal overflow and no browser console errors.

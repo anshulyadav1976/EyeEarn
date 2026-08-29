@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 import styles from "./developers.module.css";
 
 const stages = [
@@ -73,37 +70,6 @@ const matrix = [
 ] as const;
 
 export default function ProcessingLab() {
-  const [activeStage, setActiveStage] = useState(-1);
-  const [playing, setPlaying] = useState(false);
-  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(
-    () => () => {
-      if (timer.current) clearInterval(timer.current);
-    },
-    [],
-  );
-
-  function playTrace() {
-    if (timer.current) clearInterval(timer.current);
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setActiveStage(stages.length - 1);
-      return;
-    }
-    setPlaying(true);
-    setActiveStage(0);
-    let next = 1;
-    timer.current = setInterval(() => {
-      setActiveStage(next);
-      next += 1;
-      if (next === stages.length) {
-        if (timer.current) clearInterval(timer.current);
-        timer.current = null;
-        setPlaying(false);
-      }
-    }, 620);
-  }
-
   return (
     <section className={styles.lab} aria-labelledby="processing-lab-title">
       <header className={styles.labIntro}>
@@ -117,34 +83,37 @@ export default function ProcessingLab() {
         </div>
         <div className={styles.labIntroCopy}>
           <p>
-            A short street capture becomes a time-and-place-bound observation
-            by combining vision, location, motion, device context and spoken
-            field notes. Buyers receive the answer—not a surveillance archive.
+            EyeEarn records a short video and pairs it with everything the
+            phone knows at that moment: GPS location, movement, camera and
+            device details, light levels, local sound volume and the runner’s
+            spoken field notes.
           </p>
-          <button type="button" onClick={playTrace} disabled={playing}>
-            <span>{playing ? "Processing trace" : "Play processing trace"}</span>
-            <b>{playing ? "···" : "→"}</b>
-          </button>
+          <p>
+            Image-recognition models analyse what is visible, while a
+            multimodal language model connects it with what was heard and
+            measured. If the video is blurred or partly blocked, GPS, motion
+            and the ElevenLabs-enriched voice note preserve the missing
+            context.
+          </p>
+          <p>
+            The result is a <strong>time series for each place</strong>: a
+            human-readable record of accessible routes, crowd movement, noise,
+            day and night conditions, temporary obstacles and how the street
+            changes over time. Buyers receive that useful record—not continuous
+            footage or people’s identities.
+          </p>
         </div>
       </header>
 
       <ol className={styles.pipeline} aria-label="Evidence processing stages">
-        {stages.map(([number, title, detail], index) => (
-          <li
-            key={title}
-            className={`${index <= activeStage ? styles.stageComplete : ""} ${index === activeStage ? styles.stageCurrent : ""}`}
-          >
+        {stages.map(([number, title, detail]) => (
+          <li key={title}>
             <span>{number}</span>
             <strong>{title}</strong>
             <small>{detail}</small>
           </li>
         ))}
       </ol>
-      <p className={styles.stageStatus} aria-live="polite">
-        {activeStage < 0
-          ? "Trace ready · seven controlled stages"
-          : `${stages[activeStage][1]} · ${stages[activeStage][2]}`}
-      </p>
 
       <div className={styles.captureDesk}>
         <div className={styles.frameBurst}>
@@ -227,15 +196,25 @@ export default function ProcessingLab() {
 
         <article className={styles.evidenceOutput}>
           <div className={styles.outputHead}>
-            <span>Output · verified observation</span>
-            <b>READY FOR BUYER</b>
+            <span>Example · extracted evidence record</span>
+            <b>STRUCTURED OUTPUT</b>
           </div>
           <p className={styles.outputKicker}>ACCESSIBILITY · CROSSING</p>
-          <h3>West entrance open; temporary barriers narrow the approach.</h3>
-          <p className={styles.outputSummary}>
-            Pedestrian access remains usable. Allow additional passing space
-            beside the temporary barrier line during periods of higher flow.
-          </p>
+          <div className={styles.outputFinding}>
+            <span>What EyeEarn found</span>
+            <p>
+              The west entrance is open. Temporary barriers reduce the usable
+              width of the pedestrian approach.
+            </p>
+          </div>
+          <div className={styles.outputFinding}>
+            <span>Why it matters</span>
+            <p>
+              The route remains accessible, but wheelchair users and people
+              with pushchairs may need extra passing space when the area is
+              busy.
+            </p>
+          </div>
           <dl className={styles.outputGrid}>
             <div>
               <dt>Location</dt>

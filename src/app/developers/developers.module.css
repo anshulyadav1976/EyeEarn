@@ -36,6 +36,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.75fr);
   padding: clamp(3rem, 7vw, 6rem) 5vw;
+  border-top: 1px solid #30383b;
   border-bottom: 1px solid #30383b;
 }
 .hero > p,
@@ -84,8 +85,8 @@
 }
 .labIntro {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(300px, 0.6fr);
-  gap: clamp(2rem, 7vw, 8rem);
+  grid-template-columns: minmax(0, 0.9fr) minmax(430px, 1.1fr);
+  gap: clamp(2rem, 5vw, 6rem);
   padding: clamp(4rem, 7vw, 7rem) 0 2.5rem;
   border-bottom: 1px solid #17191b;
 }
@@ -100,7 +101,7 @@
   text-transform: uppercase;
 }
 .labIntro h2 {
-  max-width: 12ch;
+  max-width: 10ch;
   margin: 0;
   font-size: clamp(3.2rem, 7.3vw, 7.4rem);
   font-weight: 400;
@@ -114,44 +115,28 @@
 }
 .labIntroCopy {
   align-self: end;
+  display: grid;
+  gap: 1.2rem;
 }
 .labIntroCopy > p {
-  margin: 0 0 1.5rem;
+  margin: 0;
   color: #545b5e;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: clamp(1.03rem, 1.35vw, 1.3rem);
+  line-height: 1.55;
 }
-.labIntroCopy button {
-  width: 100%;
-  min-height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1.15rem;
-  border: 0;
-  background: #17191b;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 800;
+.labIntroCopy > p:first-child {
+  color: #17191b;
+  font-size: clamp(1.2rem, 1.7vw, 1.6rem);
+  font-weight: 650;
+  line-height: 1.42;
 }
-.labIntroCopy button:hover:not(:disabled) {
-  background: #ff1f6b;
-}
-.labIntroCopy button:disabled {
-  cursor: progress;
-}
-.labIntroCopy button b {
+.labIntroCopy strong {
   color: #ff1f6b;
-  font-size: 1.2rem;
-}
-.labIntroCopy button:hover b,
-.labIntroCopy button:disabled b {
-  color: #fff;
 }
 .pipeline {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  margin: 2rem 0 0;
+  margin: 2rem 0;
   padding: 0;
   border: 1px solid #bfc3c0;
   background: #fff;
@@ -165,9 +150,6 @@
   gap: 0.45rem;
   padding: 1rem;
   border-right: 1px solid #dedbd5;
-  transition:
-    background-color 180ms ease,
-    color 180ms ease;
 }
 .pipeline li:last-child {
   border-right: 0;
@@ -178,7 +160,7 @@
 .outputKicker,
 .boundaryHeading > span,
 .boundaryColumn > span {
-  color: #7f8789;
+  color: #ff1f6b;
   font:
     800 0.62rem ui-monospace,
     monospace;
@@ -195,35 +177,6 @@
   color: #777d7f;
   font-size: 0.68rem;
   line-height: 1.25;
-}
-.pipeline .stageComplete {
-  background: #fff0f5;
-}
-.pipeline .stageComplete > span,
-.pipeline .stageComplete small {
-  color: #b50f4e;
-}
-.pipeline .stageCurrent {
-  background: #ff1f6b;
-  color: #fff;
-  box-shadow: inset 0 -5px #17191b;
-}
-.pipeline .stageCurrent > span,
-.pipeline .stageCurrent small {
-  color: #fff;
-}
-.stageStatus {
-  min-height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin: 0;
-  color: #747b7d;
-  font:
-    700 0.64rem ui-monospace,
-    monospace !important;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 .captureDesk {
   display: grid;
@@ -443,17 +396,29 @@
   margin: 1.5rem 0 0.6rem;
   color: #ff1f6b;
 }
-.evidenceOutput h3 {
-  margin: 0;
-  font-size: clamp(2rem, 3.2vw, 3.5rem);
-  font-weight: 400;
-  line-height: 0.95;
+.outputFinding {
+  padding: 1rem 0;
+  border-top: 1px solid #414648;
+}
+.outputFinding > span {
+  color: #8b9394;
+  font:
+    700 0.54rem ui-monospace,
+    monospace;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
 }
-.outputSummary {
-  color: #bdc2c1;
+.outputFinding p {
+  margin: 0.45rem 0 0;
+  color: #d7dad9;
   font-size: 0.84rem;
-  line-height: 1.5;
+  line-height: 1.45;
+}
+.outputKicker + .outputFinding p {
+  color: #fff;
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.28;
 }
 .outputGrid {
   display: grid;
@@ -827,13 +792,6 @@
   .footer {
     gap: 1rem;
     padding-inline: 1rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pipeline li,
-  .labIntroCopy button {
-    transition: none;
   }
 }
 

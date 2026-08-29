@@ -34,23 +34,6 @@ export default function DevelopersPage() {
         </nav>
         <span>PUBLIC DATA · PHASE 8</span>
       </header>
-      <section className={styles.hero}>
-        <p>Evidence passport · v1</p>
-        <h1>
-          Useful data.
-          <br />
-          <em>No raw people.</em>
-        </h1>
-        <div className={styles.promise}>
-          <strong>GeoJSON in</strong>
-          <i>→</i>
-          <strong>cited products out</strong>
-          <small>
-            Coordinates, category, provenance, time and privacy state. No raw
-            camera frames, continuous audio or identity fields.
-          </small>
-        </div>
-      </section>
       <ProcessingLab />
       <section className={styles.console}>
         <div className={styles.consoleHead}>
@@ -80,6 +63,23 @@ export default function DevelopersPage() {
           <footer>
             DERIVED AGGREGATE <b>·</b> NO IMAGE <b>·</b> DEMO FIXTURE
           </footer>
+        </div>
+      </section>
+      <section className={styles.hero}>
+        <p>Evidence passport · v1</p>
+        <h1>
+          Useful data.
+          <br />
+          <em>No raw people.</em>
+        </h1>
+        <div className={styles.promise}>
+          <strong>GeoJSON in</strong>
+          <i>→</i>
+          <strong>cited products out</strong>
+          <small>
+            Coordinates, category, provenance, time and privacy state. No raw
+            camera frames, continuous audio or identity fields.
+          </small>
         </div>
       </section>
       <footer className={styles.footer}>
