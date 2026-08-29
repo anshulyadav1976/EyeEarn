@@ -51,3 +51,14 @@ Verification passed: Node itinerary test, ESLint, production build, real Luna-me
 - Upgraded multimodal inference to three privacy-processed frames over about one second, one Luna-medium temporal report every six seconds, and a safe local fallback.
 
 Verification passed: live three-frame Luna-medium request, local SQLite and JSON writes, buyer-to-runner bounty sharing, GPS/manual-evidence run and handoff, Operations 2D/3D review, desktop/mobile visual review, responsive overflow, lint, TypeScript, tests and production build. The combined actual-phone permission/walking flow remains the final human test gate.
+
+## Demo UX signoff
+
+- Reduced Explore to a map-first bounty choice with green rounded price markers, a visible checkpoint itinerary, and only distance, time and payout above the main action.
+- Made an active survey a true split view: live route and pace above, camera below, microphone enabled by default, plus pause/resume and finish controls.
+- Fixed the Buyer map recreation bug that made selections disappear, kept map-mode changes stable, and made new/funded locations appear immediately.
+- Reworked Operations into a high-resolution authority view with a selected trail, numbered evidence, start/finish points, recent-run selection, and 2D/3D plus street/aerial modes.
+- Changed the normal basemap to high-resolution CARTO Voyager tiles after visual testing exposed throttled placeholder tiles from the prior provider.
+- Prevented a no-evidence quick finish from making an avoidable rejected-completion request; the run still hands off cleanly with £0 accepted earnings.
+
+Verification passed again: full desktop runner interaction, fake camera/microphone/geolocation flow, Buyer selection persistence, map-mode switching, mobile overflow checks, unit tests, ESLint, TypeScript and production build.

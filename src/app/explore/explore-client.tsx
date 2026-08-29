@@ -42,22 +42,6 @@ type Analysis = {
   metadata?: { position?: PositionSnapshot | null; capturedAt?: string };
 };
 type DeviceProfile = Record<string, string | number | boolean | null>;
-type SpeechRecognitionLike = {
-  start: () => void;
-  stop: () => void;
-  onresult:
-    ((event: { results: Array<Array<{ transcript: string }>> }) => void) | null;
-  onerror: (() => void) | null;
-  onend: (() => void) | null;
-};
-
-const reasonCopy: Record<BountyZone["reason"], string> = {
-  unexplored: "No useful evidence exists yet",
-  stale: "Existing evidence is outside the freshness window",
-  "buyer-requested": "A buyer has funded fresh coverage",
-  "missing-modality": "This area is missing a sound or visual sample",
-};
-
 function readDeviceProfile(): DeviceProfile {
   const nav = navigator as Navigator & {
     deviceMemory?: number;
@@ -112,32 +96,30 @@ export default function ExploreClient({
   const [earningsTarget, setEarningsTarget] = useState(0);
   const [runnerName, setRunnerName] = useState("Runner 01");
   const [runLive, setRunLive] = useState(false);
-  const [runId, setRunId] = useState<string | null>(null);
+  const [, setRunId] = useState<string | null>(null);
   const [runEarned, setRunEarned] = useState(0);
   const [completedZones, setCompletedZones] = useState<string[]>([]);
-  const [status, setStatus] = useState("Choose a safe bounty zone");
-  const [sensors, setSensors] = useState<Record<string, SensorState>>({
+  const [, setStatus] = useState("Choose a safe bounty zone");
+  const [, setSensors] = useState<Record<string, SensorState>>({
     location: "idle",
     camera: "idle",
     microphone: "idle",
     motion: "idle",
   });
-  const [position, setPosition] = useState<PositionSnapshot | null>(null);
-  const [audioDb, setAudioDb] = useState<number | null>(null);
+  const [, setPosition] = useState<PositionSnapshot | null>(null);
+  const [, setAudioDb] = useState<number | null>(null);
   const [frameCount, setFrameCount] = useState(0);
   const [analyses, setAnalyses] = useState<Analysis[]>([]);
-  const [voices, setVoices] = useState<VoiceObservation[]>([]);
-  const [voiceDraft, setVoiceDraft] = useState("");
-  const [speaking, setSpeaking] = useState(false);
-  const [voiceMode, setVoiceMode] = useState("browser fallback");
-  const [device, setDevice] = useState<DeviceProfile | null>(null);
-  const [motion, setMotion] = useState("waiting");
+  const [, setVoices] = useState<VoiceObservation[]>([]);
+  const [, setDevice] = useState<DeviceProfile | null>(null);
+  const [, setMotion] = useState("waiting");
   const [restored, setRestored] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [coveredKm, setCoveredKm] = useState(0);
   const [routePoints, setRoutePoints] = useState<[number, number][]>([]);
-  const [showDetails, setShowDetails] = useState(false);
-  const [satellite, setSatellite] = useState(false);
+  const [runPaused, setRunPaused] = useState(false);
+  const [micMuted, setMicMuted] = useState(false);
+  const [mapReady, setMapReady] = useState(false);
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -145,18 +127,19 @@ export default function ExploreClient({
   const watchId = useRef<number | null>(null);
   const frameTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const analysisInFlight = useRef(false);
+  const evidenceCount = useRef(0);
   const lastBrightness = useRef<number | null>(null);
   const latestPosition = useRef<PositionSnapshot | null>(null);
   const latestAudioDb = useRef<number | null>(null);
   const deviceRef = useRef<DeviceProfile | null>(null);
   const motionCleanup = useRef<(() => void) | null>(null);
-  const recognition = useRef<SpeechRecognitionLike | null>(null);
-  const voiceDraftRef = useRef("");
   const runIdRef = useRef<string | null>(null);
   const pointBuffer = useRef<PositionSnapshot[]>([]);
   const pointFlushTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const runStartedAt = useRef<number | null>(null);
   const lastRoutePoint = useRef<PositionSnapshot | null>(null);
+  const itineraryMarkers = useRef<maplibregl.Marker[]>([]);
+  const runPausedRef = useRef(false);
 
   useEffect(() => {
     const refreshBounties = () =>
@@ -273,7 +256,7 @@ export default function ExploreClient({
         data: {
           type: "Feature",
           properties: {},
-          geometry: { type: "LineString", coordinates: plannedRoute },
+          geometry: { type: "LineString", coordinates: [] },
         },
       });
       instance.addLayer({
@@ -290,7 +273,7 @@ export default function ExploreClient({
         id: "safe-route",
         type: "line",
         source: "safe-route",
-        paint: { "line-color": "#ff4d2e", "line-width": 5 },
+        paint: { "line-color": "#ff4261", "line-width": 5 },
       });
       instance.addSource("live-route", {
         type: "geojson",
@@ -304,15 +287,49 @@ export default function ExploreClient({
         id: "live-route",
         type: "line",
         source: "live-route",
-        paint: { "line-color": "#1f9d70", "line-width": 5 },
+        paint: { "line-color": "#ffffff", "line-width": 5 },
       });
+      setMapReady(true);
     });
     map.current = instance;
     return () => {
+      itineraryMarkers.current.forEach((marker) => marker.remove());
       instance.remove();
       map.current = null;
     };
-  }, [plannedRoute]);
+  }, []);
+
+  useEffect(() => {
+    const instance = map.current;
+    if (!instance || !mapReady) return;
+    const source = instance.getSource("safe-route") as
+      maplibregl.GeoJSONSource | undefined;
+    source?.setData({
+      type: "Feature",
+      properties: {},
+      geometry: { type: "LineString", coordinates: plannedRoute },
+    });
+    itineraryMarkers.current.forEach((marker) => marker.remove());
+    itineraryMarkers.current = plannedRoute.map((point, index) => {
+      const el = document.createElement("span");
+      el.className = styles.routeStop;
+      el.textContent =
+        index === 0 || index === plannedRoute.length - 1
+          ? "★"
+          : String(index + 1);
+      el.setAttribute("aria-label", `Itinerary checkpoint ${index + 1}`);
+      return new maplibregl.Marker({ element: el, anchor: "center" })
+        .setLngLat(point)
+        .addTo(instance);
+    });
+    instance.fitBounds(
+      plannedRoute.reduce(
+        (bounds, point) => bounds.extend(point),
+        new maplibregl.LngLatBounds(plannedRoute[0], plannedRoute[0]),
+      ),
+      { padding: 84, maxZoom: 14.2, duration: 650 },
+    );
+  }, [mapReady, plannedRoute]);
 
   useEffect(() => {
     const instance = map.current;
@@ -328,29 +345,9 @@ export default function ExploreClient({
   }, [routePoints]);
 
   useEffect(() => {
-    const instance = map.current;
-    if (!instance || !instance.isStyleLoaded()) return;
-    if (satellite && !instance.getSource("satellite")) {
-      instance.addSource("satellite", {
-        type: "raster",
-        tiles: [
-          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        ],
-        tileSize: 256,
-        attribution: "Esri",
-      });
-      instance.addLayer(
-        {
-          id: "satellite",
-          type: "raster",
-          source: "satellite",
-          paint: { "raster-opacity": 0.94 },
-        },
-        instance.getLayer("route-casing") ? "route-casing" : undefined,
-      );
-    } else if (!satellite && instance.getLayer("satellite"))
-      instance.removeLayer("satellite");
-  }, [satellite]);
+    const frame = requestAnimationFrame(() => map.current?.resize());
+    return () => cancelAnimationFrame(frame);
+  }, [runLive]);
 
   useEffect(() => {
     const instance = map.current;
@@ -359,7 +356,7 @@ export default function ExploreClient({
     liveZones.forEach((zone) => {
       const el = document.createElement("button");
       el.type = "button";
-      el.className = `${styles.mapMarker} ${styles[zone.band]}`;
+      el.className = styles.mapMarker;
       el.textContent = zone.safeForDemo
         ? `£${(zone.rewardMinor / 100).toFixed(0)}`
         : "×";
@@ -382,7 +379,7 @@ export default function ExploreClient({
       markers.push(marker);
     });
     return () => markers.forEach((marker) => marker.remove());
-  }, [liveZones]);
+  }, [liveZones, mapReady]);
 
   const cleanup = useCallback(() => {
     mediaStreams.current.forEach((stream) =>
@@ -395,6 +392,27 @@ export default function ExploreClient({
     if (pointFlushTimer.current) clearInterval(pointFlushTimer.current);
     motionCleanup.current?.();
     motionCleanup.current = null;
+  }, []);
+
+  const toggleMic = useCallback(() => {
+    const nextMuted = !micMuted;
+    mediaStreams.current.forEach((stream) =>
+      stream.getAudioTracks().forEach((track) => {
+        track.enabled = !nextMuted;
+      }),
+    );
+    setMicMuted(nextMuted);
+  }, [micMuted]);
+
+  const togglePause = useCallback(() => {
+    const nextPaused = !runPausedRef.current;
+    runPausedRef.current = nextPaused;
+    mediaStreams.current.forEach((stream) =>
+      stream.getVideoTracks().forEach((track) => {
+        track.enabled = !nextPaused;
+      }),
+    );
+    setRunPaused(nextPaused);
   }, []);
 
   const flushPoints = useCallback(async () => {
@@ -421,7 +439,7 @@ export default function ExploreClient({
       privacyState?: "safe" | "redacted" | "blocked";
     }) => {
       if (!runIdRef.current) return;
-      await fetch("/api/runs", {
+      const response = await fetch("/api/runs", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
@@ -430,6 +448,7 @@ export default function ExploreClient({
           observation,
         }),
       });
+      if (response.ok) evidenceCount.current += 1;
     },
     [],
   );
@@ -439,7 +458,8 @@ export default function ExploreClient({
     if (
       !video.current ||
       video.current.readyState < 2 ||
-      analysisInFlight.current
+      analysisInFlight.current ||
+      runPausedRef.current
     )
       return;
     const source = video.current;
@@ -582,9 +602,13 @@ export default function ExploreClient({
       return;
     }
     runIdRef.current = started.run.id;
+    evidenceCount.current = 0;
     setRunId(started.run.id);
     setRunEarned(0);
     setCompletedZones([]);
+    runPausedRef.current = false;
+    setRunPaused(false);
+    setMicMuted(false);
     pointBuffer.current = [];
     cleanup();
     setStatus("Requesting camera, microphone and location…");
@@ -792,6 +816,12 @@ export default function ExploreClient({
 
   const finishRun = async () => {
     await flushPoints();
+    if (
+      evidenceCount.current > 0 &&
+      selected &&
+      !completedZones.includes(selected.id)
+    )
+      await completeSelected();
     let earned = runEarned;
     if (runIdRef.current) {
       const response = await fetch("/api/runs", {
@@ -811,6 +841,8 @@ export default function ExploreClient({
     }
     cleanup();
     runStartedAt.current = null;
+    runPausedRef.current = false;
+    setRunPaused(false);
     setRunLive(false);
     setStatus(
       `Run handed off · £${(earned / 100).toFixed(2)} accepted earnings`,
@@ -842,8 +874,6 @@ export default function ExploreClient({
         longitude: fused.position?.longitude,
         privacyState: "safe",
       });
-      setVoiceDraft("");
-      voiceDraftRef.current = "";
       setStatus(
         fused.modality === "fused"
           ? "Voice note fused with nearby frame"
@@ -852,68 +882,6 @@ export default function ExploreClient({
     },
     [analyses, persistObservation, runnerName],
   );
-
-  const saveVoiceDraft = useCallback(
-    () => saveVoice(voiceDraftRef.current),
-    [saveVoice],
-  );
-
-  const startSpeaking = useCallback(() => {
-    if (!runLive) return;
-    setSpeaking(true);
-    const SpeechRecognition =
-      (
-        window as Window & {
-          SpeechRecognition?: new () => SpeechRecognitionLike;
-          webkitSpeechRecognition?: new () => SpeechRecognitionLike;
-        }
-      ).SpeechRecognition ||
-      (
-        window as Window & {
-          webkitSpeechRecognition?: new () => SpeechRecognitionLike;
-        }
-      ).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      setSpeaking(false);
-      setStatus("Voice capture unavailable — type a short note instead");
-      return;
-    }
-    const next = new SpeechRecognition();
-    next.onresult = (event) => {
-      const text = event.results[0]?.[0]?.transcript ?? "";
-      voiceDraftRef.current = text;
-      setVoiceDraft(text);
-    };
-    next.onerror = () =>
-      setStatus("Voice capture unavailable — type a short note instead");
-    next.onend = () => setSpeaking(false);
-    recognition.current = next;
-    try {
-      next.start();
-    } catch {
-      setSpeaking(false);
-    }
-  }, [runLive]);
-
-  const stopSpeaking = useCallback(() => {
-    recognition.current?.stop();
-    setSpeaking(false);
-    window.setTimeout(saveVoiceDraft, 150);
-  }, [saveVoiceDraft]);
-
-  useEffect(() => {
-    if (!runLive) return;
-    fetch("/api/voice-token")
-      .then((response) => response.json())
-      .then((result) =>
-        setVoiceMode(
-          result.mode === "scribe"
-            ? "Scribe token available · browser transcript"
-            : "browser fallback · typed transcript",
-        ),
-      )
-      .catch(() => setVoiceMode("browser fallback · typed transcript"));
-  }, [runLive]);
 
   useEffect(() => {
     if (!runLive) return;
@@ -939,437 +907,103 @@ export default function ExploreClient({
           {runLive ? "● SURVEY LIVE" : "PHASE 4"}
         </span>
       </header>
-      <section className={styles.workspace}>
+      <section
+        className={`${styles.workspace} ${runLive ? styles.runningWorkspace : ""}`}
+      >
         <div className={styles.mapPanel}>
           <div
             ref={mapContainer}
             className={styles.map}
             aria-label="Prepared safe route and bounty zones"
           />
-          <div className={styles.mapControls}>
-            <button
-              type="button"
-              onClick={() => setSatellite((value) => !value)}
-            >
-              {satellite ? "Street map" : "Satellite"}
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                map.current?.fitBounds(
-                  [
-                    [-0.52, 51.28],
-                    [0.32, 51.72],
-                  ],
-                  { padding: 48, duration: 700 },
-                )
-              }
-            >
-              London
-            </button>
-          </div>
-          <div className={styles.mapHint}>Tap a bounty to see the brief</div>
-          <div className={styles.mapLegend}>
-            <b>Bounty value</b>
-            <span>
-              <i className={styles.standard} />
-              £3–5
-            </span>
-            <span>
-              <i className={styles.priority} />
-              £6–8
-            </span>
-            <span>
-              <i className={styles.urgent} />
-              £9+
-            </span>
-            <span>
-              <i className={styles.restricted} />
-              Restricted
-            </span>
-          </div>
-          <div className={styles.routeTag}>
-            {runLive ? "Live route · collecting" : "London coverage map"}
-          </div>
           {selected && (
-            <div className={styles.bountyPopup}>
-              <span className={styles.popupLabel}>{selected.band} bounty</span>
-              <strong>{selected.name}</strong>
-              <p>{reasonCopy[selected.reason]}</p>
-              <div>
-                <b>£{(selected.rewardMinor / 100).toFixed(2)}</b>
+            <div className={styles.itineraryBadge}>
+              <span>★ {plannedRoute.length} stops</span>
+              <b>{itinerary.estimatedDistanceKm} km itinerary</b>
+            </div>
+          )}
+          {!runLive && selected && (
+            <div className={styles.runDock}>
+              <div className={styles.bountyStrip}>
                 <span>
                   {itinerary.estimatedDistanceKm} km ·{" "}
                   {itinerary.estimatedDurationMinutes} min
                 </span>
+                <b>£{(selected.rewardMinor / 100).toFixed(2)}</b>
               </div>
-            </div>
-          )}
-          <div className={styles.runDock}>
-            {runLive ? (
-              <>
-                <div className={styles.liveStats}>
-                  <span>
-                    <b>
-                      {Math.floor(elapsed / 60)}:
-                      {String(elapsed % 60).padStart(2, "0")}
-                    </b>
-                    <small>elapsed</small>
-                  </span>
-                  <span>
-                    <b>{coveredKm.toFixed(2)} km</b>
-                    <small>distance</small>
-                  </span>
-                  <span>
-                    <b>
-                      {coveredKm && elapsed
-                        ? `${(coveredKm / (elapsed / 3600)).toFixed(1)} km/h`
-                        : "—"}
-                    </b>
-                    <small>pace</small>
-                  </span>
-                  <span>
-                    <b>£{(runEarned / 100).toFixed(2)}</b>
-                    <small>earned</small>
-                  </span>
-                </div>
-                <div className={styles.dockActions}>
-                  <button
-                    className={styles.captureAction}
-                    type="button"
-                    onClick={() =>
-                      saveVoice(`Manual observation at ${selected.name}`)
-                    }
-                  >
-                    ＋ Add observation
-                  </button>
-                  <button
-                    className={styles.detailToggle}
-                    type="button"
-                    onClick={() => setShowDetails((value) => !value)}
-                  >
-                    {showDetails ? "Hide details" : "Details"}
-                  </button>
-                  <button
-                    className={styles.finishDock}
-                    type="button"
-                    onClick={finishRun}
-                  >
-                    Finish run
-                  </button>
-                </div>
-              </>
-            ) : (
               <button
                 className={styles.startDock}
                 type="button"
                 onClick={startRun}
               >
-                Start earning run <span>→</span>
+                Start running &amp; filming <span>→</span>
               </button>
-            )}
-          </div>
-          {showDetails && (
-            <div className={styles.detailsPanel} aria-live="polite">
-              <div>
-                <b>Collection status</b>
-                <span>{status}</span>
-              </div>
-              <div>
-                <b>Permissions</b>
-                <span>
-                  {Object.entries(sensors)
-                    .map(([name, state]) => `${name}: ${state}`)
-                    .join(" · ")}
-                </span>
-              </div>
-              <div>
-                <b>Evidence</b>
-                <span>
-                  {frameCount} frames analysed · {voices.length} voice notes ·{" "}
-                  {analyses.length} reports
-                </span>
-              </div>
-              {position && (
-                <div>
-                  <b>GPS</b>
-                  <span>
-                    ±{Math.round(position.accuracy)} m ·{" "}
-                    {position.speed === null
-                      ? "speed unavailable"
-                      : `${position.speed.toFixed(1)} m/s`}
-                  </span>
-                </div>
-              )}
             </div>
           )}
-        </div>
-        <aside className={styles.planner}>
-          <p className={styles.kicker}>Earn Map · safe demo route</p>
-          <h1>
-            Choose value,
-            <br />
-            then move.
-          </h1>
-          <div className={styles.zoneList}>
-            {liveZones.map((zone) => (
-              <button
-                key={zone.id}
-                disabled={!zone.safeForDemo}
-                className={zone.id === selectedId ? styles.selectedZone : ""}
-                onClick={() => setSelectedId(zone.id)}
-              >
-                <span>
-                  <b>{zone.name}</b>
-                  <small>
-                    {zone.safeForDemo
-                      ? reasonCopy[zone.reason]
-                      : "Private/restricted · excluded"}
-                  </small>
-                </span>
-                <strong>
-                  {zone.safeForDemo
-                    ? `£${(zone.rewardMinor / 100).toFixed(2)}`
-                    : "LOCKED"}
-                </strong>
-              </button>
-            ))}
-          </div>
-          <div className={styles.controls}>
-            <label>
-              Runner / device owner label
-              <input
-                value={runnerName}
-                onChange={(e) => setRunnerName(e.target.value.slice(0, 40))}
-              />
-            </label>
-            <label>
-              Available time{" "}
-              <select
-                value={duration}
-                onChange={(e) => setDuration(Number(e.target.value))}
-              >
-                <option value="15">15 minutes</option>
-                <option value="30">30 minutes</option>
-                <option value="45">45 minutes</option>
-              </select>
-            </label>
-            <label>
-              Distance{" "}
-              <select
-                value={distance}
-                onChange={(e) => setDistance(Number(e.target.value))}
-              >
-                <option value="1.5">1.5 km</option>
-                <option value="2.5">2.5 km</option>
-                <option value="4">4 km</option>
-              </select>
-            </label>
-            <label>
-              Earnings target (optional)
-              <input
-                type="number"
-                min="0"
-                max="50"
-                value={earningsTarget || ""}
-                placeholder="£"
-                onChange={(e) => setEarningsTarget(Number(e.target.value))}
-              />
-            </label>
-          </div>
-          <div className={styles.itinerary}>
-            <div>
-              <small>Route</small>
-              <strong>{itinerary.estimatedDistanceKm} km</strong>
-            </div>
-            <div>
-              <small>Time</small>
-              <strong>{itinerary.estimatedDurationMinutes} min</strong>
-            </div>
-            <div>
-              <small>Est. earn</small>
-              <strong>
-                £{(itinerary.estimatedRewardMinor / 100).toFixed(2)}
-              </strong>
-            </div>
-          </div>
-          <p className={styles.requirement}>
-            <b>Next target: {selected.name}</b>
-            <br />
-            {selected.evidence}
-            <br />
-            <small>
-              {completedZones.length}/{itinerary.zoneIds.length} targets
-              accepted · £{(runEarned / 100).toFixed(2)} earned
-            </small>
-          </p>
           {runLive && (
-            <button
-              type="button"
-              className={styles.start}
-              onClick={completeSelected}
-            >
-              Mark target accepted <span>✓</span>
-            </button>
-          )}
-          {!runLive ? (
-            <button className={styles.start} onClick={startRun}>
-              Start earning run <span>→</span>
-            </button>
-          ) : (
-            <button className={styles.finish} onClick={finishRun}>
-              Finish / handoff
-            </button>
-          )}
-        </aside>
-      </section>
-      <section className={styles.capture} aria-live="polite">
-        <div className={styles.preview}>
-          <video ref={video} muted playsInline />
-          <span>
-            {runLive ? "SAMPLED FRAME PREVIEW" : "CAMERA STARTS WITH RUN"}
-          </span>
-        </div>
-        <div className={styles.telemetry}>
-          <p className={styles.kicker}>Collection ledger</p>
-          <h2>{status}</h2>
-          <div className={styles.sensorGrid}>
-            {Object.entries(sensors).map(([name, state]) => (
-              <div key={name}>
-                <small>{name}</small>
-                <b data-state={state}>{state}</b>
-              </div>
-            ))}
-            <div>
-              <small>sound level</small>
-              <b>{audioDb === null ? "—" : `${audioDb} dBFS`}</b>
-            </div>
-            <div>
-              <small>frames analysed</small>
-              <b>{frameCount}</b>
-            </div>
-            <div>
-              <small>run ledger</small>
-              <b>{runId ?? "not started"}</b>
-            </div>
-            <div>
-              <small>accepted earnings</small>
-              <b>£{(runEarned / 100).toFixed(2)}</b>
-            </div>
-          </div>
-          {position && (
-            <p className={styles.position}>
-              GPS {position.latitude.toFixed(5)},{" "}
-              {position.longitude.toFixed(5)} · ±{Math.round(position.accuracy)}{" "}
-              m ·{" "}
-              {position.speed === null
-                ? "speed unavailable"
-                : `${position.speed.toFixed(1)} m/s`}
-            </p>
-          )}
-          {device && (
-            <p className={styles.position}>
-              {String(device.deviceType)} · {String(device.platform)} ·{" "}
-              {String(device.viewport)} ·{" "}
-              {String(device.effectiveNetworkType ?? "network unknown")} ·
-              anonymous device session
-            </p>
-          )}
-          <p className={styles.position}>
-            Motion: {motion} · screen{" "}
-            {String(device?.screenOrientation ?? "unknown")}
-          </p>
-        </div>
-        <div className={styles.results}>
-          <p className={styles.kicker}>Rich evidence · Luna + voice</p>
-          <div className={styles.voiceBox}>
-            <button
-              type="button"
-              className={styles.start}
-              disabled={!runLive}
-              onClick={() =>
-                saveVoice(
-                  voiceDraftRef.current ||
-                    `Manual observation at ${selected.name}`,
-                )
-              }
-              aria-label="Record a manual observation"
-            >
-              Record observation <span>●</span>
-            </button>
-            <button
-              type="button"
-              disabled={!runLive}
-              onPointerDown={startSpeaking}
-              onPointerUp={stopSpeaking}
-              onPointerCancel={stopSpeaking}
-              aria-label="Hold to speak a short observation"
-            >
-              {speaking ? "Release to save note" : "Hold to speak"}
-            </button>
-            <input
-              value={voiceDraft}
-              maxLength={280}
-              onChange={(event) => {
-                voiceDraftRef.current = event.target.value;
-                setVoiceDraft(event.target.value);
-              }}
-              placeholder="Or type a short observation"
-            />
-            <button
-              type="button"
-              disabled={!runLive || !voiceDraft.trim()}
-              onClick={saveVoiceDraft}
-            >
-              Save note
-            </button>
-            <small>{voiceMode} · never continuous audio</small>
-          </div>
-          {voices.map((item) => (
-            <article key={item.id}>
-              <div>
+            <div className={styles.liveStats}>
+              <span>
+                <b>{coveredKm.toFixed(2)} km</b>
+                <small>covered</small>
+              </span>
+              <span>
                 <b>
-                  {item.modality === "fused"
-                    ? "fused voice note"
-                    : "voice note"}
+                  {coveredKm && elapsed
+                    ? `${(coveredKm / (elapsed / 3600)).toFixed(1)} km/h`
+                    : "—"}
                 </b>
-                <span>{item.position ? "GPS tagged" : "no GPS"}</span>
-              </div>
-              <p>{item.text}</p>
-              <small>
-                {item.runner} · {new Date(item.capturedAt).toLocaleTimeString()}{" "}
-                · {item.privacyState}
-                {item.modality === "fused"
-                  ? " · matched nearby frame"
-                  : " · voice-only"}
-              </small>
-            </article>
-          ))}
-          {analyses.length ? (
-            analyses.map((item) => (
-              <article key={item.id}>
-                <div>
-                  <b>{item.category}</b>
-                  <span>{Math.round(item.confidence * 100)}%</span>
-                </div>
-                <p>{item.description}</p>
-                <small>
-                  {item.provider} · buyer status:{" "}
-                  {item.privacyState === "blocked"
-                    ? "held for privacy review"
-                    : "derived/anonymized"}{" "}
-                  · {item.visibleObjects.join(", ") || "scene"}
-                </small>
-              </article>
-            ))
-          ) : (
-            <p className={styles.empty}>
-              Start a run to sample one compressed frame every 3 seconds.
-              Near-identical and dark frames are skipped. Raw continuous video
-              is never uploaded.
-            </p>
+                <small>pace</small>
+              </span>
+              <span>
+                <b>
+                  {Math.floor(elapsed / 60)}:
+                  {String(elapsed % 60).padStart(2, "0")}
+                </b>
+                <small>elapsed</small>
+              </span>
+            </div>
           )}
         </div>
+        <section className={styles.capture} aria-live="polite">
+          <div className={styles.preview}>
+            <video ref={video} muted playsInline />
+            <button
+              className={styles.micToggle}
+              type="button"
+              onClick={toggleMic}
+              aria-label={
+                micMuted ? "Turn microphone on" : "Turn microphone off"
+              }
+            >
+              {micMuted ? "⌁" : "●"}
+            </button>
+            <span className={styles.recordingState}>
+              {runPaused ? "FILMING PAUSED" : "● FILMING"}
+            </span>
+            {runPaused && <div className={styles.pauseVeil}>Paused</div>}
+            <small>{frameCount} frames sampled privately</small>
+          </div>
+          <div className={styles.videoActions}>
+            <button
+              type="button"
+              onClick={() =>
+                saveVoice(`Manual observation at ${selected.name}`)
+              }
+            >
+              ＋ Note
+            </button>
+            <button type="button" onClick={togglePause}>
+              {runPaused ? "Resume" : "Pause"}
+            </button>
+            <button
+              className={styles.finishDock}
+              type="button"
+              onClick={finishRun}
+            >
+              Finish &amp; submit
+            </button>
+          </div>
+        </section>
       </section>
     </main>
   );

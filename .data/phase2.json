@@ -1,6 +1,139 @@
 {
   "runs": [
     {
+      "id": "RUN-0D3022AC",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-hammersmith"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T14:05:10.516Z",
+      "routePoints": [
+        {
+          "latitude": 51.537124219754226,
+          "longitude": -0.015326630645211513,
+          "accuracy": 35,
+          "altitude": 0,
+          "altitudeAccuracy": null,
+          "heading": null,
+          "speed": null,
+          "recordedAt": "2026-08-29T14:05:11.974Z"
+        },
+        {
+          "latitude": 51.537124219754226,
+          "longitude": -0.015326630645211513,
+          "accuracy": 35,
+          "altitude": 0,
+          "altitudeAccuracy": null,
+          "heading": null,
+          "speed": null,
+          "recordedAt": "2026-08-29T14:05:11.980Z"
+        },
+        {
+          "latitude": 51.537070924670005,
+          "longitude": -0.015362355405438718,
+          "accuracy": 35,
+          "altitude": 0,
+          "altitudeAccuracy": null,
+          "heading": null,
+          "speed": null,
+          "recordedAt": "2026-08-29T14:05:12.565Z"
+        }
+      ],
+      "observations": [],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T14:05:47.789Z",
+      "handedOffAt": "2026-08-29T14:05:47.789Z"
+    },
+    {
+      "id": "RUN-A9677DCE",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-hammersmith"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T14:03:59.763Z",
+      "routePoints": [
+        {
+          "latitude": 51.53712294146794,
+          "longitude": -0.015332387857809784,
+          "accuracy": 35,
+          "altitude": 0,
+          "altitudeAccuracy": null,
+          "heading": null,
+          "speed": null,
+          "recordedAt": "2026-08-29T14:04:10.228Z"
+        },
+        {
+          "latitude": 51.53712294146794,
+          "longitude": -0.015332387857809784,
+          "accuracy": 35,
+          "altitude": 0,
+          "altitudeAccuracy": null,
+          "heading": null,
+          "speed": null,
+          "recordedAt": "2026-08-29T14:04:10.255Z"
+        },
+        {
+          "latitude": 51.537124219754226,
+          "longitude": -0.015326630645211513,
+          "accuracy": 35,
+          "altitude": 0,
+          "altitudeAccuracy": null,
+          "heading": null,
+          "speed": null,
+          "recordedAt": "2026-08-29T14:04:10.830Z"
+        }
+      ],
+      "observations": [
+        {
+          "id": "OBS-213B81D8",
+          "category": "voice note",
+          "description": "Manual observation at Hammersmith interchange",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T14:04:17.781Z",
+          "latitude": 51.537124219754226,
+          "longitude": -0.015326630645211513,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-B7F4207F",
+          "category": "voice note",
+          "description": "Manual observation at Hammersmith interchange",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T14:04:18.972Z",
+          "latitude": 51.537124219754226,
+          "longitude": -0.015326630645211513,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-B0C71CF5",
+          "category": "voice note",
+          "description": "Manual observation at Hammersmith interchange",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T14:04:20.558Z",
+          "latitude": 51.537124219754226,
+          "longitude": -0.015326630645211513,
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-6DC91A3F",
+          "category": "voice note",
+          "description": "Manual observation at Hammersmith interchange",
+          "modality": "voice",
+          "capturedAt": "2026-08-29T14:04:21.169Z",
+          "latitude": 51.537124219754226,
+          "longitude": -0.015326630645211513,
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [],
+      "earnedMinor": 0,
+      "finishedAt": "2026-08-29T14:04:22.869Z",
+      "handedOffAt": "2026-08-29T14:04:22.869Z"
+    },
+    {
       "id": "RUN-254EE9AC",
       "runnerName": "Runner 01",
       "zoneIds": [
@@ -3001,6 +3134,10 @@
     {
       "id": "zone-south-access",
       "rewardMinor": 700
+    },
+    {
+      "id": "zone-hammersmith",
+      "rewardMinor": 88888800
     }
   ]
 }

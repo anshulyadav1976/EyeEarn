@@ -126,13 +126,11 @@ const bounds: [[number, number], [number, number]] = [
 ];
 function CoverageMap({
   locations,
-  selected,
   satellite,
   onSelect,
   onMapClick,
 }: {
   locations: Coverage[];
-  selected: Coverage | null;
   satellite: boolean;
   onSelect: (item: Coverage) => void;
   onMapClick: (lng: number, lat: number) => void;
@@ -140,6 +138,14 @@ function CoverageMap({
   const host = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const markers = useRef<maplibregl.Marker[]>([]);
+  const onMapClickRef = useRef(onMapClick);
+  const satelliteRef = useRef(satellite);
+  useEffect(() => {
+    onMapClickRef.current = onMapClick;
+  }, [onMapClick]);
+  useEffect(() => {
+    satelliteRef.current = satellite;
+  }, [satellite]);
   useEffect(() => {
     if (!host.current || map.current) return;
     const instance = new maplibregl.Map({
@@ -155,33 +161,43 @@ function CoverageMap({
       new maplibregl.NavigationControl({ showCompass: false }),
       "bottom-right",
     );
-    instance.on("click", (e) => onMapClick(e.lngLat.lng, e.lngLat.lat));
+    instance.on("click", (e) =>
+      onMapClickRef.current(e.lngLat.lng, e.lngLat.lat),
+    );
     return () => {
       instance.remove();
       map.current = null;
     };
-  }, [onMapClick]);
+  }, []);
   useEffect(() => {
     const instance = map.current;
-    if (!instance || !instance.isStyleLoaded()) return;
-    if (satellite && !instance.getSource("satellite")) {
-      instance.addSource("satellite", {
-        type: "raster",
-        tiles: [
-          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        ],
-        tileSize: 256,
-        attribution: "Esri",
-      });
-      instance.addLayer({
-        id: "satellite",
-        type: "raster",
-        source: "satellite",
-      });
-    } else if (!satellite && instance.getLayer("satellite")) {
-      instance.removeLayer("satellite");
-      instance.removeSource("satellite");
-    }
+    if (!instance) return;
+    const syncSatellite = () => {
+      if (!instance.isStyleLoaded()) return;
+      if (satelliteRef.current && !instance.getSource("satellite")) {
+        instance.addSource("satellite", {
+          type: "raster",
+          tiles: [
+            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          ],
+          tileSize: 256,
+          attribution: "Esri",
+        });
+        instance.addLayer({
+          id: "satellite",
+          type: "raster",
+          source: "satellite",
+        });
+      } else if (!satelliteRef.current && instance.getLayer("satellite")) {
+        instance.removeLayer("satellite");
+        instance.removeSource("satellite");
+      }
+    };
+    syncSatellite();
+    instance.on("load", syncSatellite);
+    return () => {
+      instance.off("load", syncSatellite);
+    };
   }, [satellite]);
   useEffect(() => {
     if (!map.current) return;
@@ -205,7 +221,7 @@ function CoverageMap({
         .setLngLat([item.lng, item.lat])
         .addTo(map.current!);
     });
-  }, [locations, selected, onSelect]);
+  }, [locations, onSelect]);
   return (
     <div ref={host} className={styles.map} aria-label="London coverage map" />
   );
@@ -284,6 +300,28 @@ export default function BuyerPage() {
         }),
       });
       if (!r.ok) throw Error();
+      setCoverageLocations((current) => {
+        const exists = current.some((item) => item.id === selected.id);
+        const updated = {
+          ...selected,
+          rewardMinor: amount,
+          freshness: "Request just created",
+          note: requirement,
+        };
+        return exists
+          ? current.map((item) => (item.id === selected.id ? updated : item))
+          : [updated, ...current];
+      });
+      setSelected((current) =>
+        current?.id === selected.id
+          ? {
+              ...current,
+              rewardMinor: amount,
+              freshness: "Request just created",
+              note: requirement,
+            }
+          : current,
+      );
       setMessage(`${selected.name} is funded · runners can now collect it`);
     } catch {
       setMessage(
@@ -353,7 +391,7 @@ export default function BuyerPage() {
             <strong>London coverage</strong>
             <span> · {coverageLocations.length} active requests</span>
           </div>
-          <div>
+          <div className={styles.mapActions}>
             <button
               className={styles.requestTop}
               onClick={() => setSatellite((value) => !value)}
@@ -362,7 +400,20 @@ export default function BuyerPage() {
             </button>
             <button
               className={styles.requestTop}
-              onClick={() => setRequestOpen(true)}
+              onClick={() => {
+                if (!selected)
+                  setSelected({
+                    id: `point-${Date.now()}`,
+                    name: "Central London request",
+                    lng: -0.11,
+                    lat: 51.51,
+                    coverage: 0,
+                    freshness: "No evidence",
+                    rewardMinor: 800,
+                    note: "Start a request for this public location.",
+                  });
+                setRequestOpen(true);
+              }}
             >
               ＋ Request coverage
             </button>
@@ -370,11 +421,10 @@ export default function BuyerPage() {
         </div>
         <CoverageMap
           locations={coverageLocations}
-          selected={selected}
           satellite={satellite}
           onSelect={setSelected}
           onMapClick={(lng, lat) => {
-            setSelected({
+            const point = {
               id: `point-${Date.now()}`,
               name: "New London location",
               lng,
@@ -383,7 +433,8 @@ export default function BuyerPage() {
               freshness: "No evidence",
               rewardMinor: 800,
               note: "Start a request for this public location.",
-            });
+            };
+            setSelected(point);
             setRequestOpen(true);
           }}
         />
@@ -400,9 +451,7 @@ export default function BuyerPage() {
             <i className={styles.low} />
             needs coverage
           </span>
-          <span className={styles.hint}>
-            Click the map to request a new point
-          </span>
+          <span className={styles.hint}>Click the map to request a point</span>
         </div>
       </section>
       {selected && (
@@ -476,6 +525,7 @@ export default function BuyerPage() {
               type="button"
               className={styles.close}
               onClick={() => setRequestOpen(false)}
+              aria-label="Close request form"
             >
               ×
             </button>

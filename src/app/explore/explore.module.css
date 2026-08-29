@@ -1,3 +1,386 @@
-.page{min-height:100vh;background:#f4f6f2;color:#17221d}.header{height:68px;display:flex;align-items:center;gap:28px;padding:0 24px;background:#fff;border-bottom:1px solid #dfe5df;position:relative;z-index:5}.header nav{display:flex;gap:22px;margin:auto;font-size:.78rem;font-weight:700;color:#728078}.header nav b{color:#1c2c24}.header>span{font:700 .68rem ui-monospace,monospace;letter-spacing:.08em}.ready{color:#22845f}.live{color:#e45137}.workspace{height:calc(100vh - 68px);min-height:650px;position:relative}.mapPanel{position:absolute;inset:0;overflow:hidden;background:#dbe7df}.map{position:absolute;inset:0}.mapPanel:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#12271a1c 0%,transparent 38%,#09211636 100%)}.mapControls{position:absolute;z-index:3;top:18px;right:20px;display:flex;gap:6px}.mapControls button,.detailToggle{background:#fff;color:#223129;border:1px solid #d5ddd7;border-radius:999px;padding:9px 14px;font-size:.75rem;font-weight:800;box-shadow:0 2px 12px #1e37251c;cursor:pointer}.mapHint{position:absolute;z-index:2;top:20px;left:22px;background:#173a2c;color:#eff8f1;border-radius:999px;padding:10px 15px;font-size:.72rem;font-weight:700;box-shadow:0 3px 14px #173a2c30}.routeTag{position:absolute;z-index:2;left:22px;bottom:174px;background:#fff;color:#29654b;padding:9px 13px;border-radius:999px;font:700 .68rem ui-monospace,monospace;box-shadow:0 2px 14px #12332124}.mapLegend{position:absolute;z-index:2;left:22px;bottom:118px;background:#ffffffed;border:1px solid #dce5df;border-radius:14px;padding:10px 13px;display:flex;gap:12px;color:#637168;font:700 .64rem ui-monospace,monospace}.mapLegend span{display:flex;align-items:center;gap:5px}.mapLegend i{width:8px;height:8px;border-radius:50%}.standard{background:#4cb688}.priority{background:#ecaa38}.urgent{background:#e45137}.restricted{background:#8a938d}.mapMarker{width:46px;height:46px;border-radius:50%;border:4px solid #fff;color:#fff;font:900 .76rem Arial;cursor:pointer;box-shadow:0 3px 12px #163c2b4d;transition:transform .15s ease}.mapMarker:hover,.mapMarker:focus-visible{transform:scale(1.12)}.mapMarker.standard{background:#43ad7d}.mapMarker.priority{background:#e6a331}.mapMarker.urgent{background:#df503a}.mapMarker:disabled{background:#7b857e;cursor:not-allowed}.bountyPopup{position:absolute;z-index:3;left:22px;top:72px;width:min(310px,calc(100% - 44px));padding:17px 18px;background:#fff;border:1px solid #dce5df;border-radius:18px;box-shadow:0 8px 30px #173a2c1c}.popupLabel{display:block;color:#22845f;font:800 .63rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em}.bountyPopup strong{display:block;margin-top:7px;font-size:1.2rem;letter-spacing:-.03em}.bountyPopup p{margin:6px 0 13px;color:#69766f;font-size:.82rem}.bountyPopup div{display:flex;justify-content:space-between;align-items:center;gap:10px}.bountyPopup div b{color:#df503a;font-size:1.35rem}.bountyPopup div span{color:#748178;font-size:.72rem}.runDock{position:absolute;z-index:4;left:22px;right:22px;bottom:22px;background:#173a2c;color:#eef7f0;border-radius:20px;padding:13px 16px;box-shadow:0 12px 36px #173a2c3b}.startDock{width:100%;padding:16px;border:0;border-radius:12px;background:#ef6a43;color:#fff;font-weight:900;font-size:1rem;display:flex;justify-content:space-between;cursor:pointer}.liveStats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.liveStats span{display:grid;gap:2px}.liveStats b{font-size:1.08rem}.liveStats small{color:#a9c5b4;font:700 .62rem ui-monospace,monospace;text-transform:uppercase}.dockActions{display:flex;gap:8px;margin-top:12px}.dockActions button{flex:1;padding:10px;border-radius:10px;font-weight:800;cursor:pointer}.captureAction{border:1px solid #6d9b82;background:#255640;color:#fff}.finishDock{border:0;background:#ef6a43;color:#fff}.detailToggle{padding:8px 12px;background:#fff}.planner{display:none}.capture{position:absolute;z-index:5;right:22px;bottom:154px;width:180px;height:116px;display:block}.preview{position:relative;height:100%;background:#13231b;border:3px solid #fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 22px #173a2c3d}.preview video{width:100%;height:100%;object-fit:cover}.preview span{position:absolute;left:7px;bottom:7px;background:#173a2cdd;border-radius:5px;padding:4px;font:700 .53rem ui-monospace,monospace;color:#fff}.telemetry,.results{display:none}.voiceBox{display:grid}.start,.finish{cursor:pointer}
-@media(max-width:600px){.header{height:58px;padding:0 15px}.header nav{display:none}.workspace{height:calc(100vh - 58px);min-height:600px}.mapHint{left:14px;top:14px}.mapControls{right:14px;top:14px}.bountyPopup{left:14px;top:60px;width:calc(100% - 28px)}.runDock{left:10px;right:10px;bottom:10px;border-radius:16px}.liveStats{gap:6px}.liveStats b{font-size:.87rem}.liveStats small{font-size:.54rem}.dockActions{gap:5px}.dockActions button{font-size:.67rem;padding:9px 5px}.routeTag{left:14px;bottom:150px}.mapLegend{left:14px;bottom:96px;max-width:calc(100% - 28px);overflow:auto;white-space:nowrap}.capture{right:14px;bottom:175px;width:128px;height:84px}}
-.detailsPanel{position:absolute;z-index:5;right:22px;bottom:154px;width:min(360px,calc(100% - 44px));padding:14px 16px;background:#fff;border:1px solid #dce5df;border-radius:16px;box-shadow:0 8px 28px #173a2c24;color:#526158;font-size:.72rem}.detailsPanel div{display:grid;grid-template-columns:105px 1fr;gap:10px;padding:7px 0;border-bottom:1px solid #e8eee9}.detailsPanel div:last-child{border-bottom:0}.detailsPanel b{color:#173a2c}.detailsPanel span{line-height:1.35}
+.page {
+  min-height: 100vh;
+  background: #202326;
+  color: #f7f7f5;
+}
+.header {
+  height: 62px;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 0 24px;
+  background: #202326;
+  border-bottom: 1px solid #34383d;
+  position: relative;
+  z-index: 8;
+}
+.header nav {
+  display: flex;
+  gap: 22px;
+  margin: auto;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #aeb4b8;
+}
+.header nav b {
+  color: #fff;
+}
+.header > span {
+  font:
+    800 0.66rem ui-monospace,
+    monospace;
+  letter-spacing: 0.09em;
+}
+.ready {
+  color: #9ca4a9;
+}
+.live {
+  color: #ff4261;
+}
+.workspace {
+  height: calc(100vh - 62px);
+  min-height: 640px;
+  position: relative;
+  background: #d8dad6;
+  overflow: hidden;
+}
+.mapPanel {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.map {
+  position: absolute;
+  inset: 0;
+}
+.map :global(.maplibregl-ctrl-logo) {
+  display: none;
+}
+.mapPanel:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    #20232614 0%,
+    transparent 54%,
+    #20232654 100%
+  );
+}
+.mapMarker {
+  width: 48px;
+  height: 38px;
+  border: 3px solid #fff;
+  border-radius: 10px;
+  background: #22ba6d;
+  color: #092b1a;
+  font: 900 0.78rem/1 Arial;
+  box-shadow: 0 3px 14px #16342554;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+.mapMarker:hover,
+.mapMarker:focus-visible {
+  transform: scale(1.1);
+  background: #4cdd91;
+}
+.mapMarker:disabled {
+  background: #7f8684;
+  color: #e4e7e5;
+  cursor: not-allowed;
+}
+.routeStop {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 8px;
+  background: #202326;
+  color: #fff;
+  font: 900 0.72rem Arial;
+  box-shadow: 0 2px 8px #20232670;
+  border: 2px solid #fff;
+}
+.itineraryBadge {
+  position: absolute;
+  z-index: 3;
+  top: 18px;
+  left: 18px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #202326e8;
+  color: #fff;
+  border: 1px solid #41464a;
+  border-radius: 10px;
+  padding: 9px 11px;
+  font-size: 0.7rem;
+  box-shadow: 0 6px 18px #20232630;
+}
+.itineraryBadge span {
+  color: #ff4261;
+  font-weight: 900;
+}
+.itineraryBadge b {
+  font:
+    800 0.68rem ui-monospace,
+    monospace;
+  letter-spacing: 0.02em;
+}
+.runDock {
+  position: absolute;
+  z-index: 4;
+  left: 22px;
+  right: 22px;
+  bottom: 22px;
+  max-width: 520px;
+  margin: auto;
+  border-radius: 16px;
+  background: #202326;
+  color: #fff;
+  padding: 9px;
+  box-shadow: 0 14px 34px #20232661;
+}
+.bountyStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 7px 10px;
+  color: #cdd1d4;
+  font:
+    800 0.72rem ui-monospace,
+    monospace;
+}
+.bountyStrip b {
+  color: #58e49a;
+  font-size: 1.08rem;
+}
+.startDock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  padding: 15px 16px;
+  background: #ff4261;
+  color: #fff;
+  font-size: 0.98rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+.startDock:hover {
+  background: #ec2448;
+}
+.liveStats {
+  position: absolute;
+  z-index: 3;
+  left: 18px;
+  right: 18px;
+  bottom: 14px;
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  pointer-events: none;
+}
+.liveStats span {
+  min-width: 93px;
+  display: grid;
+  gap: 1px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: #202326e8;
+  border: 1px solid #41464a;
+  color: #fff;
+}
+.liveStats b {
+  font-size: 0.84rem;
+}
+.liveStats small {
+  color: #aeb4b8;
+  font:
+    800 0.55rem ui-monospace,
+    monospace;
+  text-transform: uppercase;
+}
+.capture {
+  display: none;
+}
+.runningWorkspace {
+  display: grid;
+  grid-template-rows: 50% 50%;
+  height: calc(100vh - 62px);
+  min-height: 640px;
+  background: #202326;
+}
+.runningWorkspace .mapPanel {
+  position: relative;
+  grid-row: 1;
+  border-bottom: 2px solid #ff4261;
+}
+.runningWorkspace .capture {
+  position: relative;
+  display: block;
+  grid-row: 2;
+  min-height: 0;
+  background: #101214;
+}
+.preview {
+  position: absolute;
+  inset: 0;
+  background: #101214;
+  overflow: hidden;
+}
+.preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #101214;
+}
+.recordingState,
+.preview small {
+  position: absolute;
+  z-index: 2;
+  border-radius: 7px;
+  background: #202326d9;
+  color: #fff;
+  font:
+    800 0.58rem ui-monospace,
+    monospace;
+  letter-spacing: 0.05em;
+}
+.recordingState {
+  top: 14px;
+  left: 54px;
+  padding: 7px 8px;
+  color: #ff5d75;
+}
+.preview small {
+  right: 14px;
+  top: 16px;
+  padding: 6px 8px;
+  color: #cfd4d5;
+}
+.micToggle {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  left: 14px;
+  width: 31px;
+  height: 31px;
+  border: 1px solid #747a7f;
+  border-radius: 8px;
+  background: #202326e8;
+  color: #ff4261;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.pauseVeil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  background: #202326a8;
+  color: #fff;
+  font:
+    900 1.3rem ui-monospace,
+    monospace;
+}
+.videoActions {
+  position: absolute;
+  z-index: 4;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  gap: 8px;
+}
+.videoActions button {
+  border: 1px solid #4a4e52;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #282c2f;
+  color: #fff;
+  font-weight: 900;
+  cursor: pointer;
+}
+.videoActions .finishDock {
+  margin-left: auto;
+  border-color: #ff4261;
+  background: #ff4261;
+}
+.videoActions .finishDock:hover {
+  background: #ec2448;
+}
+@media (max-width: 600px) {
+  .header {
+    height: 54px;
+    padding: 0 14px;
+  }
+  .header nav {
+    display: none;
+  }
+  .workspace {
+    height: calc(100vh - 54px);
+    min-height: 590px;
+  }
+  .runningWorkspace {
+    height: calc(100vh - 54px);
+    min-height: 590px;
+  }
+  .itineraryBadge {
+    top: 12px;
+    left: 12px;
+  }
+  .itineraryBadge b {
+    font-size: 0.6rem;
+  }
+  .runDock {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+  .liveStats {
+    left: 10px;
+    right: 10px;
+    bottom: 9px;
+    justify-content: flex-start;
+  }
+  .liveStats span {
+    min-width: 0;
+    flex: 1;
+    padding: 6px 7px;
+  }
+  .liveStats b {
+    font-size: 0.72rem;
+  }
+  .recordingState {
+    top: 10px;
+    left: 49px;
+  }
+  .preview small {
+    top: 11px;
+    right: 10px;
+    font-size: 0.49rem;
+  }
+  .micToggle {
+    top: 9px;
+    left: 10px;
+  }
+  .videoActions {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+  .videoActions button {
+    padding: 11px 10px;
+    font-size: 0.72rem;
+  }
+  .header > span {
+    font-size: 0.57rem;
+  }
+}
