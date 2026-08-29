@@ -1,19 +1,20 @@
 .page {
   min-height: 100vh;
-  background: #15171a;
-  color: #f8f5ef;
+  background: #f7f5f0;
+  color: #17191b;
   font-family: Arial, sans-serif;
 }
 .header {
   height: 68px;
-  border-bottom: 1px solid #30353a;
+  background: #fff;
+  border-bottom: 1px solid #dedbd5;
   display: flex;
   align-items: center;
   padding: 0 4vw;
   gap: 32px;
 }
 .wordmark {
-  color: #f8f5ef;
+  color: #17191b;
   text-decoration: none;
   font-weight: 900;
   letter-spacing: -0.08em;
@@ -22,7 +23,7 @@
 .wordmark span,
 .rail h1 em,
 .emptyState h1 em {
-  color: #ff4261;
+  color: #ff1f6b;
   font-style: normal;
 }
 .header nav {
@@ -40,13 +41,13 @@
   text-decoration: none;
 }
 .header nav b {
-  color: #fff;
+  color: #17191b;
 }
 .live {
   font:
     700 10px ui-monospace,
     monospace;
-  color: #48d597;
+  color: #ff1f6b;
   letter-spacing: 0.09em;
 }
 .stage {
@@ -57,7 +58,7 @@
 .rail,
 .evidence {
   padding: 34px 26px;
-  background: #1c1f22;
+  background: #fff;
 }
 .rail {
   border-right: 1px solid #30353a;
@@ -67,7 +68,7 @@
 }
 .eyebrow {
   margin: 0;
-  color: #48d597;
+  color: #ff1f6b;
   font:
     700 10px ui-monospace,
     monospace;
@@ -84,8 +85,8 @@
 }
 .rail select {
   width: 100%;
-  background: #111315;
-  color: #f8f5ef;
+  background: #fff;
+  color: #17191b;
   border: 1px solid #424a4f;
   padding: 12px;
   font:
@@ -133,7 +134,7 @@
   font:
     700 9px ui-monospace,
     monospace;
-  color: #ff4261;
+  color: #ff1f6b;
   letter-spacing: 0.12em;
   margin-bottom: 7px;
 }
@@ -145,6 +146,43 @@
 .map {
   position: absolute;
   inset: 0;
+}
+.replayTrace {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+.replayTrace path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.traceHalo {
+  stroke: #fff;
+  stroke-width: 14;
+  opacity: 0.9;
+}
+.traceFuture {
+  stroke: #ff1f6b;
+  stroke-width: 8;
+}
+.traceRevealed {
+  stroke: #17191b;
+  stroke-width: 5;
+  stroke-dasharray: 100;
+}
+.traceRunner {
+  fill: #ff1f6b;
+  stroke: #fff;
+  stroke-width: 4;
+  offset-path: path(
+    "M170 570 C95 430 160 210 350 155 C520 105 790 190 835 355 C870 485 650 575 470 545 C335 522 245 630 170 570"
+  );
 }
 .map :global(.maplibregl-ctrl-group) {
   background: #17191b;
@@ -167,7 +205,7 @@
   text-align: center;
 }
 .progress input {
-  accent-color: #ff4261;
+  accent-color: #ff1f6b;
 }
 .controls {
   position: absolute;
@@ -188,8 +226,8 @@
   cursor: pointer;
 }
 .controls .play {
-  background: #ff4261;
-  border-color: #ff4261;
+  background: #ff1f6b;
+  border-color: #ff1f6b;
 }
 .speeds {
   display: flex;
@@ -274,7 +312,7 @@
 }
 .endcard {
   margin-top: 28px;
-  border: 1px solid #ff4261;
+  border: 1px solid #ff1f6b;
   padding: 14px;
   display: grid;
   gap: 6px;
@@ -299,7 +337,7 @@
 .emptyState > a {
   display: inline-flex;
   margin-top: 25px;
-  background: #ff4261;
+  background: #ff1f6b;
   color: #fff;
   text-decoration: none;
   padding: 14px 18px;
@@ -407,4 +445,22 @@
   .emptyState > div {
     flex-wrap: wrap;
   }
+}
+
+.rail,
+.evidence,
+.metrics,
+.metrics div,
+.evidence li {
+  border-color: #dedbd5;
+}
+.narration,
+.evidence li.revealed {
+  color: #4e5558;
+}
+.mapFrame {
+  border-inline: 1px solid #dedbd5;
+}
+.endcard {
+  border-color: #ff1f6b;
 }

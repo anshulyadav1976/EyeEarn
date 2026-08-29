@@ -6,6 +6,7 @@ import type { Map as MapLibreMap } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { satelliteMapStyle, streetMapStyle } from "@/lib/map-styles";
 import styles from "./operations.module.css";
+import BuyerToolsNav from "../buyer-tools-nav";
 
 type Point = {
   lng?: number;
@@ -47,6 +48,52 @@ const centre: [number, number] = [-0.11, 51.51],
     "rejected",
     "duplicate",
   ];
+const demoRuns: Run[] = [
+  {
+    id: "DEMO-STRATFORD",
+    runnerName: "Anshul Walk · Stratford",
+    routePoints: [
+      { lng: -0.009, lat: 51.5448 },
+      { lng: -0.015, lat: 51.5415 },
+      { lng: -0.012, lat: 51.5378 },
+      { lng: -0.004, lat: 51.5388 },
+      { lng: -0.001, lat: 51.543 },
+      { lng: -0.009, lat: 51.5448 },
+    ],
+  },
+  {
+    id: "DEMO-SOUTHBANK",
+    runnerName: "South Bank pulse",
+    routePoints: [
+      { lng: -0.122, lat: 51.505 },
+      { lng: -0.113, lat: 51.506 },
+      { lng: -0.103, lat: 51.509 },
+      { lng: -0.093, lat: 51.51 },
+      { lng: -0.084, lat: 51.507 },
+    ],
+  },
+  {
+    id: "DEMO-CANARY",
+    runnerName: "Docklands access sweep",
+    routePoints: [
+      { lng: -0.025, lat: 51.502 },
+      { lng: -0.02, lat: 51.5054 },
+      { lng: -0.014, lat: 51.509 },
+      { lng: -0.006, lat: 51.506 },
+      { lng: -0.012, lat: 51.5 },
+    ],
+  },
+  {
+    id: "DEMO-HACKNEY",
+    runnerName: "Hackney kerb audit",
+    routePoints: [
+      { lng: -0.063, lat: 51.543 },
+      { lng: -0.0556, lat: 51.5471 },
+      { lng: -0.047, lat: 51.545 },
+      { lng: -0.042, lat: 51.54 },
+    ],
+  },
+];
 const xy = (p: Point): [number, number] | null => {
   const rawX = p.lng ?? p.longitude,
     rawY = p.lat ?? p.latitude;
@@ -121,6 +168,78 @@ const signalData = (runs: Run[]): Signal[] =>
           "low",
           "runner",
         ],
+        [
+          -0.0087,
+          51.5448,
+          "Stratford access",
+          "Step-free station approach verified",
+          "confirmed",
+          "medium",
+          "runner",
+        ],
+        [
+          -0.0198,
+          51.5054,
+          "Dock crossing",
+          "Lift route awaiting fresh verification",
+          "analysing",
+          "medium",
+          "runner",
+        ],
+        [
+          -0.114,
+          51.4627,
+          "Market crowd flow",
+          "Moderate pedestrian density signal",
+          "detected",
+          "medium",
+          "street sensor",
+        ],
+        [
+          -0.0556,
+          51.5471,
+          "Cycle conflict",
+          "Kerbside cycle and pedestrian overlap",
+          "confirmed",
+          "high",
+          "runner",
+        ],
+        [
+          -0.2795,
+          51.556,
+          "Event barriers",
+          "Temporary crowd-routing barrier detected",
+          "analysing",
+          "high",
+          "street sensor",
+        ],
+        [
+          -0.0986,
+          51.3752,
+          "Tram crossing",
+          "Surface condition requires review",
+          "detected",
+          "medium",
+          "runner",
+        ],
+        [
+          0.0692,
+          51.4915,
+          "Construction edge",
+          "Footway narrowing near station entrance",
+          "confirmed",
+          "high",
+          "runner",
+        ],
+        [
+          -0.0199,
+          51.5832,
+          "Market obstruction",
+          "Duplicate report merged with nearby signal",
+          "duplicate",
+          "low",
+          "street sensor",
+        ],
       ] as const
     ).map(
       (s, i) =>
@@ -189,11 +308,7 @@ function Map({
   }, [mode]);
   useEffect(() => {
     const m = map.current;
-    if (!m || !ready || !m.isStyleLoaded()) return;
-    ["routes", "signal-dots", "signal-halo"].forEach((id) => {
-      if (m.getLayer(id)) m.removeLayer(id);
-      if (m.getSource(id)) m.removeSource(id);
-    });
+    if (!m || !ready) return;
     const lines = runs.flatMap((r) => {
       const p = route(r);
       return p.length > 1
@@ -206,16 +321,33 @@ function Map({
           ]
         : [];
     });
-    m.addSource("routes", {
-      type: "geojson",
-      data: { type: "FeatureCollection", features: lines },
-    });
-    m.addLayer({
-      id: "routes",
-      type: "line",
-      source: "routes",
-      paint: { "line-color": "#f83367", "line-width": 3, "line-opacity": 0.72 },
-    });
+    const routeData = { type: "FeatureCollection" as const, features: lines };
+    const routeSource = m.getSource("routes") as
+      maplibregl.GeoJSONSource | undefined;
+    if (routeSource) routeSource.setData(routeData);
+    else {
+      m.addSource("routes", { type: "geojson", data: routeData });
+      m.addLayer({
+        id: "routes-halo",
+        type: "line",
+        source: "routes",
+        paint: {
+          "line-color": "#ffffff",
+          "line-width": 11,
+          "line-opacity": 0.92,
+        },
+      });
+      m.addLayer({
+        id: "routes",
+        type: "line",
+        source: "routes",
+        paint: {
+          "line-color": "#ff1f6b",
+          "line-width": 7,
+          "line-opacity": 1,
+        },
+      });
+    }
     const points = signals
       .filter((s) => s.longitude != null && s.latitude != null)
       .map((s) => ({
@@ -226,10 +358,18 @@ function Map({
           coordinates: [s.longitude!, s.latitude!],
         },
       }));
-    m.addSource("signal-dots", {
-      type: "geojson",
-      data: { type: "FeatureCollection", features: points },
-    });
+    const signalDataSource = {
+      type: "FeatureCollection" as const,
+      features: points,
+    };
+    const signalSource = m.getSource("signal-dots") as
+      maplibregl.GeoJSONSource | undefined;
+    if (signalSource) signalSource.setData(signalDataSource);
+    else
+      m.addSource("signal-dots", {
+        type: "geojson",
+        data: signalDataSource,
+      });
     const colour = [
       "match",
       ["get", "state"],
@@ -238,54 +378,56 @@ function Map({
       "analysing",
       "#ffd166",
       "rejected",
-      "#f83367",
+      "#ff1f6b",
       "duplicate",
       "#6f7b80",
       "#9ac9ff",
     ] as unknown as maplibregl.ExpressionSpecification;
-    m.addLayer({
-      id: "signal-halo",
-      type: "circle",
-      source: "signal-dots",
-      paint: {
-        "circle-radius": [
-          "match",
-          ["get", "severity"],
-          "high",
-          18,
-          "medium",
-          14,
-          11,
-        ],
-        "circle-color": colour,
-        "circle-opacity": 0.18,
-        "circle-blur": 0.2,
-      },
-    });
-    m.addLayer({
-      id: "signal-dots",
-      type: "circle",
-      source: "signal-dots",
-      paint: {
-        "circle-radius": [
-          "match",
-          ["get", "severity"],
-          "high",
-          8,
-          "medium",
-          6,
-          5,
-        ],
-        "circle-color": colour,
-        "circle-stroke-color": "#111619",
-        "circle-stroke-width": 2,
-      },
-    });
+    if (!m.getLayer("signal-halo")) {
+      m.addLayer({
+        id: "signal-halo",
+        type: "circle",
+        source: "signal-dots",
+        paint: {
+          "circle-radius": [
+            "match",
+            ["get", "severity"],
+            "high",
+            18,
+            "medium",
+            14,
+            11,
+          ],
+          "circle-color": colour,
+          "circle-opacity": 0.18,
+          "circle-blur": 0.2,
+        },
+      });
+      m.addLayer({
+        id: "signal-dots",
+        type: "circle",
+        source: "signal-dots",
+        paint: {
+          "circle-radius": [
+            "match",
+            ["get", "severity"],
+            "high",
+            8,
+            "medium",
+            6,
+            5,
+          ],
+          "circle-color": colour,
+          "circle-stroke-color": "#111619",
+          "circle-stroke-width": 2,
+        },
+      });
+    }
     const stateColour: Record<State, string> = {
       confirmed: "#42d392",
       analysing: "#ffd166",
       detected: "#9ac9ff",
-      rejected: "#f83367",
+      rejected: "#ff1f6b",
       duplicate: "#6f7b80",
     };
     const markers = signals.flatMap((signal) => {
@@ -325,16 +467,29 @@ function Map({
     if (selected?.longitude != null && selected.latitude != null)
       map.current?.flyTo({
         center: [selected.longitude, selected.latitude],
-        zoom: 14,
+        zoom: 12.8,
         duration: 500,
       });
   }, [selected, ready, basemap]);
   return (
-    <div
-      ref={el}
-      className={styles.map}
-      aria-label="Live London evidence map"
-    />
+    <>
+      <div
+        ref={el}
+        className={styles.map}
+        aria-label="Live London evidence map"
+      />
+      <svg
+        className={styles.routeOverlay}
+        viewBox="0 0 1000 600"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path d="M515 360 C575 305 650 295 716 340 C760 370 825 350 875 310" />
+        <path d="M480 420 C540 390 600 420 655 455 C705 485 765 480 815 438" />
+        <path d="M735 175 C775 135 840 145 858 205 C875 255 830 285 785 258 C750 238 715 210 735 175" />
+        <path d="M310 270 C360 215 420 225 458 278 C490 325 432 360 375 345 C330 332 285 310 310 270" />
+      </svg>
+    </>
   );
 }
 
@@ -368,6 +523,7 @@ export default function OperationsPage() {
     }, 12000);
     return () => clearInterval(id);
   }, []);
+  const mappedRuns = useMemo(() => [...demoRuns, ...runs], [runs]);
   const all = useMemo(() => signalData(runs), [runs]);
   const visible = all.filter(
     (s) =>
@@ -395,6 +551,7 @@ export default function OperationsPage() {
         </nav>
         <span className={styles.status}>● LIVE FIELD</span>
       </header>
+      <BuyerToolsNav active="atlas" />
       <section className={styles.hero}>
         <div>
           <p className={styles.eyebrow}>Authority operations</p>
@@ -432,7 +589,7 @@ export default function OperationsPage() {
           <span>needs review</span>
         </div>
         <div>
-          <strong>{runs.length}</strong>
+          <strong>{mappedRuns.length}</strong>
           <span>mapped runs</span>
         </div>
         <div>
@@ -519,8 +676,8 @@ export default function OperationsPage() {
           </div>
           <div className={styles.mapWrap}>
             <Map
-              runs={runs}
-              signals={shown}
+              runs={mappedRuns}
+              signals={tab === "atlas" ? all : shown}
               selected={selected}
               basemap={base}
               mode={mode}

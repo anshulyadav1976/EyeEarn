@@ -1,17 +1,65 @@
 {
   "runs": [
     {
-      "id": "RUN-7385C07D",
+      "id": "RUN-5C957602",
       "runnerName": "Runner 01",
       "zoneIds": [
         "zone-south-access"
       ],
       "status": "live",
-      "startedAt": "2026-08-29T16:03:10.365Z",
+      "startedAt": "2026-08-29T16:03:58.092Z",
       "routePoints": [],
-      "observations": [],
+      "observations": [
+        {
+          "id": "OBS-0B2508A3",
+          "category": "temporal_route_report",
+          "description": "All frames are effectively unchanged, showing a vehicle/interior floor area with dark carpeting, a loose cable, white footwear, and bright green cleaning equipment. No route infrastructure, signage, access conditions, co",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T16:12:37.973Z",
+          "privacyState": "safe"
+        },
+        {
+          "id": "OBS-9C07EC19",
+          "category": "temporal route-survey",
+          "description": "Frames remain largely obstructed or unusable: the first is heavily blurred with indistinct nearby objects, the second shows an indoor tiled ceiling with lighting and ventilation grilles, and the final frame is fully blac",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T16:12:43.952Z",
+          "privacyState": "safe"
+        }
+      ],
       "completions": [],
       "earnedMinor": 0
+    },
+    {
+      "id": "RUN-7385C07D",
+      "runnerName": "Runner 01",
+      "zoneIds": [
+        "zone-south-access"
+      ],
+      "status": "handed-off",
+      "startedAt": "2026-08-29T16:03:10.365Z",
+      "routePoints": [],
+      "observations": [
+        {
+          "id": "OBS-2439F767",
+          "category": "access_and_operational_conditions",
+          "description": "Across the frames, an indoor doorway remains partially obstructed by a green cable, equipment legs, and items on the floor. The threshold and drainage grate lead outside to a blue safety cone; minor debris is visible. No",
+          "modality": "vision",
+          "capturedAt": "2026-08-29T16:03:20.711Z",
+          "privacyState": "safe"
+        }
+      ],
+      "completions": [
+        {
+          "zoneId": "zone-south-access",
+          "accepted": true,
+          "completedAt": "2026-08-29T16:03:32.306Z",
+          "rewardMinor": 700
+        }
+      ],
+      "earnedMinor": 700,
+      "finishedAt": "2026-08-29T16:03:32.377Z",
+      "handedOffAt": "2026-08-29T16:03:32.377Z"
     },
     {
       "id": "RUN-AC96D4E6",

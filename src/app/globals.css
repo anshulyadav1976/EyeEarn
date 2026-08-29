@@ -5,7 +5,7 @@
   --chalk: #f4f0e8;
   --muted: #a8aaa5;
   --line: #343839;
-  --vermilion: #ff4d2e;
+  --vermilion: #ff1f6b;
   --blue: #3267e8;
   --amber: #f4ad3d;
   --mint: #73c99c;
@@ -14,13 +14,13 @@
   box-sizing: border-box;
 }
 html {
-  background: var(--ink);
-  color: var(--chalk);
+  background: #f7f5f0;
+  color: #161719;
 }
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--ink);
+  background: #f7f5f0;
   font-family: "Arial Narrow", "Aptos Narrow", Arial, sans-serif;
 }
 a {
@@ -94,8 +94,8 @@ a {
   border: 1px solid var(--vermilion);
   border-radius: 50%;
   box-shadow:
-    0 0 0 38px #ff4d2e11,
-    0 0 0 76px #ff4d2e08;
+    0 0 0 38px #ff1f6b11,
+    0 0 0 76px #ff1f6b08;
   pointer-events: none;
 }
 .eyebrow {

@@ -7,6 +7,7 @@ import type { ChangeEvent } from "react";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { streetMapStyle } from "@/lib/map-styles";
 import styles from "./buyer.module.css";
+import BuyerToolsNav from "../buyer-tools-nav";
 type Coverage = {
   id: string;
   name: string;
@@ -117,6 +118,86 @@ const locations: Coverage[] = [
     freshness: "Aging · 4d",
     rewardMinor: 430,
     note: "Riverside access, steps and temporary barriers.",
+  },
+  {
+    id: "london-wembley",
+    name: "Wembley event approach",
+    lng: -0.2795,
+    lat: 51.556,
+    coverage: 22,
+    freshness: "Aging · 8d",
+    rewardMinor: 980,
+    note: "Crowd routing, barriers and step-free stadium approach.",
+  },
+  {
+    id: "london-brixton",
+    name: "Brixton market route",
+    lng: -0.114,
+    lat: 51.4627,
+    coverage: 48,
+    freshness: "Fresh · 3h",
+    rewardMinor: 530,
+    note: "Market access, crowd flow and ambient conditions.",
+  },
+  {
+    id: "london-canary",
+    name: "Canary Wharf dock edge",
+    lng: -0.0198,
+    lat: 51.5054,
+    coverage: 76,
+    freshness: "Fresh · 22m",
+    rewardMinor: 640,
+    note: "Dock crossing, lifts and temporary route closures.",
+  },
+  {
+    id: "london-hackney",
+    name: "Hackney Central corridor",
+    lng: -0.0556,
+    lat: 51.5471,
+    coverage: 57,
+    freshness: "Fresh · 1h",
+    rewardMinor: 690,
+    note: "Crossings, cycle-lane conflicts and station access.",
+  },
+  {
+    id: "london-croydon",
+    name: "Croydon tram interchange",
+    lng: -0.0986,
+    lat: 51.3752,
+    coverage: 31,
+    freshness: "Aging · 5d",
+    rewardMinor: 710,
+    note: "Tram crossing, lifts and pavement condition refresh.",
+  },
+  {
+    id: "london-woolwich",
+    name: "Woolwich Elizabeth line",
+    lng: 0.0692,
+    lat: 51.4915,
+    coverage: 44,
+    freshness: "Fresh · 4h",
+    rewardMinor: 820,
+    note: "Station approach, signage and construction edge.",
+  },
+  {
+    id: "london-walthamstow",
+    name: "Walthamstow market mile",
+    lng: -0.0199,
+    lat: 51.5832,
+    coverage: 39,
+    freshness: "Aging · 3d",
+    rewardMinor: 570,
+    note: "Market congestion, kerb access and obstructions.",
+  },
+  {
+    id: "london-ealing",
+    name: "Ealing Broadway interchange",
+    lng: -0.3017,
+    lat: 51.5142,
+    coverage: 68,
+    freshness: "Fresh · 50m",
+    rewardMinor: 620,
+    note: "Station access, bus interchange and temporary works.",
   },
 ];
 const money = (minor: number) => `£${(minor / 100).toFixed(2)}`;
@@ -342,6 +423,7 @@ export default function BuyerPage() {
         </nav>
         <span className={styles.status}>● BUYER CONSOLE</span>
       </header>
+      <BuyerToolsNav active="coverage" />
       <section className={styles.hero}>
         <div>
           <p className={styles.eyebrow}>Coverage desk · London</p>

@@ -96,3 +96,15 @@ Verification passed: owner-driven desktop interaction across Phases 5–8, Autho
 - Corrected the Git commit identity to the GitHub account's verified noreply address so connected Vercel deployments can resolve the author.
 
 Verification passed: desktop and 390 px browser review, six-card navigation, Explore handoff, responsive overflow, console/network checks, ESLint, TypeScript and production build.
+
+## Final demo navigation and visibility pass
+
+- Reduced the landing page to Explore, Buyer and Public Evidence, and moved Ask the Street, Authority Atlas and Run Replay into a shared Buyer tool strip.
+- Aligned the main application surfaces to the light EyeEarn shell and one pink accent.
+- Replaced Intelligence’s fixed-choice layout with a freeform evidence-grounded Luna chat while preserving three deterministic demo prompts.
+- Added the hardcoded “Anshul Walk · Stratford” replay with a high-contrast route, evidence timeline, accepted zones and payout.
+- Kept four authority tracks and the complete signal layer visible while Atlas feed filters change or a signal is selected.
+- Removed Explore’s numbered route markers; bounty selection now presents a closed loop, target pace, finish estimate, capture plan and clearly labelled example field-video links.
+- Implemented the full-viewport eight-second burning-wick canvas with a reduced-motion fallback.
+
+Verification passed: browser interaction and visual inspection of Home, Explore, Buyer, Intelligence, Authority Atlas and Replay; fresh console checks after MapLibre lifecycle fixes; ESLint, TypeScript, six unit tests and production build.

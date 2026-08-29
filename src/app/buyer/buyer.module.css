@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
-  background: #101417;
-  color: #f4f0e8;
+  background: #f7f5f0;
+  color: #17191b;
 }
 .header {
   height: 70px;
@@ -9,7 +9,8 @@
   align-items: center;
   gap: 3vw;
   padding: 0 3vw;
-  border-bottom: 1px solid #293136;
+  background: #fff;
+  border-bottom: 1px solid #dedbd5;
 }
 .header nav {
   display: flex;
@@ -22,8 +23,8 @@
   color: #89969b;
 }
 .header nav b {
-  color: #f4f0e8;
-  border-bottom: 2px solid #ff603c;
+  color: #17191b;
+  border-bottom: 2px solid #ff1f6b;
   height: 70px;
   display: flex;
   align-items: center;
@@ -32,7 +33,7 @@
   font:
     700 0.65rem ui-monospace,
     monospace;
-  color: #79d5a3;
+  color: #ff1f6b;
 }
 .hero {
   display: flex;
@@ -42,7 +43,7 @@
 }
 .eyebrow {
   margin: 0;
-  color: #79d5a3;
+  color: #ff1f6b;
   font:
     700 0.66rem ui-monospace,
     monospace;
@@ -58,11 +59,11 @@
 }
 .hero h1 em {
   font-style: normal;
-  color: #ff603c;
+  color: #ff1f6b;
 }
 .hero p:not(.eyebrow) {
   max-width: 530px;
-  color: #abb7b9;
+  color: #666c70;
   line-height: 1.5;
   font-size: 1.05rem;
 }
@@ -84,8 +85,8 @@
   width: 100%;
   height: 48px;
   border: 1px solid #344047;
-  background: #192024;
-  color: #f4f0e8;
+  background: #fff;
+  color: #17191b;
   padding: 0 14px;
   outline: none;
 }
@@ -108,7 +109,7 @@
   cursor: pointer;
 }
 .suggestions button:hover {
-  background: #ff603c22;
+  background: #ff1f6b22;
 }
 .suggestions span {
   color: #89969b;
@@ -146,7 +147,7 @@
 .actions button,
 .modal button[type="submit"] {
   border: 0;
-  background: #ff603c;
+  background: #ff1f6b;
   color: #141718;
   padding: 11px 15px;
   font-weight: 800;
@@ -189,8 +190,8 @@
   color: #101417;
 }
 .marker.high {
-  background: #ff603c;
-  color: #ff603c;
+  background: #ff1f6b;
+  color: #ff1f6b;
 }
 .marker.mid {
   background: #f3b34e;
@@ -226,7 +227,7 @@
   border-radius: 50%;
 }
 .legend .high {
-  background: #ff603c;
+  background: #ff1f6b;
 }
 .legend .mid {
   background: #f3b34e;
@@ -469,4 +470,49 @@
     display: grid;
     gap: 1rem;
   }
+}
+
+.mapSection,
+.dossier,
+.modal,
+.suggestions {
+  background: #fff;
+  border-color: #d9d5ce;
+}
+.mapHeader,
+.stats,
+.stats div {
+  border-color: #dedbd5;
+}
+.map :global(.maplibregl-ctrl-group) {
+  background: #fff;
+  border-color: #c9c5be;
+}
+.map :global(.maplibregl-ctrl button) {
+  filter: none;
+}
+.search input,
+.modal textarea,
+.modal input[type="number"] {
+  background: #fff;
+  color: #17191b;
+  border-color: #cbc7bf;
+}
+.suggestions button,
+.actions .secondary {
+  color: #17191b;
+}
+.note {
+  color: #4f5558;
+}
+.requestTop,
+.actions button,
+.modal button[type="submit"] {
+  background: #ff1f6b;
+  color: #fff;
+}
+.marker.high,
+.legend .high {
+  background: #ff1f6b;
+  color: #ff1f6b;
 }

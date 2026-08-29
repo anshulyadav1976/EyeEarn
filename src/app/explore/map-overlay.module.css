@@ -1,9 +1,64 @@
-.mapOverlay{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 55% 43%,#11131520 0 18%,transparent 19%)}
-.mapOverlay svg{position:absolute;inset:8% 4% 10%;width:92%;height:82%;filter:drop-shadow(0 0 14px #ff4d2e55)}
-.routeCase,.route{fill:none;stroke-linecap:round;stroke-linejoin:round}
-.routeCase{stroke:#0d0f10;stroke-width:20}
-.route{stroke:var(--vermilion);stroke-width:8;stroke-dasharray:2 1}
-.marker{position:absolute;z-index:3;transform:translate(-50%,-50%);pointer-events:auto}
-.active{box-shadow:0 0 0 4px var(--chalk),0 0 28px currentColor!important}
-.stadiumLabel,.riverLabel{position:absolute;text-transform:uppercase;font:900 clamp(1rem,2vw,2rem) ui-monospace,monospace;color:#0d0f1088;letter-spacing:.08em}
-.stadiumLabel{left:42%;top:40%}.riverLabel{right:6%;top:25%;writing-mode:vertical-rl}
+.mapOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at 55% 43%,
+    #11131520 0 18%,
+    transparent 19%
+  );
+}
+.mapOverlay svg {
+  position: absolute;
+  inset: 8% 4% 10%;
+  width: 92%;
+  height: 82%;
+  filter: drop-shadow(0 0 14px #ff1f6b55);
+}
+.routeCase,
+.route {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.routeCase {
+  stroke: #0d0f10;
+  stroke-width: 20;
+}
+.route {
+  stroke: var(--vermilion);
+  stroke-width: 8;
+  stroke-dasharray: 2 1;
+}
+.marker {
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+.active {
+  box-shadow:
+    0 0 0 4px var(--chalk),
+    0 0 28px currentColor !important;
+}
+.stadiumLabel,
+.riverLabel {
+  position: absolute;
+  text-transform: uppercase;
+  font:
+    900 clamp(1rem, 2vw, 2rem) ui-monospace,
+    monospace;
+  color: #0d0f1088;
+  letter-spacing: 0.08em;
+}
+.stadiumLabel {
+  left: 42%;
+  top: 40%;
+}
+.riverLabel {
+  right: 6%;
+  top: 25%;
+  writing-mode: vertical-rl;
+}

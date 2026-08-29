@@ -13,13 +13,15 @@ npm run dev
 
 Open `http://localhost:3000` and `http://localhost:3000/build-status.html`.
 
+The landing page exposes three clear entry points: Explore, Buyer and Public Evidence. Buyer then groups the specialist demo tools as subtabs.
+
 Main demo routes:
 
 - `/explore` — choose a bounty, run and film.
 - `/buyer` — inspect or fund London coverage.
-- `/operations` — live/atlas authority evidence view.
+- `/operations` — Buyer → Authority Atlas, with seeded London signals and routes.
 - `/intelligence` — grounded questions with evidence citations and gap-to-bounty funding.
-- `/replay` — play a completed route, evidence and earnings back over time.
+- `/replay` — Buyer → Run Replay, defaulting to “Anshul Walk · Stratford”.
 - `/developers` — inspect the public GeoJSON surface and labelled external fixtures.
 
 ## Data and AI boundaries
@@ -33,3 +35,10 @@ Main demo routes:
 - The signed-in ChatGPT/Codex session is not copied into the app. OpenAI application APIs require server-side API credentials.
 
 See [docs/PHASE5_8_DEMO.md](docs/PHASE5_8_DEMO.md), [docs/DATA_COLLECTION.md](docs/DATA_COLLECTION.md), [docs/PRIVACY.md](docs/PRIVACY.md), and [docs/BUILD_LOG.md](docs/BUILD_LOG.md).
+
+## Demo UI notes
+
+- All product chrome uses the landing page’s light survey-grid language and `#ff1f6b` accent.
+- Explore removes numbered route pins and shows a closed circuit, target pace, estimated finish and capture brief before the camera starts.
+- Example field-footage links are clearly labelled as references rather than submitted EyeEarn evidence. The linked Pexels and Mixkit collections describe their clips as free-use stock video; review the source licence before repackaging assets.
+- The home-page burning-wick canvas respects reduced-motion preferences.

@@ -138,7 +138,6 @@ export default function ExploreClient({
   const pointFlushTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const runStartedAt = useRef<number | null>(null);
   const lastRoutePoint = useRef<PositionSnapshot | null>(null);
-  const itineraryMarkers = useRef<maplibregl.Marker[]>([]);
   const runPausedRef = useRef(false);
 
   useEffect(() => {
@@ -146,7 +145,15 @@ export default function ExploreClient({
       fetch("/api/fund")
         .then((response) => response.json())
         .then((result) => {
-          if (Array.isArray(result.zones)) setLiveZones(result.zones);
+          if (Array.isArray(result.zones)) {
+            const clean = result.zones.filter(
+              (zone: BountyZone) =>
+                zone.rewardMinor > 0 &&
+                zone.rewardMinor <= 20000 &&
+                zone.name !== "New London location",
+            );
+            setLiveZones(clean);
+          }
         })
         .catch(() => undefined);
     void refreshBounties();
@@ -165,6 +172,7 @@ export default function ExploreClient({
       [lng, lat],
       [lng + spread * 0.45, lat + spread * 0.55],
       [lng + spread, lat + spread * 0.2],
+      [lng - spread, lat - spread * 0.45],
     ];
   }, [selected, distance, route]);
   const itinerary = useMemo(
@@ -273,7 +281,11 @@ export default function ExploreClient({
         id: "safe-route",
         type: "line",
         source: "safe-route",
-        paint: { "line-color": "#ff4261", "line-width": 5 },
+        paint: {
+          "line-color": "#ff1f6b",
+          "line-width": 9,
+          "line-opacity": 0.96,
+        },
       });
       instance.addSource("live-route", {
         type: "geojson",
@@ -293,7 +305,6 @@ export default function ExploreClient({
     });
     map.current = instance;
     return () => {
-      itineraryMarkers.current.forEach((marker) => marker.remove());
       instance.remove();
       map.current = null;
     };
@@ -308,19 +319,6 @@ export default function ExploreClient({
       type: "Feature",
       properties: {},
       geometry: { type: "LineString", coordinates: plannedRoute },
-    });
-    itineraryMarkers.current.forEach((marker) => marker.remove());
-    itineraryMarkers.current = plannedRoute.map((point, index) => {
-      const el = document.createElement("span");
-      el.className = styles.routeStop;
-      el.textContent =
-        index === 0 || index === plannedRoute.length - 1
-          ? "★"
-          : String(index + 1);
-      el.setAttribute("aria-label", `Itinerary checkpoint ${index + 1}`);
-      return new maplibregl.Marker({ element: el, anchor: "center" })
-        .setLngLat(point)
-        .addTo(instance);
     });
     instance.fitBounds(
       plannedRoute.reduce(
@@ -930,6 +928,53 @@ export default function ExploreClient({
                   {itinerary.estimatedDurationMinutes} min
                 </span>
                 <b>£{(selected.rewardMinor / 100).toFixed(2)}</b>
+              </div>
+              <div className={styles.routeBrief}>
+                <div>
+                  <small>Your circuit</small>
+                  <strong>{selected.name}</strong>
+                  <p>
+                    Follow the pink loop back to the start. Capture entrances,
+                    crossing conditions, footfall and any access obstruction.
+                  </p>
+                </div>
+                <dl>
+                  <div>
+                    <dt>Target pace</dt>
+                    <dd>
+                      {(
+                        itinerary.estimatedDurationMinutes /
+                        itinerary.estimatedDistanceKm
+                      ).toFixed(1)}{" "}
+                      min/km
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Est. finish</dt>
+                    <dd>{itinerary.estimatedDurationMinutes} min</dd>
+                  </div>
+                  <div>
+                    <dt>Evidence</dt>
+                    <dd>Video · GPS · audio</dd>
+                  </div>
+                </dl>
+                <div className={styles.referenceClips}>
+                  <span>Field-video examples</span>
+                  <a
+                    href="https://www.pexels.com/video/people-walking-in-the-street-of-london-3545482/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    London street walk ↗
+                  </a>
+                  <a
+                    href="https://mixkit.co/free-stock-video/pedestrian/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Pedestrian reference ↗
+                  </a>
+                </div>
               </div>
               <button
                 className={styles.startDock}

@@ -15,25 +15,6 @@
   font-family: "Arial Narrow", "Aptos Narrow", Arial, sans-serif;
 }
 
-.edgePulse {
-  position: fixed;
-  z-index: 20;
-  top: 38vh;
-  right: 9px;
-  width: 2px;
-  height: 118px;
-  background: linear-gradient(
-    transparent,
-    var(--pink),
-    #fff,
-    var(--pink),
-    transparent
-  );
-  filter: drop-shadow(0 0 7px var(--pink));
-  animation: drift 5s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
 .header {
   position: relative;
   z-index: 10;
@@ -297,12 +278,6 @@
   color: var(--pink);
 }
 
-@keyframes drift {
-  to {
-    transform: translateY(20vh);
-  }
-}
-
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
@@ -370,9 +345,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .edgePulse {
-    animation: none;
-  }
   .actions a,
   .card {
     transition: none;

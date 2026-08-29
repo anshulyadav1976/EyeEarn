@@ -7,6 +7,7 @@ import type { Map as MapLibreMap } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { satelliteMapStyle } from "@/lib/map-styles";
 import styles from "./replay.module.css";
+import BuyerToolsNav from "../buyer-tools-nav";
 
 type Point = { latitude: number; longitude: number; recordedAt: string };
 type Observation = {
@@ -33,6 +34,98 @@ type Run = {
   completions: Completion[];
   earnedMinor: number;
   status: string;
+};
+
+const stratfordStart = Date.parse("2026-08-29T14:10:00.000Z");
+const stratfordAnchors: Array<[number, number]> = [
+  [-0.0032, 51.5413],
+  [-0.0092, 51.5426],
+  [-0.0137, 51.5449],
+  [-0.0168, 51.5471],
+  [-0.0115, 51.5489],
+  [-0.0062, 51.5457],
+  [-0.0032, 51.5413],
+];
+const stratfordPoints: Point[] = stratfordAnchors
+  .slice(0, -1)
+  .flatMap((start, segment) =>
+    Array.from({ length: 8 }, (_, step) => {
+      const end = stratfordAnchors[segment + 1];
+      const t = step / 8;
+      const index = segment * 8 + step;
+      return {
+        longitude: start[0] + (end[0] - start[0]) * t,
+        latitude: start[1] + (end[1] - start[1]) * t,
+        recordedAt: new Date(stratfordStart + index * 18_000).toISOString(),
+      };
+    }),
+  );
+stratfordPoints.push({
+  longitude: stratfordAnchors.at(-1)![0],
+  latitude: stratfordAnchors.at(-1)![1],
+  recordedAt: new Date(stratfordStart + 48 * 18_000).toISOString(),
+});
+const demoObservation = (
+  id: string,
+  index: number,
+  category: string,
+  description: string,
+): Observation => ({
+  id,
+  category,
+  description,
+  capturedAt: stratfordPoints[index].recordedAt,
+  longitude: stratfordPoints[index].longitude,
+  latitude: stratfordPoints[index].latitude,
+  privacyState: "redacted",
+});
+const stratfordDemoRun: Run = {
+  id: "DEMO-ANSHUL-STRATFORD",
+  runnerName: "Anshul Walk · Stratford",
+  startedAt: new Date(stratfordStart).toISOString(),
+  routePoints: stratfordPoints,
+  observations: [
+    demoObservation(
+      "STRAT-01",
+      8,
+      "Station accessibility",
+      "Step-free Stratford station entrance clear; temporary wayfinding board visible.",
+    ),
+    demoObservation(
+      "STRAT-02",
+      19,
+      "Crossing works",
+      "Temporary barrier narrows the Olympic Park crossing while preserving a passable route.",
+    ),
+    demoObservation(
+      "STRAT-03",
+      31,
+      "Crowd flow",
+      "Moderate pedestrian flow near the park entrance with clear forward movement.",
+    ),
+    demoObservation(
+      "STRAT-04",
+      42,
+      "Cycle lane",
+      "Protected cycle lane and adjacent footway remain unobstructed on the return leg.",
+    ),
+  ],
+  completions: [
+    {
+      zoneId: "stratford-station",
+      accepted: true,
+      completedAt: new Date(stratfordStart + 570_000).toISOString(),
+      rewardMinor: 690,
+    },
+    {
+      zoneId: "olympic-park-loop",
+      accepted: true,
+      completedAt: new Date(stratfordStart + 840_000).toISOString(),
+      rewardMinor: 520,
+    },
+  ],
+  earnedMinor: 1210,
+  status: "handed-off",
 };
 
 const money = (minor: number) =>
@@ -105,6 +198,7 @@ function ReplayMap({
         );
     });
     return () => {
+      setReady(false);
       instance.remove();
       map.current = null;
     };
@@ -112,10 +206,12 @@ function ReplayMap({
   useEffect(() => {
     const instance = map.current;
     if (!ready || !instance?.isStyleLoaded()) return;
-    ["future", "revealed", "runner", "evidence"].forEach((id) => {
-      if (instance.getLayer(id)) instance.removeLayer(id);
-      if (instance.getSource(id)) instance.removeSource(id);
-    });
+    ["future-halo", "future", "revealed", "runner", "evidence"].forEach(
+      (id) => {
+        if (instance.getLayer(id)) instance.removeLayer(id);
+        if (instance.getSource(id)) instance.removeSource(id);
+      },
+    );
     const line = (
       id: string,
       lineCoords: [number, number][],
@@ -145,8 +241,9 @@ function ReplayMap({
     };
     const all = coords(points),
       shown = all.slice(0, visibleCount);
-    line("future", all, "#fff", 5, 0.24);
-    line("revealed", shown, "#ff4261", 5, 1);
+    line("future-halo", all, "#ffffff", 15, 0.92);
+    line("future", all, "#ff1f6b", 9, 1);
+    line("revealed", shown, "#161719", 6, 1);
     if (shown.length) {
       const current = shown.at(-1)!;
       instance.addSource("runner", {
@@ -163,7 +260,7 @@ function ReplayMap({
         source: "runner",
         paint: {
           "circle-radius": 9,
-          "circle-color": "#ff4261",
+          "circle-color": "#ff1f6b",
           "circle-stroke-width": 3,
           "circle-stroke-color": "#fff",
         },
@@ -211,16 +308,51 @@ function ReplayMap({
     }
   }, [observations, points, progress, ready, visibleCount]);
   return (
-    <div ref={element} className={styles.map} aria-label="Run replay map" />
+    <>
+      <div ref={element} className={styles.map} aria-label="Run replay map" />
+      <svg
+        className={styles.replayTrace}
+        viewBox="0 0 1000 700"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          className={styles.traceHalo}
+          d="M170 570 C95 430 160 210 350 155 C520 105 790 190 835 355 C870 485 650 575 470 545 C335 522 245 630 170 570"
+        />
+        <path
+          className={styles.traceFuture}
+          d="M170 570 C95 430 160 210 350 155 C520 105 790 190 835 355 C870 485 650 575 470 545 C335 522 245 630 170 570"
+        />
+        <path
+          className={styles.traceRevealed}
+          pathLength="100"
+          style={{ strokeDashoffset: 100 - progress * 100 }}
+          d="M170 570 C95 430 160 210 350 155 C520 105 790 190 835 355 C870 485 650 575 470 545 C335 522 245 630 170 570"
+        />
+        <circle
+          className={styles.traceRunner}
+          style={{ offsetDistance: `${progress * 100}%` }}
+          cx="0"
+          cy="0"
+          r="10"
+        />
+      </svg>
+    </>
   );
 }
 
 export default function ReplayClient() {
-  const [runs, setRuns] = useState<Run[]>([]);
-  const [selectedId, setSelectedId] = useState("");
+  const [runs, setRuns] = useState<Run[]>([stratfordDemoRun]);
+  const [selectedId, setSelectedId] = useState(stratfordDemoRun.id);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [speed, setSpeed] = useState(1);
+  const progressRef = useRef(0);
+  const moveTo = (value: number) => {
+    progressRef.current = value;
+    setProgress(value);
+  };
   useEffect(() => {
     fetch("/api/runs")
       .then((response) => response.json())
@@ -236,26 +368,27 @@ export default function ReplayClient() {
                 a.observations.length * 10 +
                 cleanPoints(a).length / 100),
           );
-        setRuns(usable);
-        setSelectedId(usable[0]?.id ?? "");
+        setRuns([stratfordDemoRun, ...usable]);
+        setSelectedId(stratfordDemoRun.id);
       })
-      .catch(() => setRuns([]));
+      .catch(() => setRuns([stratfordDemoRun]));
   }, []);
   const run = runs.find((item) => item.id === selectedId) ?? null;
   const points = useMemo(() => cleanPoints(run), [run]);
   useEffect(() => {
     if (!playing) return;
-    const started = performance.now() - (progress * 36000) / speed;
+    const started = performance.now() - (progressRef.current * 36000) / speed;
     let id = 0;
     const tick = (now: number) => {
       const next = Math.min(1, ((now - started) * speed) / 36000);
+      progressRef.current = next;
       setProgress(next);
       if (next < 1) id = requestAnimationFrame(tick);
       else setPlaying(false);
     };
     id = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(id);
-  }, [playing, progress, speed]);
+  }, [playing, speed]);
   const visibleEvidence =
     run?.observations.filter((observation) => {
       const index = points.findIndex(
@@ -285,6 +418,7 @@ export default function ReplayClient() {
         </nav>
         <span className={styles.live}>REPLAY STUDIO</span>
       </header>
+      <BuyerToolsNav active="replay" />
       {run ? (
         <section className={styles.stage}>
           <aside className={styles.rail}>
@@ -299,13 +433,15 @@ export default function ReplayClient() {
               value={selectedId}
               onChange={(event) => {
                 setSelectedId(event.target.value);
-                setProgress(0);
+                moveTo(0);
                 setPlaying(false);
               }}
             >
               {runs.map((item) => (
                 <option key={item.id} value={item.id}>
-                  {item.runnerName} · {item.id.slice(-5)}
+                  {item.id === stratfordDemoRun.id
+                    ? item.runnerName
+                    : `${item.runnerName} · ${item.id.slice(-5)}`}
                 </option>
               ))}
             </select>
@@ -350,7 +486,7 @@ export default function ReplayClient() {
                 value={progress * 100}
                 onChange={(event) => {
                   setPlaying(false);
-                  setProgress(Number(event.target.value) / 100);
+                  moveTo(Number(event.target.value) / 100);
                 }}
               />
               <span>00:36</span>
@@ -359,7 +495,7 @@ export default function ReplayClient() {
               <button
                 className={styles.play}
                 onClick={() => {
-                  if (progress >= 1) setProgress(0);
+                  if (progress >= 1) moveTo(0);
                   setPlaying(!playing);
                 }}
               >
@@ -368,7 +504,7 @@ export default function ReplayClient() {
               <button
                 onClick={() => {
                   setPlaying(false);
-                  setProgress(0);
+                  moveTo(0);
                 }}
               >
                 Restart
