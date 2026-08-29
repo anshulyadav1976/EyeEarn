@@ -126,3 +126,11 @@ Verification passed: desktop and 390 px Playwright runs, rotating headline RUN�
 - Added a compact evidence-flywheel diagram, live-demo links, API map, stack summary and direct routes into every demo moment.
 
 Verification passed: all six production captures completed without browser console errors, local README asset paths resolve, Markdown diff checks pass and the six unit checks remain green.
+
+## Public evidence processing lab
+
+- Added the frontend-only “From video to anonymized enriched data” section above the Public Evidence API surface.
+- Added a seven-stage interactive evidence trace, four supplied recognition visuals, synchronized sensor and voice context, a structured buyer-safe observation, eight extracted-data dimensions and an explicit transient-versus-public privacy boundary.
+- Presented the recognition roles for YOLOv8, Grounding DINO, SAM 2, DPT, Luna and ElevenLabs Scribe without changing inference, storage, API routes or environment configuration.
+
+Verification passed: desktop and 390 px browser review, all four images loaded, trace playback and reduced-motion completion, zero horizontal overflow, no browser console errors, ESLint and TypeScript.

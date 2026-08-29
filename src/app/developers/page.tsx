@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ProcessingLab from "./processing-lab";
 import styles from "./developers.module.css";
 
 const endpoints = [
@@ -50,6 +51,7 @@ export default function DevelopersPage() {
           </small>
         </div>
       </section>
+      <ProcessingLab />
       <section className={styles.console}>
         <div className={styles.consoleHead}>
           <span>Safe public surface</span>

@@ -75,7 +75,7 @@ EyeEarn closes that gap with a simple flywheel:
 - **Cited intelligence chat** with confidence, coverage, method and linked evidence; missing evidence becomes a funded mission instead of a fabricated answer.
 - **Authority operations** with live/atlas modes, route trails, mapped observations and status, severity, modality, source and time filters.
 - **Recorded run replay** with a seeded *Anshul Walk · Stratford* story, progressive route, evidence reveals, accepted zones and earnings.
-- **Privacy-bounded public GeoJSON API** that excludes raw camera/audio, direct identity and blocked observations.
+- **Public evidence processing lab** that visualizes the capture-to-public pipeline, named recognition stack, voice enrichment and privacy boundary above the bounded GeoJSON API.
 - **Portable demo storage** using local SQLite plus a JSON snapshot that seeds serverless deployments.
 
 ## The evidence flywheel
